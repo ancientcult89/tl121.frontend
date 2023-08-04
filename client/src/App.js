@@ -4,28 +4,40 @@ import { BrowserRouter } from "react-router-dom";
 import { Spin } from 'antd';
 import {observer} from "mobx-react-lite";
 import {Context} from "./index";
-import {check} from "./http/userApi";
+import LayoutBar from "./components/LayoutBar";
+import TopBar from "./components/TopBar";
 
 const App = observer(() => {
-  const {user} = useContext(Context)
-  const [loading, setLoading] = useState(true)
-      useEffect(() => {
-        check().then(data => {
-            user.setUser(true)
+    const {user} = useContext(Context)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        // check().then(data => {
+        //     user.setUser(true)
+        //     user.setIsAuth(true)
+        // }).finally(() => setLoading(false))
+        let token = localStorage.getItem('token');
+        console.log('token: ' +  token);
+        if(token !== null && token !== '')
+        {
+            user.setUser(true);
             user.setIsAuth(true)
-        }).finally(() => setLoading(false))
+        }
+        setLoading(false)
     }, [user])
 
     if (loading) {
         return <Spin/>
     }
-  return (
+    return (
         <React.StrictMode>
             <BrowserRouter>
-                <Auth />
+                <TopBar/>
+                <LayoutBar>
+                </LayoutBar>
             </BrowserRouter>
         </React.StrictMode>
-  );
+    );
 });
 
 export default App;
