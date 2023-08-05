@@ -1,36 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Space, Table, Tag} from 'antd';
+import {Button, Space, Table, Popconfirm} from 'antd';
 import {Context} from "../index";
-import {getGradeList} from "../http/gradeApi";
+import {deleteGrade, getGradeList} from "../http/gradeApi";
 import {ADD_MODAL, EDIT_MODAL} from "../utils/consts";
 import GradeModal from "./modals/GradeModal";
 const { Column } = Table;
-const dataNew = [
-    {
-        key: '1',
-        gradeName: 'Junior',
-        lastName: 'Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-    },
-    {
-        key: '2',
-        gradeName: 'Jim',
-        lastName: 'Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-    },
-    {
-        key: '3',
-        gradeName: 'Joe',
-        lastName: 'Black',
-        age: 32,
-        address: 'Sydney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-    },
-];
+
 const GradeList = () => {
     const {grade} = useContext(Context);
     const [modalVisible, setModalVisible] = useState(false)
@@ -68,9 +43,24 @@ const GradeList = () => {
                                 setModalVisible(true);
                                 setSelectedGrade(record.gradeId);
                             }}>
-                                Edit {/*record.gradeName*/}
+                                Edit
                             </a>
-                            <a>Delete</a>
+                            <Popconfirm
+                                title="Delete the Grade"
+                                description="Are you sure to delete this Grade?"
+                                onConfirm={() => {
+                                    deleteGrade(record.gradeId).then(() => {
+                                        getGradeList().then(data => {
+                                            grade.setGrades(data);
+                                        });
+                                    })
+                                }}
+                                okText="Yes"
+                                cancelText="No"
+                            >
+                            <a>
+                                Delete</a>
+                            </Popconfirm>
                         </Space>
                     )}
                 />
