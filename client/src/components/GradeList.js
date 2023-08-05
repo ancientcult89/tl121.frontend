@@ -1,7 +1,9 @@
-import React, {useContext, useEffect} from 'react';
-import { Space, Table, Tag } from 'antd';
+import React, {useContext, useEffect, useState} from 'react';
+import {Button, Space, Table, Tag} from 'antd';
 import {Context} from "../index";
 import {getGradeList} from "../http/gradeApi";
+import {ADD_MODAL, EDIT_MODAL} from "../utils/consts";
+import GradeModal from "./modals/GradeModal";
 const { Column } = Table;
 const dataNew = [
     {
@@ -31,26 +33,55 @@ const dataNew = [
 ];
 const GradeList = () => {
     const {grade} = useContext(Context);
+    const [modalVisible, setModalVisible] = useState(false)
+    const [modalType, setModalType] = useState(null);
+    const [selectedGrade, setSelectedGrade] = useState(null);
     useEffect(() => {
         getGradeList().then(data => {
             grade.setGrades(data);
         });
     }, [grade])
-    return (
-        <Table dataSource={grade.grades}>
 
-            <Column title="Grade Name" dataIndex="gradeName" key="key" />
-            <Column
-                title="Action"
-                key="action"
-                render={(_, record) => (
-                    <Space size="middle">
-                        <a>Edit {/*record.gradeName*/}</a>
-                        <a>Delete</a>
-                    </Space>
-                )}
+
+    return (
+        <div>
+            <Button
+                type={"primary"}
+                onClick={() => {
+                    setModalType(ADD_MODAL);
+                    setModalVisible(true);
+                    setSelectedGrade(null);
+                }}
+            >
+                    Add Grade
+            </Button>
+            <Table dataSource={grade.grades} style={{marginTop:20}}>
+
+                <Column title="Grade Name" dataIndex="gradeName" key="key" />
+                <Column
+                    title="Action"
+                    key="action"
+                    render={(_, record) => (
+                        <Space size="middle">
+                            <a onClick={() => {
+                                setModalType(EDIT_MODAL);
+                                setModalVisible(true);
+                                setSelectedGrade(record.gradeId);
+                            }}>
+                                Edit {/*record.gradeName*/}
+                            </a>
+                            <a>Delete</a>
+                        </Space>
+                    )}
+                />
+            </Table>
+            <GradeModal
+                modalType={modalType}
+                open={modalVisible} onCancel={() => setModalVisible(false)}
+                gradeId={selectedGrade}
             />
-        </Table>
+        </div>
+
     );
 };
 

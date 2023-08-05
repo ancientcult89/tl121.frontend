@@ -1,35 +1,44 @@
-import React, {useState} from 'react';
-import { Button, Modal } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Button, Form, Input, Modal} from 'antd';
+import {ADD_MODAL} from "../../utils/consts";
+import {getGrade} from "../../http/gradeApi";
 
-const [open, setOpen] = useState(false);
-const [confirmLoading, setConfirmLoading] = useState(false);
-const [modalText, setModalText] = useState('Content of the modal');
-const showModal = () => {
-    setOpen(true);
-};
-const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
-    setConfirmLoading(true);
-    setTimeout(() => {
-        setOpen(false);
-        setConfirmLoading(false);
-    }, 2000);
-};
-const handleCancel = () => {
-    console.log('Clicked cancel button');
-    setOpen(false);
-};
 
-const GradeModal = () => {
+
+const GradeModal = ({modalType, open, onCancel, gradeId}) => {
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [gradeName, setGradeName] = useState('');
+
+    useEffect(() => {
+        if(gradeId != null)
+        {
+            getGrade(gradeId).then(data => setGradeName(data.gradeName))
+        }
+    }, [gradeId]);
+
+    const handleOk = () => {
+        setConfirmLoading(true);
+        setTimeout(() => {
+
+            setConfirmLoading(false);
+        }, 2000);
+    };
+
+
+
     return (
         <Modal
-            title="Title"
+            title={modalType === ADD_MODAL ? 'Add grade' : 'Edit grade'}
             open={open}
             onOk={handleOk}
             confirmLoading={confirmLoading}
-            onCancel={handleCancel}
+            onCancel={onCancel}
         >
-            <p>{modalText}</p>
+            <Form>
+                <Form.Item label={'Grade name'}>
+                    <Input value={gradeName} onChange={e => setGradeName(e.target.value)}></Input>
+                </Form.Item>
+            </Form>
         </Modal>
     );
 };
