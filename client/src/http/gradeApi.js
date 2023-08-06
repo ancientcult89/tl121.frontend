@@ -16,7 +16,6 @@ export const createGrade = async (gradeName) => {
 }
 
 export const deleteGrade = async (gradeId) => {
-    console.log(gradeId)
     const {data} = await $authHost.delete('api/v1/Grade/' + gradeId);
     return data
 }

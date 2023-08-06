@@ -1,35 +1,35 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Form, Input, Modal} from 'antd';
+import {Form, Input, Modal} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
-import {createGrade, getGrade, getGradeList, updateGrade} from "../../http/gradeApi";
 import {Context} from "../../index";
+import {createPerson, getPerson, getPersonList, updatePerson} from "../../http/personApi";
 
-
-
-const GradeModal = ({modalType, open, onCancel, gradeId}) => {
+const PersonModal = ({modalType, open, onCancel, personId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [gradeName, setGradeName] = useState('');
     const [selectedGrade, setSelectedGrade] = useState(null);
-    const {grade} = useContext(Context);
+    const {person} = useContext(Context);
 
     useEffect(() => {
         setConfirmLoading(true);
-        if(gradeId != null)
+        if(personId != null)
         {
-            getGrade(gradeId).then(grade => {
+
+            getPerson(personId).then(grade => {
                 setGradeName(grade.gradeName);
                 setSelectedGrade(grade)
             });
         }
         setConfirmLoading(false);
-    }, [gradeId]);
+    }, [personId]);
 
     const handleOk = () => {
+        setConfirmLoading(true);
         if(modalType === ADD_MODAL)
         {
-            createGrade(gradeName).then(() =>{
-                getGradeList().then(data => {
-                    grade.setGrades(data);
+            createPerson(gradeName).then(() =>{
+                getPersonList().then(data => {
+                    person.setPersons(data);
                 });
                 setSelectedGrade(null);
                 setGradeName('');
@@ -38,20 +38,21 @@ const GradeModal = ({modalType, open, onCancel, gradeId}) => {
         }
         else if(modalType === EDIT_MODAL)
         {
-            updateGrade(selectedGrade.gradeId, gradeName).then(() =>{
-                getGradeList().then(data => {
-                    grade.setGrades(data);
+            updatePerson(selectedGrade.gradeId, gradeName).then(() =>{
+                getPersonList().then(data => {
+                    person.setPersons(data);
                 });
                 setSelectedGrade(null);
                 setGradeName('');
                 onCancel();
             });
         }
+        setConfirmLoading(false);
     };
 
     return (
         <Modal
-            title={modalType === ADD_MODAL ? 'Add grade' : 'Edit grade'}
+            title={modalType === ADD_MODAL ? 'Add person' : 'Edit grade'}
             open={open}
             onOk={handleOk}
             confirmLoading={confirmLoading}
@@ -68,4 +69,4 @@ const GradeModal = ({modalType, open, onCancel, gradeId}) => {
     );
 };
 
-export default GradeModal;
+export default PersonModal;

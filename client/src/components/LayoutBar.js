@@ -2,17 +2,14 @@ import React, {useContext, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {Context} from "../index";
 import {
-    DesktopOutlined,
-    FileOutlined,
-    PieChartOutlined,
     TeamOutlined,
-    UserOutlined,
+    BookOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import {GRADE_ROUTE, LOGIN_ROUTE} from "../utils/consts";
+import {GRADE_ROUTE, LOGIN_ROUTE, PERSON_ROUTE} from "../utils/consts";
 import AppRouter from "./AppRouter";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Sider } = Layout;
 function getItem(label, key, icon, children) {
     return {
         key,
@@ -21,16 +18,14 @@ function getItem(label, key, icon, children) {
         label,
     };
 }
+
 const items = [
-    getItem('Grade', GRADE_ROUTE, <PieChartOutlined />),
-    getItem('Login', LOGIN_ROUTE, <DesktopOutlined />),
-    getItem('User', 'sub1', <UserOutlined />, [
-        getItem('Tom', '3'),
-        getItem('Bill', '4'),
-        getItem('Alex', '5'),
+    getItem('1-2-1', '1', <TeamOutlined />),
+    getItem('Login', LOGIN_ROUTE),
+    getItem('References', 'sub1', <BookOutlined />, [
+        getItem('Person', PERSON_ROUTE),
+        getItem('Grade', GRADE_ROUTE),
     ]),
-    getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-    getItem('Files', '9', <FileOutlined />),
 ];
 
 

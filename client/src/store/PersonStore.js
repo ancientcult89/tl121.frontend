@@ -1,17 +1,17 @@
 import {makeAutoObservable} from "mobx";
 
-export default class GradeStore {
+export default class PersonStore {
     constructor() {
-        this._grades = [];
+        this._persons = [];
 
         // отслеживает состояние и при изменении вызывает ререндер
         makeAutoObservable(this);
     }
 
-    setGrades(grades) {
-        this._grades = grades;
+    setPersons(persons) {
+        this._persons = persons;
     }
-    get grades() {
-        return this._grades;
+    get persons() {
+        return this._persons;
     }
 }

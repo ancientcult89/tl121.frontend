@@ -32,7 +32,7 @@ const GradeList = () => {
             </Button>
             <Table dataSource={grade.grades} style={{marginTop:20}}>
 
-                <Column title="Grade Name" dataIndex="gradeName" key="key" />
+                <Column title="Grade Name" dataIndex="gradeName" key="gradeName" />
                 <Column
                     title="Action"
                     key="action"

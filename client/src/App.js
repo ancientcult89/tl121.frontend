@@ -17,7 +17,6 @@ const App = observer(() => {
         //     user.setIsAuth(true)
         // }).finally(() => setLoading(false))
         let token = localStorage.getItem('token');
-        console.log('token: ' +  token);
         if(token !== null && token !== '')
         {
             user.setUser(true);

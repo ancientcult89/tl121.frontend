@@ -1,13 +1,14 @@
 import React, {useContext, useEffect} from 'react';
-import {GRADE_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
+import {GRADE_ROUTE, LOGIN_ROUTE, PERSON_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
 import GradeList from "./GradeList";
 import Auth from "../pages/Auth";
 import {Route, Routes} from "react-router-dom";
 import {Context} from "../index";
+import PersonList from "./PersonList";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
-    useEffect(() => console.log('user is auth 2:' + user.isAuth), [user])
+    useEffect(() => console.log('user is auth:' + user.isAuth), [user])
 
     return (
         <Routes>
@@ -19,7 +20,14 @@ const AppRouter = () => {
                         element={<GradeList />}
                         exact
                     />
+                    <Route
+                        key={PERSON_ROUTE}
+                        path={PERSON_ROUTE}
+                        element={<PersonList />}
+                        exact
+                    />
                 </React.Fragment>
+
             )}
             {
                 <React.Fragment>
