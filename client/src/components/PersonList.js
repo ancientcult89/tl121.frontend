@@ -18,7 +18,6 @@ const PersonList = () => {
         });
     }, [person])
 
-
     return (
         <div>
             <Button

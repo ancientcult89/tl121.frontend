@@ -2,7 +2,6 @@ import {$authHost} from "./index";
 
 export const getPersonList = async () => {
     const {data} = await $authHost.get('api/v1/Person/')
-    console.log(data);
     return data;
 }
 
