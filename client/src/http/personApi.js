@@ -10,8 +10,8 @@ export const getPerson = async (personId) => {
     return data
 }
 
-export const createPerson = async (personName) => {
-    const {data} = await $authHost.post('api/v1/Person/', {personName});
+export const createPerson = async (person) => {
+    const {data} = await $authHost.post('api/v1/Person/', person);
     return data
 }
 

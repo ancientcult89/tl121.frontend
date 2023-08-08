@@ -59,9 +59,10 @@ const GradeModal = ({modalType, open, onCancel, gradeId}) => {
         >
             <Form>
                 <Form.Item label={'Grade name'}>
-                    <Input value={gradeName} onChange={e => {setGradeName(e.target.value)
-                        console.log(gradeName)
-                    }}></Input>
+                    <Input
+                        value={gradeName}
+                        onChange={e => {setGradeName(e.target.value)}}
+                    ></Input>
                 </Form.Item>
             </Form>
         </Modal>

@@ -12,10 +12,6 @@ const App = observer(() => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        // check().then(data => {
-        //     user.setUser(true)
-        //     user.setIsAuth(true)
-        // }).finally(() => setLoading(false))
         let token = localStorage.getItem('token');
         if(token !== null && token !== '')
         {
