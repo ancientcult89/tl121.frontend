@@ -53,8 +53,8 @@ const PersonList = () => {
                             <Space size="middle">
                                 <a onClick={() => {
                                     setModalType(EDIT_MODAL);
+                                    setSelectedPerson(record.personId);
                                     setModalVisible(true);
-                                    setSelectedPerson(record.gradeId);
                                 }}>
                                     Edit
                                 </a>

@@ -21,7 +21,7 @@ export const deletePerson = async (personId) => {
     return data
 }
 
-export const updatePerson = async (personId, personName) => {
-    const {data} = await $authHost.put('api/v1/Person/' + personId, {personId, personName})
+export const updatePerson = async (person) => {
+    const {data} = await $authHost.put('api/v1/Person/' + person.personId, person)
     return data
 }

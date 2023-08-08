@@ -33,20 +33,30 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
     const items = [];
 
     useEffect(() => {
+        getGradeList().then(data => {
+            grade.setGrades(data);
+        });
+
         if(personId != null)
         {
-            getPerson(personId).then(grade => {
-                setSelectedGradeName(grade.gradeName);
-                setSelectedGradeId(grade.gradeId)
+            getPerson(personId).then(person => {
+                grade.grades.map(item => {
+                    console.log(item)
+                    if(item.gradeId === person.gradeId)
+                    {
+                        setSelectedGradeName(item.gradeName);
+                        setSelectedGradeId(item.gradeId)
+                        console.log(item.gradeName)
+                    }
+                });
+                setFirstName(person.firstName);
+                setLastName(person.lastName);
+                setSurName(person.surName);
+                setShortName(person.shortName);
+                setPersonEmail(person.email);
             });
         }
         setPersonDataLoaded(true);
-        if(!grade)
-        {
-            getGradeList().then(data => {
-                grade.setGrades(data);
-            });
-        }
 
         const items = [];
         grade.grades.map((grade) => {
@@ -61,21 +71,20 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
         });
         setGradeDropdownItems(items);
         setGradeTypesLoaded(true);
-        console.log('loaded = true')
-    }, []);
+    }, [personId]);
 
     const handleOk = () => {
+        let formData = {
+            "firstName": firstName,
+            "surName": surName,
+            "lastName": lastName,
+            "shortName": shortName,
+            "email": personEmail,
+            "gradeId": selectedGradeId,
+        }
+
         if(modalType === ADD_MODAL)
         {
-            const formData = {
-                "firstName": firstName,
-                "surName": surName,
-                "lastName": lastName,
-                "shortName": shortName,
-                "email": personEmail,
-                "gradeId": selectedGradeId,
-            }
-
             createPerson(formData).then(() =>{
                 getPersonList()
                     .then(data => {
@@ -97,14 +106,20 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
         }
         else if(modalType === EDIT_MODAL)
         {
-            // updatePerson(selectedGrade.gradeId, gradeName).then(() =>{
-            //     getPersonList().then(data => {
-            //         person.setPersons(data);
-            //     });
-            //     setSelectedGrade(null);
-            //     setGradeName('');
-            //     onCancel();
-            // });
+            formData = {...formData, "personId": personId};
+            updatePerson(formData).then(() =>{
+                getPersonList().then(data => {
+                    person.setPersons(data);
+                });
+                setSelectedGradeId(null);
+                setSelectedGradeName(null);
+                setPersonEmail('');
+                setFirstName(null);
+                setShortName(null);
+                setLastName(null)
+                setSurName(null)
+                onCancel();
+            });
         }
     };
 
@@ -138,7 +153,6 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
                         }}></Input>
                     </Form.Item>
                     <Form.Item
-                        name={['user', 'email']}
                         label="Email"
                         rules={[
                             {
