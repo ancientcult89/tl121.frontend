@@ -7,7 +7,7 @@ import GradeModal from "./modals/GradeModal";
 const { Column } = Table;
 
 const GradeList = () => {
-    const {grade} = useContext(Context);
+    const {grade, locale} = useContext(Context);
     const [modalVisible, setModalVisible] = useState(false)
     const [modalType, setModalType] = useState(null);
     const [selectedGrade, setSelectedGrade] = useState(null);
@@ -30,14 +30,14 @@ const GradeList = () => {
                     setSelectedGrade(null);
                 }}
             >
-                    Add Grade
+                {locale.locale.Grade.Add}
             </Button>
-            <Spin tip={"Loading..."} spinning={isLoading}>
+            <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={grade.grades} style={{marginTop:20}}>
 
-                    <Column title="Grade Name" dataIndex="gradeName" key="gradeName" />
+                    <Column title={locale.locale.Grade.GradeName} dataIndex="gradeName" key="gradeName" />
                     <Column
-                        title="Action"
+                        title={locale.locale.Action}
                         key="action"
                         render={(_, record) => (
                             <Space size="middle">
@@ -46,11 +46,11 @@ const GradeList = () => {
                                     setModalVisible(true);
                                     setSelectedGrade(record.gradeId);
                                 }}>
-                                    Edit
+                                    {locale.locale.Edit}
                                 </a>
                                 <Popconfirm
-                                    title="Delete the Grade"
-                                    description="Are you sure to delete this Grade?"
+                                    title={locale.locale.Grade.DeleteTitle}
+                                    description={locale.locale.Grade.DeleteConfirmation}
                                     onConfirm={() => {
                                         deleteGrade(record.gradeId).then(() => {
                                             getGradeList().then(data => {
@@ -58,11 +58,12 @@ const GradeList = () => {
                                             });
                                         })
                                     }}
-                                    okText="Yes"
-                                    cancelText="No"
+                                    okText={locale.locale.Ok}
+                                    cancelText={locale.locale.NO}
                                 >
                                     <a>
-                                        Delete</a>
+                                        {locale.locale.Delete}
+                                    </a>
                                 </Popconfirm>
                             </Space>
                         )}

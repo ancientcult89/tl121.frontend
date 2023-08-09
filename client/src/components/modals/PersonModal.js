@@ -6,8 +6,7 @@ import {createPerson, getPerson, getPersonList, updatePerson} from "../../http/p
 import {getGradeList} from "../../http/gradeApi";
 
 const PersonModal = ({modalType, open, onCancel, personId}) => {
-    const {grade} = useContext(Context)
-    const {person} = useContext(Context);
+    const {grade, person, locale} = useContext(Context)
     const [personDataLoaded, setPersonDataLoaded] = useState(false);
     const [gradeTypesLoaded, setGradeTypesLoaded] = useState(false);
     const [selectedGradeName, setSelectedGradeName] = useState('');
@@ -125,35 +124,35 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
 
     return (
         <Modal
-            title={modalType === ADD_MODAL ? 'Add person' : 'Edit grade'}
+            title={modalType === ADD_MODAL ? locale.locale.Person.Add : locale.locale.Person.Edit}
             open={open}
             onOk={handleOk}
             onCancel={onCancel}
         >
             <Form>
-                <Spin tip={"Loading..."} spinning={!personDataLoaded}>
-                    <Form.Item label={'FirstName'}>
+                <Spin tip={locale.locale.Loading} spinning={!personDataLoaded}>
+                    <Form.Item label={locale.locale.Person.FirstName}>
                         <Input value={firstName} onChange={e => {setFirstName(e.target.value)
 
                         }}></Input>
                     </Form.Item>
-                    <Form.Item label={'SurName'}>
+                    <Form.Item label={locale.locale.Person.SurName}>
                         <Input value={surName} onChange={e => {setSurName(e.target.value)
 
                         }}></Input>
                     </Form.Item>
-                    <Form.Item label={'LastName'}>
+                    <Form.Item label={locale.locale.Person.LastName}>
                         <Input value={lastName} onChange={e => {setLastName(e.target.value)
 
                         }}></Input>
                     </Form.Item>
-                    <Form.Item label={'ShortName'}>
+                    <Form.Item label={locale.locale.Person.ShortName}>
                         <Input value={shortName} onChange={e => {setShortName(e.target.value)
 
                         }}></Input>
                     </Form.Item>
                     <Form.Item
-                        label="Email"
+                        label={locale.locale.Person.Email}
                         rules={[
                             {
                                 type: 'email',
@@ -163,14 +162,14 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
                         <Input value={personEmail} onChange={e => setPersonEmail(e.target.value)}/>
                     </Form.Item>
                 </Spin>
-                <Spin tip={"Loading..."} spinning={!gradeTypesLoaded}>
-                    <Form.Item label={'Grade'}>
+                <Spin tip={locale.locale.Loading} spinning={!gradeTypesLoaded}>
+                    <Form.Item label={locale.locale.Person.Grade}>
                         <Dropdown menu={{
                             items: gradeDropdownItems
                         }}>
                             <Button>
                                 <Space>
-                                    {selectedGradeName || 'Select a grade...'}
+                                    {selectedGradeName || locale.locale.Person.SelectGradeQuery}
                                 </Space>
                             </Button>
                         </Dropdown>

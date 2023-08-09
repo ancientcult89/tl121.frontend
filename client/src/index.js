@@ -4,6 +4,7 @@ import App from "./App";
 import UserStore from "./store/UserStore";
 import GradeStore from "./store/GradeStore";
 import PersonStore from "./store/PersonStore";
+import LocaleStore from "./store/LocaleStore";
 
 export const Context = createContext(null);
 
@@ -14,7 +15,8 @@ root.render(
             value={{
                 user: new UserStore(),
                 grade: new GradeStore(),
-                person: new PersonStore()
+                person: new PersonStore(),
+                locale: new LocaleStore()
             }}
         >
             <App />

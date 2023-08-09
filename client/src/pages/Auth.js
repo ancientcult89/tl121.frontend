@@ -9,7 +9,7 @@ import FormItemLabel from "antd/es/form/FormItemLabel";
 
 
 const Auth = observer(() => {
-    const {user} = useContext(Context);
+    const {user, locale} = useContext(Context);
     const location = useLocation();
     const navigate = useNavigate();
     const isLogin = location.pathname === LOGIN_ROUTE;
@@ -48,24 +48,24 @@ const Auth = observer(() => {
                 autoComplete="off"
             >
                 <Form.Item
-                    label="Username"
+                    label={locale.locale.UserName}
                     name="user"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+                    rules={[{ required: true, message: locale.locale.UserNameRequiredMessage }]}
                 >
                     <Input value={email} onChange={e => setEmail(e.target.value)}/>
                 </Form.Item>
 
                 <Form.Item
-                    label="Password"
+                    label={locale.locale.Password}
                     name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
+                    rules={[{ required: true, message: locale.locale.PasswordRequiredMessage }]}
                 >
                     <Input.Password value={password} onChange={e => setPassword(e.target.value)}/>
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <Button type="primary" onClick={click}>
-                        Submit
+                        {locale.locale.Submit}
                     </Button>
                 </Form.Item>
             </Form>

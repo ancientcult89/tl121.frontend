@@ -10,7 +10,7 @@ const GradeModal = ({modalType, open, onCancel, gradeId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [gradeName, setGradeName] = useState('');
     const [selectedGrade, setSelectedGrade] = useState(null);
-    const {grade} = useContext(Context);
+    const {grade, locale} = useContext(Context);
 
     useEffect(() => {
         setConfirmLoading(true);
@@ -51,14 +51,14 @@ const GradeModal = ({modalType, open, onCancel, gradeId}) => {
 
     return (
         <Modal
-            title={modalType === ADD_MODAL ? 'Add grade' : 'Edit grade'}
+            title={modalType === ADD_MODAL ? locale.locale.Grade.Add : locale.locale.Grade.Edit}
             open={open}
             onOk={handleOk}
             confirmLoading={confirmLoading}
             onCancel={onCancel}
         >
             <Form>
-                <Form.Item label={'Grade name'}>
+                <Form.Item label={locale.locale.Grade.GradeName}>
                     <Input
                         value={gradeName}
                         onChange={e => {setGradeName(e.target.value)}}

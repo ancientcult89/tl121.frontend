@@ -7,7 +7,7 @@ import {deletePerson, getPersonList} from "../http/personApi";
 import PersonModal from "./modals/PersonModal";
 
 const PersonList = () => {
-    const {person} = useContext(Context);
+    const {person, locale} = useContext(Context);
     const [modalVisible, setModalVisible] = useState(false)
     const [modalType, setModalType] = useState(null);
     const [selectedPerson, setSelectedPerson] = useState(null);
@@ -31,15 +31,15 @@ const PersonList = () => {
                     setIsLoading(true);
                 }}
             >
-                Add Person
+                {locale.locale.Person.Add}
             </Button>
-            <Spin tip={"Loading..."} spinning={isLoading}>
+            <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={person.persons} style={{marginTop: 20}}>
-                    <Column title="LastName" dataIndex="lastName" key="lastName"/>
-                    <Column title="FirstName" dataIndex="firstName" key="firstName"/>
-                    <Column title="SurName" dataIndex="surName" key="surName"/>
+                    <Column title={locale.locale.Person.LastName} dataIndex="lastName" key="lastName"/>
+                    <Column title={locale.locale.Person.FirstName} dataIndex="firstName" key="firstName"/>
+                    <Column title={locale.locale.Person.SurName} dataIndex="surName" key="surName"/>
                     <Column
-                        title="Grade"
+                        title={locale.locale.Person.Grade}
                         dataIndex="grade"
                         key="grade"
                         render={(grade) => (
@@ -47,7 +47,7 @@ const PersonList = () => {
                         )}
                     />
                     <Column
-                        title="Action"
+                        title={locale.locale.Action}
                         key="action"
                         render={(_, record) => (
                             <Space size="middle">
@@ -56,11 +56,11 @@ const PersonList = () => {
                                     setSelectedPerson(record.personId);
                                     setModalVisible(true);
                                 }}>
-                                    Edit
+                                    {locale.locale.Edit}
                                 </a>
                                 <Popconfirm
-                                    title="Delete the Person"
-                                    description="Are you sure to delete this Person?"
+                                    title={locale.locale.Person.DeleteTitle}
+                                    description={locale.locale.Person.DeleteConfirmation}
                                     onConfirm={() => {
                                         deletePerson(record.personId).then(() => {
                                             setIsLoading(true);
@@ -70,11 +70,11 @@ const PersonList = () => {
                                                 .finally(() => {setIsLoading(false);});
                                         })
                                     }}
-                                    okText="Yes"
-                                    cancelText="No"
+                                    okText={locale.locale.OK}
+                                    cancelText={locale.locale.NO}
                                 >
                                 <a>
-                                    Delete
+                                    {locale.locale.Delete}
                                 </a>
                                 </Popconfirm>
                             </Space>

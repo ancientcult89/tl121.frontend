@@ -8,8 +8,10 @@ import {
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import {GRADE_ROUTE, LOGIN_ROUTE, PERSON_ROUTE} from "../utils/consts";
 import AppRouter from "./AppRouter";
+import {enLocale} from "../locales/en-En";
 
 const { Content, Sider } = Layout;
+
 function getItem(label, key, icon, children) {
     return {
         key,
@@ -19,29 +21,30 @@ function getItem(label, key, icon, children) {
     };
 }
 
-const items = [
-    getItem('1-2-1', '1', <TeamOutlined />),
-    getItem('Login', LOGIN_ROUTE),
-    getItem('References', 'sub1', <BookOutlined />, [
-        getItem('Person', PERSON_ROUTE),
-        getItem('Grade', GRADE_ROUTE),
-    ]),
-];
-
-
 const LayoutBar = () => {
     const navigate = useNavigate();
     const [current, setCurrent] = useState('mail');
-    const {user} = useContext(Context);
+    const {user, locale} = useContext(Context);
+    const [selectedLocale, setSelectedLocale] = useState(enLocale)
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+
     const onClick = (e) => {
         console.log('user is auth: ' + user._isAuth);
-        navigate(e.key);
         setCurrent(e.key);
+        navigate(e.key);
     };
+
+    const items = [
+        getItem('1-2-1', '1', <TeamOutlined />),
+
+        getItem(locale.locale.References, 'sub1', <BookOutlined />, [
+            getItem(locale.locale.PersonReference, PERSON_ROUTE),
+            getItem(locale.locale.GradeReference, GRADE_ROUTE),
+        ]),
+    ];
     return (
         <Layout
             style={{
