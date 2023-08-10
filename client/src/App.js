@@ -6,11 +6,13 @@ import {observer} from "mobx-react-lite";
 import {Context} from "./index";
 import LayoutBar from "./components/LayoutBar";
 import TopBar from "./components/TopBar";
+import {enLocale} from "./locales/en-En";
 
 const App = observer(() => {
     const {user} = useContext(Context)
     const [loading, setLoading] = useState(true)
-
+    const {locale} = useContext(Context)
+    const [selectedLocale, setSelectedLocale] = useState(enLocale);
     useEffect(() => {
         let token = localStorage.getItem('token');
         if(token !== null && token !== '')
@@ -18,6 +20,8 @@ const App = observer(() => {
             user.setUser(true);
             user.setIsAuth(true)
         }
+        setSelectedLocale(enLocale);
+        locale.setLocale("En");
         setLoading(false)
     }, [user])
 

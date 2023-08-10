@@ -15,8 +15,6 @@ const Auth = observer(() => {
     const isLogin = location.pathname === LOGIN_ROUTE;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    console.log(user.isAuth);
     const click = async () => {
         try {
             let authRespose;

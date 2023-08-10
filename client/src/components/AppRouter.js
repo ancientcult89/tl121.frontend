@@ -8,7 +8,6 @@ import PersonList from "./PersonList";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
-    useEffect(() => console.log('user is auth:' + user.isAuth), [user])
 
     return (
         <Routes>

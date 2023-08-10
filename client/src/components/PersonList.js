@@ -5,20 +5,27 @@ import {ADD_MODAL, EDIT_MODAL} from "../utils/consts";
 import Column from "antd/es/table/Column";
 import {deletePerson, getPersonList} from "../http/personApi";
 import PersonModal from "./modals/PersonModal";
+import {observer} from "mobx-react-lite";
 
-const PersonList = () => {
+const PersonList = observer(() => {
     const {person, locale} = useContext(Context);
-    const [modalVisible, setModalVisible] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false);
     const [modalType, setModalType] = useState(null);
     const [selectedPerson, setSelectedPerson] = useState(null);
-    const [isLoading, setIsLoading] = useState(true)
+    const [needUpdate, setNeedUpdate] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
+        console.log('rerender')
         getPersonList()
-            .then(data => person.setPersons(data))
+            .then(data => {
+                person.setPersons(data)
+                setItems(person.persons)
+            })
             .catch()
             .finally(() => setIsLoading(false));
-    }, [person])
+    }, [needUpdate])
 
     return (
         <div>
@@ -34,7 +41,7 @@ const PersonList = () => {
                 {locale.locale.Person.Add}
             </Button>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
-                <Table dataSource={person.persons} style={{marginTop: 20}}>
+                <Table dataSource={items} style={{marginTop: 20}}>
                     <Column title={locale.locale.Person.LastName} dataIndex="lastName" key="lastName"/>
                     <Column title={locale.locale.Person.FirstName} dataIndex="firstName" key="firstName"/>
                     <Column title={locale.locale.Person.SurName} dataIndex="surName" key="surName"/>
@@ -54,6 +61,7 @@ const PersonList = () => {
                                 <a onClick={() => {
                                     setModalType(EDIT_MODAL);
                                     setSelectedPerson(record.personId);
+                                    setIsLoading(true);
                                     setModalVisible(true);
                                 }}>
                                     {locale.locale.Edit}
@@ -67,7 +75,10 @@ const PersonList = () => {
                                             getPersonList()
                                                 .then(data => {person.setPersons(data);})
                                                 .catch()
-                                                .finally(() => {setIsLoading(false);});
+                                                .finally(() => {
+                                                    setNeedUpdate(!needUpdate);
+                                                    setIsLoading(false);
+                                                });
                                         })
                                     }}
                                     okText={locale.locale.OK}
@@ -86,14 +97,15 @@ const PersonList = () => {
                 modalType={modalType}
                 open={modalVisible}
                 onCancel={() => {
-                    setModalVisible(false);
+                    setNeedUpdate(!needUpdate);
                     setIsLoading(false);
+                    setModalVisible(false);
                 }}
                 personId={selectedPerson}
             />
         </div>
 
     );
-};
+});
 
 export default PersonList;

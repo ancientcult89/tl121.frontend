@@ -4,20 +4,23 @@ import {Context} from "../index";
 import {deleteGrade, getGradeList} from "../http/gradeApi";
 import {ADD_MODAL, EDIT_MODAL} from "../utils/consts";
 import GradeModal from "./modals/GradeModal";
+import {observer} from "mobx-react-lite";
+
 const { Column } = Table;
 
-const GradeList = () => {
+const GradeList = observer(() => {
     const {grade, locale} = useContext(Context);
-    const [modalVisible, setModalVisible] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false);
     const [modalType, setModalType] = useState(null);
     const [selectedGrade, setSelectedGrade] = useState(null);
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true);
+    const [needUpdate, setNeedUpdate] = useState(true);
     useEffect(() => {
         getGradeList()
             .then(data => grade.setGrades(data))
             .catch()
             .finally(() => setIsLoading(false));
-    }, [])
+    }, [needUpdate])
 
 
     return (
@@ -27,6 +30,7 @@ const GradeList = () => {
                 onClick={() => {
                     setModalType(ADD_MODAL);
                     setModalVisible(true);
+                    setIsLoading(true);
                     setSelectedGrade(null);
                 }}
             >
@@ -43,6 +47,7 @@ const GradeList = () => {
                             <Space size="middle">
                                 <a onClick={() => {
                                     setModalType(EDIT_MODAL);
+                                    setIsLoading(true);
                                     setModalVisible(true);
                                     setSelectedGrade(record.gradeId);
                                 }}>
@@ -52,10 +57,13 @@ const GradeList = () => {
                                     title={locale.locale.Grade.DeleteTitle}
                                     description={locale.locale.Grade.DeleteConfirmation}
                                     onConfirm={() => {
+                                        setIsLoading(true);
                                         deleteGrade(record.gradeId).then(() => {
                                             getGradeList().then(data => {
                                                 grade.setGrades(data);
-                                            });
+                                                setNeedUpdate(!needUpdate);
+                                            })
+                                            .finally(() => setIsLoading(false));
                                         })
                                     }}
                                     okText={locale.locale.Ok}
@@ -72,12 +80,17 @@ const GradeList = () => {
             </Spin>
             <GradeModal
                 modalType={modalType}
-                open={modalVisible} onCancel={() => setModalVisible(false)}
+                open={modalVisible}
+                onCancel={() => {
+                    setNeedUpdate(!needUpdate);
+                    setIsLoading(false);
+                    setModalVisible(false);
+                }}
                 gradeId={selectedGrade}
             />
         </div>
 
     );
-};
+});
 
 export default GradeList;

@@ -16,7 +16,6 @@ export const createPerson = async (person) => {
 }
 
 export const deletePerson = async (personId) => {
-    console.log(personId)
     const {data} = await $authHost.delete('api/v1/Person/' + personId);
     return data
 }

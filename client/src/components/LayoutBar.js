@@ -32,7 +32,6 @@ const LayoutBar = () => {
     } = theme.useToken();
 
     const onClick = (e) => {
-        console.log('user is auth: ' + user._isAuth);
         setCurrent(e.key);
         navigate(e.key);
     };

@@ -5,11 +5,6 @@ import {enLocale} from "../locales/en-En";
 
 const TopBar = () => {
     const {locale} = useContext(Context)
-    const [selectedLocale, setSelectedLocale] = useState(null);
-    useEffect(() => {
-        setSelectedLocale(enLocale);
-        locale.setLocale("En");
-    });
 
     return (
         <div style={{background:"black", height: 42}}>

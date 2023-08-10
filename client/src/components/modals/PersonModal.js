@@ -40,12 +40,10 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
         {
             getPerson(personId).then(person => {
                 grade.grades.map(item => {
-                    console.log(item)
                     if(item.gradeId === person.gradeId)
                     {
                         setSelectedGradeName(item.gradeName);
                         setSelectedGradeId(item.gradeId)
-                        console.log(item.gradeName)
                     }
                 });
                 setFirstName(person.firstName);
