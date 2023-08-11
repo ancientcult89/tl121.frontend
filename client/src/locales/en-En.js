@@ -20,6 +20,7 @@ export const enLocale  = {
 
     Person: {
         Add: "Add Person",
+        Edit: "Edit Person",
         DeleteTitle: "Delete the Person",
         DeleteConfirmation: "Are you sure to delete this Person?",
         LastName: "LastName",
@@ -32,6 +33,7 @@ export const enLocale  = {
     },
     Grade: {
         Add: "Add Grade",
+        Edit: "Edit Grade",
         DeleteTitle: "Delete the Grade",
         DeleteConfirmation: "Are you sure to delete this Grade?",
         GradeName: "Grade Name",

@@ -82,32 +82,23 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
 
         if(modalType === ADD_MODAL)
         {
-            createPerson(formData).then(() =>{
-                getPersonList()
-                    .then(data => {
-                    person.setPersons(data);
-                })
-                    .catch()
-                    .finally(() => {
-                        setSelectedGradeId(null);
-                        setSelectedGradeName(null);
-                        setPersonEmail('');
-                        setFirstName(null);
-                        setShortName(null);
-                        setLastName(null)
-                        setSurName(null)
-                        onCancel();
-                    }
-                );
+            createPerson(formData).then((newPerson) =>{
+                person.setPersons([...person.persons, newPerson])
+                setSelectedGradeId(null);
+                setSelectedGradeName(null);
+                setPersonEmail('');
+                setFirstName(null);
+                setShortName(null);
+                setLastName(null)
+                setSurName(null)
+                onCancel();
             });
         }
         else if(modalType === EDIT_MODAL)
         {
             formData = {...formData, "personId": personId};
-            updatePerson(formData).then(() =>{
-                getPersonList().then(data => {
-                    person.setPersons(data);
-                });
+            updatePerson(formData).then((updatedPerson) =>{
+                person.setPersons([...person.persons, updatedPerson])
                 setSelectedGradeId(null);
                 setSelectedGradeName(null);
                 setPersonEmail('');

@@ -22,7 +22,6 @@ const GradeList = observer(() => {
             .finally(() => setIsLoading(false));
     }, [needUpdate])
 
-
     return (
         <div>
             <Button
@@ -38,11 +37,10 @@ const GradeList = observer(() => {
             </Button>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={grade.grades} style={{marginTop:20}}>
-
-                    <Column title={locale.locale.Grade.GradeName} dataIndex="gradeName" key="gradeName" />
+                    <Column title={locale.locale.Grade.GradeName} dataIndex="gradeName" key="1" />
                     <Column
                         title={locale.locale.Action}
-                        key="action"
+                        key="2"
                         render={(_, record) => (
                             <Space size="middle">
                                 <a onClick={() => {
@@ -89,7 +87,6 @@ const GradeList = observer(() => {
                 gradeId={selectedGrade}
             />
         </div>
-
     );
 });
 

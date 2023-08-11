@@ -3,10 +3,11 @@ import {Form, Input, Modal} from 'antd';
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {createGrade, getGrade, getGradeList, updateGrade} from "../../http/gradeApi";
 import {Context} from "../../index";
+import {observer} from "mobx-react-lite";
 
 
 
-const GradeModal = ({modalType, open, onCancel, gradeId}) => {
+const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [gradeName, setGradeName] = useState('');
     const [selectedGrade, setSelectedGrade] = useState(null);
@@ -27,10 +28,8 @@ const GradeModal = ({modalType, open, onCancel, gradeId}) => {
     const handleOk = () => {
         if(modalType === ADD_MODAL)
         {
-            createGrade(gradeName).then(() =>{
-                getGradeList().then(data => {
-                    grade.setGrades(data);
-                });
+            createGrade(gradeName).then(newGrade =>{
+                grade.setGrades([...grade.grades, newGrade])
                 setSelectedGrade(null);
                 setGradeName('');
                 onCancel();
@@ -38,10 +37,8 @@ const GradeModal = ({modalType, open, onCancel, gradeId}) => {
         }
         else if(modalType === EDIT_MODAL)
         {
-            updateGrade(selectedGrade.gradeId, gradeName).then(() =>{
-                getGradeList().then(data => {
-                    grade.setGrades(data);
-                });
+            updateGrade(selectedGrade.gradeId, gradeName).then((updatedGrade) =>{
+                grade.setGrades([...grade.grades, updatedGrade])
                 setSelectedGrade(null);
                 setGradeName('');
                 onCancel();
@@ -67,6 +64,6 @@ const GradeModal = ({modalType, open, onCancel, gradeId}) => {
             </Form>
         </Modal>
     );
-};
+});
 
 export default GradeModal;
