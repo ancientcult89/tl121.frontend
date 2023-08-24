@@ -15,11 +15,12 @@ const GradeList = observer(() => {
     const [selectedGrade, setSelectedGrade] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [needUpdate, setNeedUpdate] = useState(true);
-    useEffect(() => {
+
+    useEffect(() => {        
         getGradeList()
             .then(data => grade.setGrades(data))
             .catch()
-            .finally(() => setIsLoading(false));
+            .finally(() => setIsLoading(false));            
     }, [needUpdate])
 
     return (
@@ -36,7 +37,7 @@ const GradeList = observer(() => {
                 {locale.locale.Grade.Add}
             </Button>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
-                <Table dataSource={grade.grades} style={{marginTop:20}}>
+                <Table dataSource={grade.grades} rowKey={(record) => record.gradeId } style={{marginTop:20}}>
                     <Column title={locale.locale.Grade.GradeName} dataIndex="gradeName" key="1" />
                     <Column
                         title={locale.locale.Action}
@@ -47,6 +48,7 @@ const GradeList = observer(() => {
                                     setModalType(EDIT_MODAL);
                                     setIsLoading(true);
                                     setModalVisible(true);
+                                    console.log(record.gradeId);
                                     setSelectedGrade(record.gradeId);
                                 }}>
                                     {locale.locale.Edit}
@@ -76,7 +78,7 @@ const GradeList = observer(() => {
                     />
                 </Table>
             </Spin>
-            <GradeModal
+                <GradeModal
                 modalType={modalType}
                 open={modalVisible}
                 onCancel={() => {
@@ -84,8 +86,8 @@ const GradeList = observer(() => {
                     setIsLoading(false);
                     setModalVisible(false);
                 }}
-                gradeId={selectedGrade}
-            />
+                    gradeId={modalVisible ? selectedGrade : null}
+                />
         </div>
     );
 });

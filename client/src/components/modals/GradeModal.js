@@ -38,7 +38,7 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
         else if(modalType === EDIT_MODAL)
         {
             updateGrade(selectedGrade.gradeId, gradeName).then((updatedGrade) =>{
-                grade.setGrades([...grade.grades, updatedGrade])
+                grade.setGrades(grade.grades.map((item) => item.gradeId === updateGrade.gradeId ? {...updateGrade} : item))
                 setSelectedGrade(null);
                 setGradeName('');
                 onCancel();
@@ -50,6 +50,7 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
         <Modal
             title={modalType === ADD_MODAL ? locale.locale.Grade.Add : locale.locale.Grade.Edit}
             open={open}
+            destroyOnClose={true}
             onOk={handleOk}
             confirmLoading={confirmLoading}
             onCancel={onCancel}
