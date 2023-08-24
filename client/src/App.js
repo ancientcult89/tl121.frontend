@@ -15,7 +15,7 @@ const App = observer(() => {
     const [selectedLocale, setSelectedLocale] = useState(enLocale);
     useEffect(() => {
         let token = localStorage.getItem('token');
-        if(token != '')
+        if(token != null ?? token !== '')
         {
             user.setUser(true);
             user.setIsAuth(true)
