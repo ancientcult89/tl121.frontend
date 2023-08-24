@@ -42,7 +42,7 @@ const GradeList = observer(() => {
                     <Column
                         title={locale.locale.Action}
                         key="2"
-                        render={(_, record) => (
+                        render={(record) => (
                             <Space size="middle">
                                 <a onClick={() => {
                                     setModalType(EDIT_MODAL);

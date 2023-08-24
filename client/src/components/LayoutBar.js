@@ -6,7 +6,7 @@ import {
     BookOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import {GRADE_ROUTE, LOGIN_ROUTE, PERSON_ROUTE} from "../utils/consts";
+import {GRADE_ROUTE, PERSON_ROUTE} from "../utils/consts";
 import AppRouter from "./AppRouter";
 import {enLocale} from "../locales/en-En";
 
@@ -24,7 +24,7 @@ function getItem(label, key, icon, children) {
 const LayoutBar = () => {
     const navigate = useNavigate();
     const [current, setCurrent] = useState('mail');
-    const {user, locale} = useContext(Context);
+    const {locale} = useContext(Context);
     const [selectedLocale, setSelectedLocale] = useState(enLocale)
     const [collapsed, setCollapsed] = useState(false);
     const {

@@ -17,7 +17,6 @@ const PersonList = observer(() => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        console.log('rerender')
         getPersonList()
             .then(data => {
                 person.setPersons(data)
@@ -41,7 +40,7 @@ const PersonList = observer(() => {
                 {locale.locale.Person.Add}
             </Button>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
-                <Table dataSource={items} style={{marginTop: 20}}>
+                <Table dataSource={items} rowKey={(record) => record.personId } style={{marginTop: 20}}>
                     <Column title={locale.locale.Person.LastName} dataIndex="lastName" key="lastName"/>
                     <Column title={locale.locale.Person.FirstName} dataIndex="firstName" key="firstName"/>
                     <Column title={locale.locale.Person.SurName} dataIndex="surName" key="surName"/>
@@ -56,7 +55,7 @@ const PersonList = observer(() => {
                     <Column
                         title={locale.locale.Action}
                         key="action"
-                        render={(_, record) => (
+                        render={(record) => (
                             <Space size="middle">
                                 <a onClick={() => {
                                     setModalType(EDIT_MODAL);
@@ -101,7 +100,7 @@ const PersonList = observer(() => {
                     setIsLoading(false);
                     setModalVisible(false);
                 }}
-                personId={selectedPerson}
+                personId={modalVisible ? selectedPerson : null}
             />
         </div>
 

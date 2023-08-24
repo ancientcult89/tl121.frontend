@@ -3,7 +3,7 @@ import {Button, Dropdown, Form, Input, Modal, Space, Spin} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createPerson, getPerson, getPersonList, updatePerson} from "../../http/personApi";
-import {getGradeList} from "../../http/gradeApi";
+import {getGradeList, updateGrade} from "../../http/gradeApi";
 
 const PersonModal = ({modalType, open, onCancel, personId}) => {
     const {grade, person, locale} = useContext(Context)
@@ -98,7 +98,7 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
         {
             formData = {...formData, "personId": personId};
             updatePerson(formData).then((updatedPerson) =>{
-                person.setPersons([...person.persons, updatedPerson])
+                person.setPersons(person.persons.map((item) => item.personId === personId ? {...updatedPerson} : item))
                 setSelectedGradeId(null);
                 setSelectedGradeName(null);
                 setPersonEmail('');

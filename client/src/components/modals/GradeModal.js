@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Form, Input, Modal} from 'antd';
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
-import {createGrade, getGrade, getGradeList, updateGrade} from "../../http/gradeApi";
+import {createGrade, getGrade, updateGrade} from "../../http/gradeApi";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 

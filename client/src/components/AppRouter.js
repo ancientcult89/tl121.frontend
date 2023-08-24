@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {GRADE_ROUTE, LOGIN_ROUTE, PERSON_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
 import GradeList from "./GradeList";
 import Auth from "../pages/Auth";
@@ -26,7 +26,6 @@ const AppRouter = () => {
                         exact
                     />
                 </React.Fragment>
-
             )}
             {
                 <React.Fragment>
