@@ -15,7 +15,7 @@ const App = observer(() => {
     const [selectedLocale, setSelectedLocale] = useState(enLocale);
     useEffect(() => {
         let token = localStorage.getItem('token');
-        if(token !== null && token !== '')
+        if(token != '')
         {
             user.setUser(true);
             user.setIsAuth(true)
@@ -32,8 +32,7 @@ const App = observer(() => {
         <React.StrictMode>
             <BrowserRouter>
                 <TopBar/>
-                <LayoutBar>
-                </LayoutBar>
+                <LayoutBar/>
             </BrowserRouter>
         </React.StrictMode>
     );

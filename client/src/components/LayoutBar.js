@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {Context} from "../index";
 import {
@@ -6,9 +6,10 @@ import {
     BookOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import {GRADE_ROUTE, PERSON_ROUTE} from "../utils/consts";
+import {GRADE_ROUTE, LOGIN_ROUTE, PERSON_ROUTE} from "../utils/consts";
 import AppRouter from "./AppRouter";
 import {enLocale} from "../locales/en-En";
+import {observer} from "mobx-react-lite";
 
 const { Content, Sider } = Layout;
 
@@ -21,10 +22,10 @@ function getItem(label, key, icon, children) {
     };
 }
 
-const LayoutBar = () => {
+const LayoutBar = observer(() => {
     const navigate = useNavigate();
     const [current, setCurrent] = useState('mail');
-    const {locale} = useContext(Context);
+    const {locale, user} = useContext(Context);
     const [selectedLocale, setSelectedLocale] = useState(enLocale)
     const [collapsed, setCollapsed] = useState(false);
     const {
@@ -44,6 +45,7 @@ const LayoutBar = () => {
             getItem(locale.locale.GradeReference, GRADE_ROUTE),
         ]),
     ];
+
     return (
         <Layout
             style={{
@@ -79,6 +81,6 @@ const LayoutBar = () => {
             </Layout>
         </Layout>
     );
-};
+});
 
 export default LayoutBar;

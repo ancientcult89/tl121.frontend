@@ -48,7 +48,6 @@ const GradeList = observer(() => {
                                     setModalType(EDIT_MODAL);
                                     setIsLoading(true);
                                     setModalVisible(true);
-                                    console.log(record.gradeId);
                                     setSelectedGrade(record.gradeId);
                                 }}>
                                     {locale.locale.Edit}
