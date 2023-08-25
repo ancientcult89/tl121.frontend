@@ -15,6 +15,8 @@ export const enLocale  = {
     Register: "Register",
     LogOut: "LogOut",
     References: "References",
+    AdminPanel: "Admin Panel",
+    Dashboard: "Dashboard",
     PersonReference: "Person",
     GradeReference: "Grade",
 
@@ -38,4 +40,11 @@ export const enLocale  = {
         DeleteConfirmation: "Are you sure to delete this Grade?",
         GradeName: "Grade Name",
     },
+    OneTwoOne: {
+        Person: "Person",
+        Grade: "Grade",
+        LastMeeting: "Last 1-2-1 meeting",
+        DeadLine: "Deadline",
+        DaysForDeadline: "Days for Deadline",
+    }
 }

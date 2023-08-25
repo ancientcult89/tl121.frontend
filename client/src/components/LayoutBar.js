@@ -1,12 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {Context} from "../index";
 import {
     TeamOutlined,
     BookOutlined,
+    AppstoreOutlined,
+    InsertRowAboveOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import {GRADE_ROUTE, LOGIN_ROUTE, PERSON_ROUTE} from "../utils/consts";
+import {GRADE_ROUTE, LOGIN_ROUTE, ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_ROUTE} from "../utils/consts";
 import AppRouter from "./AppRouter";
 import {enLocale} from "../locales/en-En";
 import {observer} from "mobx-react-lite";
@@ -38,11 +40,14 @@ const LayoutBar = observer(() => {
     };
 
     const items = [
+        getItem(locale.locale.Dashboard, ONE_TWO_ONE_DEADLINES_ROUTE, <InsertRowAboveOutlined />),
         getItem('1-2-1', '1', <TeamOutlined />),
-
         getItem(locale.locale.References, 'sub1', <BookOutlined />, [
             getItem(locale.locale.PersonReference, PERSON_ROUTE),
             getItem(locale.locale.GradeReference, GRADE_ROUTE),
+        ]),
+        getItem(locale.locale.AdminPanel, 'sub2', <AppstoreOutlined />, [
+            getItem("placeholder"),
         ]),
     ];
 

@@ -2,8 +2,8 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Button, Dropdown, Form, Input, Modal, Space, Spin} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
-import {createPerson, getPerson, getPersonList, updatePerson} from "../../http/personApi";
-import {getGradeList, updateGrade} from "../../http/gradeApi";
+import {createPerson, getPerson, updatePerson} from "../../http/personApi";
+import {getGradeList} from "../../http/gradeApi";
 
 const PersonModal = ({modalType, open, onCancel, personId}) => {
     const {grade, person, locale} = useContext(Context)

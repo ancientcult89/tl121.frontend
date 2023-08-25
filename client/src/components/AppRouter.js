@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {GRADE_ROUTE, LOGIN_ROUTE, PERSON_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
+import {GRADE_ROUTE, LOGIN_ROUTE, ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
 import GradeList from "./GradeList";
 import Auth from "../pages/Auth";
 import {Route, Routes} from "react-router-dom";
 import {Context} from "../index";
 import PersonList from "./PersonList";
+import OneToOneDeadLineList from "./OneToOneDeadLineList";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -23,6 +24,12 @@ const AppRouter = () => {
                         key={PERSON_ROUTE}
                         path={PERSON_ROUTE}
                         element={<PersonList />}
+                        exact
+                    />
+                    <Route
+                        key={ONE_TWO_ONE_DEADLINES_ROUTE}
+                        path={ONE_TWO_ONE_DEADLINES_ROUTE}
+                        element={<OneToOneDeadLineList />}
                         exact
                     />
                 </React.Fragment>

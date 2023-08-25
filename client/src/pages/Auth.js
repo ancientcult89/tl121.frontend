@@ -1,11 +1,10 @@
 import {observer} from "mobx-react-lite";
 import React, {useContext, useState} from "react";
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import {useLocation, useNavigate} from "react-router-dom";
-import {GRADE_ROUTE, LOGIN_ROUTE} from "../utils/consts";
+import {LOGIN_ROUTE, ONE_TWO_ONE_DEADLINES_ROUTE} from "../utils/consts";
 import {Context} from "../index";
 import {login, registration} from "../http/userApi";
-import FormItemLabel from "antd/es/form/FormItemLabel";
 
 
 const Auth = observer(() => {
@@ -19,7 +18,7 @@ const Auth = observer(() => {
         try {
             let authRespose;
             //if(isLogin) {
-            authRespose = await  login(email, password);
+            authRespose = await login(email, password);
 
             //}
 /*            else {
@@ -28,7 +27,7 @@ const Auth = observer(() => {
             }*/
             user.setUser(user);
             user.setIsAuth(true);
-            navigate(GRADE_ROUTE);
+            navigate(ONE_TWO_ONE_DEADLINES_ROUTE);
         }
         catch (e)
         {
