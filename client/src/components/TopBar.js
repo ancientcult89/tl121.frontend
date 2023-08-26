@@ -1,11 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, Row} from "antd";
+import React, {useContext} from 'react';
+import {Button, Col, Row} from "antd";
 import {Context} from "../index";
-import {enLocale} from "../locales/en-En";
 import {useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE} from "../utils/consts";
+import {observer} from "mobx-react-lite";
 
-const TopBar = () => {
+const TopBar = observer(() => {
     const {locale, user} = useContext(Context)
     const navigate = useNavigate();
 
@@ -15,19 +15,42 @@ const TopBar = () => {
         user.setUser(null);
         navigate(LOGIN_ROUTE);
     }
+    const marginTopButtons = 8;
+    const signIn = () => {
+        navigate(LOGIN_ROUTE);
+    }
+
     return (
-        <div style={{background:"black", height: 42}}>
-            <Row >
-                <div style={{color:"white", fontSize: "20px", marginLeft: 5, marginTop: 5}}
-                >
-                    TeamLead Helper
-                </div>
-                <Button style={{marginTop: 5, marginLeft: 5}}>{locale.locale.SignIn}</Button>
-                <Button style={{marginTop: 5, marginLeft: 5}}>{locale.locale.Register}</Button>
-                <Button style={{marginTop: 5, marginLeft: 5}} onClick={logOut}>{locale.locale.LogOut}</Button>
+        <div style={{background:"black", height: 47}}>
+            <Row>
+                <Col span={3} >
+                    <div style={{color:"white", fontSize: "25px", marginLeft: 5, marginTop: 5} } align="right">
+                        TeamLead Helper
+                    </div>
+                </Col>
+                <Col span={20}>
+                    <div align="right">
+                        {user.isAuth &&
+                            <Button style={{marginTop: marginTopButtons, marginLeft: 5}}  onClick={logOut}>{locale.locale.LogOut}</Button>
+                        }
+                        {!user.isAuth &&
+                            <div>
+                                <Button
+                                    style={{marginTop: marginTopButtons, marginLeft: 5}}
+                                    onClick={signIn}
+                                >
+                                    {locale.locale.SignIn}
+                                </Button>
+                                <Button style={{marginTop: marginTopButtons, marginLeft: 5}}>
+                                    {locale.locale.Register}
+                                </Button>
+                            </div>
+                        }
+                    </div>
+                </Col>
             </Row>
         </div>
     );
-};
+});
 
 export default TopBar;

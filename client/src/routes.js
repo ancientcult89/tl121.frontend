@@ -1,8 +1,16 @@
-import {GRADE_ROUTE, LOGIN_ROUTE, ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_ROUTE, REGISTRATION_ROUTE} from "./utils/consts";
+import {
+    GRADE_ROUTE,
+    LOGIN_ROUTE,
+    ONE_TWO_ONE_DEADLINES_ROUTE,
+    PERSON_ROUTE,
+    PROJECT_ROUTE,
+    REGISTRATION_ROUTE
+} from "./utils/consts";
 import Auth from "./pages/Auth";
 import GradeList from "./components/GradeList";
 import PersonList from "./components/PersonList";
 import OneToOneDeadLineList from "./components/OneToOneDeadLineList";
+import ProjectList from "./components/ProjectList";
 
 export const authRoutes = [
 
@@ -32,5 +40,9 @@ export const publicRoutes = [
     {
         path: ONE_TWO_ONE_DEADLINES_ROUTE,
         Component: OneToOneDeadLineList
+    },
+    {
+        path: PROJECT_ROUTE,
+        Component: ProjectList
     },
 ];

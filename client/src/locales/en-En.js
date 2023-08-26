@@ -19,6 +19,7 @@ export const enLocale  = {
     Dashboard: "Dashboard",
     PersonReference: "Person",
     GradeReference: "Grade",
+    ProjectReference: "Project",
 
     Person: {
         Add: "Add Person",
@@ -46,5 +47,12 @@ export const enLocale  = {
         LastMeeting: "Last 1-2-1 meeting",
         DeadLine: "Deadline",
         DaysForDeadline: "Days for Deadline",
+    },
+    Project: {
+        ProjectName: "Project Name",
+        Add: "Add Project",
+        Edit: "Edit Project",
+        DeleteTitle: "Delete the Project",
+        DeleteConfirmation: "Are you sure to delete this Project?",
     }
 }

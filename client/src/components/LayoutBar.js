@@ -8,7 +8,7 @@ import {
     InsertRowAboveOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import {GRADE_ROUTE, LOGIN_ROUTE, ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_ROUTE} from "../utils/consts";
+import {GRADE_ROUTE, LOGIN_ROUTE, ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_ROUTE, PROJECT_ROUTE} from "../utils/consts";
 import AppRouter from "./AppRouter";
 import {enLocale} from "../locales/en-En";
 import {observer} from "mobx-react-lite";
@@ -45,6 +45,7 @@ const LayoutBar = observer(() => {
         getItem(locale.locale.References, 'sub1', <BookOutlined />, [
             getItem(locale.locale.PersonReference, PERSON_ROUTE),
             getItem(locale.locale.GradeReference, GRADE_ROUTE),
+            getItem(locale.locale.ProjectReference, PROJECT_ROUTE),
         ]),
         getItem(locale.locale.AdminPanel, 'sub2', <AppstoreOutlined />, [
             getItem("placeholder"),

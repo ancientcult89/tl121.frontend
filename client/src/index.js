@@ -5,6 +5,7 @@ import UserStore from "./store/UserStore";
 import GradeStore from "./store/GradeStore";
 import PersonStore from "./store/PersonStore";
 import LocaleStore from "./store/LocaleStore";
+import ProjectStore from "./store/ProjectStore";
 
 export const Context = createContext(null);
 
@@ -16,7 +17,8 @@ root.render(
                 user: new UserStore(),
                 grade: new GradeStore(),
                 person: new PersonStore(),
-                locale: new LocaleStore()
+                locale: new LocaleStore(),
+                project: new ProjectStore()
             }}
         >
             <App />
