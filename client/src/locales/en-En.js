@@ -20,6 +20,7 @@ export const enLocale  = {
     PersonReference: "Person",
     GradeReference: "Grade",
     ProjectReference: "Project",
+    MeetingReference: "1-2-1",
 
     Person: {
         Add: "Add Person",
@@ -54,5 +55,18 @@ export const enLocale  = {
         Edit: "Edit Project",
         DeleteTitle: "Delete the Project",
         DeleteConfirmation: "Are you sure to delete this Project?",
+    },
+    Meeting: {
+        Person: "Person",
+        PlannedDate: "Planned Date",
+        ActualDate: "Actual Date",
+        FollowUpWasSended: "Follow-up was sended",
+        Add: "Add Meeting",
+        Edit: "Edit Meeting",
+        DeleteTitle: "Delete the Meeting",
+        DeleteConfirmation: "Are you sure to delete this Meeting?",
+        Filter: "Filter",
+        ClearFiltering: "Clear",
+        SelectPerson: "Select a Person..."
     }
 }

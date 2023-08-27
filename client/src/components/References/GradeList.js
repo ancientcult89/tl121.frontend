@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Space, Table, Popconfirm, Spin} from 'antd';
-import {Context} from "../index";
-import {deleteGrade, getGradeList} from "../http/gradeApi";
-import {ADD_MODAL, EDIT_MODAL} from "../utils/consts";
-import GradeModal from "./modals/GradeModal";
+import {Context} from "../../index";
+import {deleteGrade, getGradeList} from "../../http/gradeApi";
+import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
+import GradeModal from "../modals/GradeModal";
 import {observer} from "mobx-react-lite";
 
 const { Column } = Table;
@@ -77,16 +77,16 @@ const GradeList = observer(() => {
                     />
                 </Table>
             </Spin>
-                <GradeModal
-                modalType={modalType}
-                open={modalVisible}
-                onCancel={() => {
-                    setNeedUpdate(!needUpdate);
-                    setIsLoading(false);
-                    setModalVisible(false);
-                }}
-                    gradeId={modalVisible ? selectedGrade : null}
-                />
+            <GradeModal
+            modalType={modalType}
+            open={modalVisible}
+            onCancel={() => {
+                setNeedUpdate(!needUpdate);
+                setIsLoading(false);
+                setModalVisible(false);
+            }}
+                gradeId={modalVisible ? selectedGrade : null}
+            />
         </div>
     );
 });

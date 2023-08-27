@@ -39,7 +39,6 @@ const OneToOneDeadLineList = observer(() => {
             deadLine: new Date(item.deadLine).toLocaleDateString(),
             dayToDeadLine: item.dayToDeadline,
         })
-        console.log("test " + item.person.personId)
     });
 
     return (

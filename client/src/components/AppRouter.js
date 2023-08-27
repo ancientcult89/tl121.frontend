@@ -1,19 +1,20 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import {
     GRADE_ROUTE,
-    LOGIN_ROUTE,
+    LOGIN_ROUTE, MEETING_ROUTE,
     ONE_TWO_ONE_DEADLINES_ROUTE,
     PERSON_ROUTE,
     PROJECT_ROUTE,
     REGISTRATION_ROUTE
 } from "../utils/consts";
-import GradeList from "./GradeList";
+import GradeList from "./References/GradeList";
 import Auth from "../pages/Auth";
 import {Route, Routes} from "react-router-dom";
 import {Context} from "../index";
-import PersonList from "./PersonList";
+import PersonList from "./References/PersonList";
 import OneToOneDeadLineList from "./OneToOneDeadLineList";
-import ProjectList from "./ProjectList";
+import ProjectList from "./References/ProjectList";
+import MeetingList from "./References/MeetingList";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -44,6 +45,12 @@ const AppRouter = () => {
                         key={PROJECT_ROUTE}
                         path={PROJECT_ROUTE}
                         element={<ProjectList />}
+                        exact
+                    />
+                    <Route
+                        key={MEETING_ROUTE}
+                        path={MEETING_ROUTE}
+                        element={<MeetingList />}
                         exact
                     />
                 </React.Fragment>

@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Button, Popconfirm, Space, Spin, Table} from "antd";
-import {ADD_MODAL, EDIT_MODAL} from "../utils/consts";
-import {deletePerson, getPersonList} from "../http/personApi";
-import {Context} from "../index";
-import {deleteProject, getProjectList} from "../http/projectApi";
-import ProjectModal from "./modals/ProjectModal";
+import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
+import {deletePerson, getPersonList} from "../../http/personApi";
+import {Context} from "../../index";
+import {deleteProject, getProjectList} from "../../http/projectApi";
+import ProjectModal from "../modals/ProjectModal";
 
 const { Column } = Table;
 

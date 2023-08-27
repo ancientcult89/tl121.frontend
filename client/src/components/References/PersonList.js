@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Context} from "../index";
+import {Context} from "../../index";
 import {Button, Popconfirm, Space, Spin, Table} from "antd";
-import {ADD_MODAL, EDIT_MODAL} from "../utils/consts";
+import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import Column from "antd/es/table/Column";
-import {deletePerson, getPersonList} from "../http/personApi";
-import PersonModal from "./modals/PersonModal";
+import {deletePerson, getPersonList} from "../../http/personApi";
+import PersonModal from "../modals/PersonModal";
 import {observer} from "mobx-react-lite";
 
 const PersonList = observer(() => {
