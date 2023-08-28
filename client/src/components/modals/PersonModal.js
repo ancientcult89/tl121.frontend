@@ -4,12 +4,12 @@ import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createPerson, getPerson, updatePerson} from "../../http/personApi";
 import {getGradeList} from "../../http/gradeApi";
+import {observer} from "mobx-react-lite";
 
-const PersonModal = ({modalType, open, onCancel, personId}) => {
+const PersonModal = observer(({modalType, open, onCancel, personId}) => {
     const {grade, person, locale} = useContext(Context)
     const [personDataLoaded, setPersonDataLoaded] = useState(false);
     const [gradeTypesLoaded, setGradeTypesLoaded] = useState(false);
-    const [selectedGradeName, setSelectedGradeName] = useState('');
     const [gradeDropdownItems,setGradeDropdownItems] = useState([]);
 
     const [firstName, setFirstName] = useState('');
@@ -17,6 +17,7 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
     const [lastName, setLastName] = useState('');
     const [shortName, setShortName] = useState('');
     const [selectedGradeId, setSelectedGradeId] = useState(null);
+    const [selectedGradeName, setSelectedGradeName] = useState('');
     const [personEmail, setPersonEmail ] = useState('')
 
     const selectGradeTypeHandler = (gradeId) => {
@@ -28,8 +29,6 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
             }
         })
     }
-
-    const items = [];
 
     useEffect(() => {
         getGradeList().then(data => {
@@ -68,7 +67,7 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
         });
         setGradeDropdownItems(items);
         setGradeTypesLoaded(true);
-    }, [personId]);
+    }, [modalType]);
 
     const handleOk = () => {
         let formData = {
@@ -167,6 +166,6 @@ const PersonModal = ({modalType, open, onCancel, personId}) => {
             </Form>
         </Modal>
     );
-};
+});
 
 export default PersonModal;

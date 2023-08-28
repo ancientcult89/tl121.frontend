@@ -4,44 +4,80 @@ import {Context} from "../../index";
 import {deleteMeeting, getMeetingList} from "../../http/meetingApi";
 import {Button, Checkbox, Dropdown, Popconfirm, Row, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
-import {deleteGrade, getGradeList} from "../../http/gradeApi";
 import Column from "antd/es/table/Column";
 import {getPersonList} from "../../http/personApi";
 
 const MeetingList = observer(() => {
-    const {meeting, locale} = useContext(Context);
+    const {meeting, locale, person} = useContext(Context);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalType, setModalType] = useState(null);
     const [selectedMeeting, setSelectedMeeting] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [needUpdate, setNeedUpdate] = useState(true);
-    const [selectedPerson, setSelectedPerson] = useState(null);
+    const [selectedPersonId, setSelectedPersonId] = useState(null);
+    const [selectedPersonFullName, setSelectedPersonFullName] = useState(null);
     const [personDropdownItems, setPersonDropdownItems] = useState([]);
+    const [meetings, setMeetings] = useState([]);
 
     useEffect(() => {
         getMeetingList()
-            .then(data => {meeting.setMeetings(data)})
+            .then(data => {
+                meeting.setMeetings(data);
+                setMeetings(data);
+            })
             .then(() => {
                 const items = [];
                 getPersonList()
-                    .then(persons => persons.map((person) => items.push({
-                            label: person.lastName + ' ' + person.firstName + ' ' + person.surName,
+                    .then(persons => {
+                        person.setPersons(persons)
+                        persons.map((person) => items.push({
+                            label: (
+                                <div onClick={() => selectedPersonHandler(person.personId)}>
+                                    {person.lastName + ' ' + person.firstName + ' ' + person.surName}
+                                </div>
+                            ),
                             key: person.personId,
                         })
-                    ))
+                    )})
                     .finally(() => setPersonDropdownItems(items));
             })
             .catch()
             .finally(() => setIsLoading(false));
     }, [needUpdate, meeting])
 
+    const filteringMeetingList = () => {
+        getMeetingList(selectedPersonId)
+            .then(data => {
+                meeting.setMeetings(data);
+                setMeetings(data);
+            })
+    }
+
+    const clearFilteringMeetingList = () => {
+        getMeetingList()
+            .then(data => {
+                meeting.setMeetings(data);
+                setMeetings(data);
+            })
+    }
+
+    const selectedPersonHandler = (personId) => {
+        person.persons.map(item => {
+            if(item.personId === personId)
+            {
+                setSelectedPersonFullName(item.lastName + ' ' + item.firstName + ' ' + item.surName);
+                setSelectedPersonId(item.personId)
+            }
+        })
+    }
+
     return (
         <div>
             <Row>
-                <Button type={"primary"}>
+                <Button type={"primary"} onClick={filteringMeetingList}>
                     {locale.locale.Meeting.Filter}
                 </Button>
-                <Button style={{marginLeft: 5}}>
+                <Button style={{marginLeft: 5}} onClick={clearFilteringMeetingList}>
                     {locale.locale.Meeting.ClearFiltering}
                 </Button>
                 <Dropdown
@@ -50,7 +86,7 @@ const MeetingList = observer(() => {
                 }}>
                     <Button style={{marginLeft: 5}}>
                         <Space>
-                            {selectedPerson || locale.locale.Meeting.SelectPerson}
+                            {selectedPersonFullName || locale.locale.Meeting.SelectPerson}
                         </Space>
                     </Button>
                 </Dropdown>
@@ -68,7 +104,7 @@ const MeetingList = observer(() => {
                 {locale.locale.Meeting.Add}
             </Button>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
-                <Table dataSource={meeting.meetings} rowKey={(record) => record.meetingId } style={{marginTop:20}}>
+                <Table dataSource={meetings} rowKey={(record) => record.meetingId } style={{marginTop:20}}>
                     <Column
                         title={locale.locale.Meeting.Person}
                         dataIndex="person"

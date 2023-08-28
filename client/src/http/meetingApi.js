@@ -1,7 +1,8 @@
 import {$authHost} from "./index";
 
-export const getMeetingList = async () => {
-    const {data} = await $authHost.get('api/v1/Meeting/')
+export const getMeetingList = async (personId) => {
+    console.log('api ' + personId)
+    const {data} = await $authHost.get('api/v1/Meeting/', {params : {personId: personId}})
     return data;
 }
 
