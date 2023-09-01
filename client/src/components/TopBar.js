@@ -21,7 +21,7 @@ const TopBar = observer(() => {
     }
 
     return (
-        <div style={{background:"black", height: 47}}>
+        <div style={{background:"rgb(0, 33, 64)", height: 47}}>
             <Row>
                 <Col span={3} >
                     <div style={{color:"white", fontSize: "25px", marginLeft: 5, marginTop: 5} } align="right">
