@@ -1,4 +1,3 @@
-import Auth from "./pages/Auth";
 import React, {useContext, useEffect, useState} from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Spin } from 'antd';
@@ -7,6 +6,7 @@ import {Context} from "./index";
 import LayoutBar from "./components/LayoutBar";
 import TopBar from "./components/TopBar";
 import {enLocale} from "./locales/en-En";
+import './global.css';
 
 const App = observer(() => {
     const {user} = useContext(Context)
