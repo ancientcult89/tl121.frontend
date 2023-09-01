@@ -6,6 +6,7 @@ export const enLocale  = {
     PasswordRequiredMessage: "Please input your password!",
     Password: "Password",
     Submit: "Submit",
+    NotSet: "Not Set",
     OK: "Ok",
     NO: "No",
     Edit: "Edit",
@@ -65,7 +66,6 @@ export const enLocale  = {
         Edit: "Edit Meeting",
         DeleteTitle: "Delete the Meeting",
         DeleteConfirmation: "Are you sure to delete this Meeting?",
-        Filter: "Filter",
         ClearFiltering: "Clear",
         SelectPerson: "Select a Person..."
     }

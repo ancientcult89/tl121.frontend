@@ -6,12 +6,13 @@ import {Button, Checkbox, Dropdown, Popconfirm, Row, Space, Spin, Table} from "a
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import Column from "antd/es/table/Column";
 import {getPersonList} from "../../http/personApi";
+import MeetingModal from "../modals/MeetingModal";
 
 const MeetingList = observer(() => {
     const {meeting, locale, person} = useContext(Context);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalType, setModalType] = useState(null);
-    const [selectedMeeting, setSelectedMeeting] = useState(null);
+    const [selectedMeetingId, setSelectedMeetingId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [needUpdate, setNeedUpdate] = useState(true);
     const [selectedPersonId, setSelectedPersonId] = useState(null);
@@ -20,7 +21,7 @@ const MeetingList = observer(() => {
     const [meetings, setMeetings] = useState([]);
 
     useEffect(() => {
-        getMeetingList()
+        getMeetingList(selectedPersonId)
             .then(data => {
                 meeting.setMeetings(data);
                 setMeetings(data);
@@ -32,7 +33,9 @@ const MeetingList = observer(() => {
                         person.setPersons(persons)
                         persons.map((person) => items.push({
                             label: (
-                                <div onClick={() => selectedPersonHandler(person.personId)}>
+                                <div onClick={() => {
+                                    selectedPersonHandler(person.personId);
+                                }}>
                                     {person.lastName + ' ' + person.firstName + ' ' + person.surName}
                                 </div>
                             ),
@@ -45,8 +48,8 @@ const MeetingList = observer(() => {
             .finally(() => setIsLoading(false));
     }, [needUpdate, meeting])
 
-    const filteringMeetingList = () => {
-        getMeetingList(selectedPersonId)
+    const filteringMeetingList = (personId) => {
+        getMeetingList(personId)
             .then(data => {
                 meeting.setMeetings(data);
                 setMeetings(data);
@@ -59,6 +62,8 @@ const MeetingList = observer(() => {
                 meeting.setMeetings(data);
                 setMeetings(data);
             })
+        setSelectedPersonFullName(null);
+        setSelectedPersonId(null);
     }
 
     const selectedPersonHandler = (personId) => {
@@ -66,18 +71,16 @@ const MeetingList = observer(() => {
             if(item.personId === personId)
             {
                 setSelectedPersonFullName(item.lastName + ' ' + item.firstName + ' ' + item.surName);
-                setSelectedPersonId(item.personId)
+                setSelectedPersonId(item.personId);
             }
+            filteringMeetingList(personId);
         })
     }
 
     return (
         <div>
             <Row>
-                <Button type={"primary"} onClick={filteringMeetingList}>
-                    {locale.locale.Meeting.Filter}
-                </Button>
-                <Button style={{marginLeft: 5}} onClick={clearFilteringMeetingList}>
+                <Button onClick={clearFilteringMeetingList}>
                     {locale.locale.Meeting.ClearFiltering}
                 </Button>
                 <Dropdown
@@ -98,7 +101,7 @@ const MeetingList = observer(() => {
                     setModalType(ADD_MODAL);
                     setModalVisible(true);
                     setIsLoading(true);
-                    setSelectedMeeting(null);
+                    setSelectedMeetingId(null);
                 }}
             >
                 {locale.locale.Meeting.Add}
@@ -129,7 +132,7 @@ const MeetingList = observer(() => {
                         key="3"
                         render={(record) => (
                             <a>
-                                {new Date(record.meetingDate).toLocaleDateString()}
+                                {record.meetingDate != null ? new Date(record.meetingDate).toLocaleDateString() : locale.locale.NotSet}
                             </a>
                         )}
                     />
@@ -149,7 +152,7 @@ const MeetingList = observer(() => {
                                     setModalType(EDIT_MODAL);
                                     setIsLoading(true);
                                     setModalVisible(true);
-                                    setSelectedMeeting(record.gradeId);
+                                    setSelectedMeetingId(record.meetingId);
                                 }}>
                                     {locale.locale.Edit}
                                 </a>
@@ -179,6 +182,16 @@ const MeetingList = observer(() => {
                     />
                 </Table>
             </Spin>
+            <MeetingModal
+                modalType={modalType}
+                open={modalVisible}
+                onCancel={() => {
+                    setNeedUpdate(!needUpdate);
+                    setIsLoading(false);
+                    setModalVisible(false);
+                }}
+                meetingId={modalVisible ? selectedMeetingId : null}
+            />
         </div>
     );
 });

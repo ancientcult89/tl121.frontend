@@ -24,8 +24,6 @@ const OneToOneDeadLineList = observer(() => {
     useEffect(() => {
         getOneTwoOne().then(oneTwoOneDeadlines => {
             setData(oneTwoOneDeadlines);
-            data.map((item) => console.log(item));
-            console.log(oneTwoOneDeadlines);
             setIsLoading(false);
         });
     }, []);
