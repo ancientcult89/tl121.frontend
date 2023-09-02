@@ -24,3 +24,8 @@ export const updateMeeting = async (meeting) => {
     const {data} = await $authHost.put('api/v1/Meeting/' + meeting.meetingId, meeting)
     return data
 }
+
+export const getPrevNotesAndFoals = async (meetingId, personId) => {
+    const {data} = await $authHost.get('api/v1/Meeting/previous', {params: {meetingId: meetingId, personId: personId}})
+    return data
+}

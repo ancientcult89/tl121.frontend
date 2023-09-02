@@ -187,7 +187,10 @@ const MeetingList = observer(() => {
                         key="6"
                         render={(record) => (
                             <Space size="middle">
-                                <a onClick={() => navigate(MEETING_PROCESSING_ROUTE, {state:{meetingId:record.meetingId, personId:record.personId}})}
+                                <a onClick={() => {
+                                    console.log('click')
+                                    navigate(MEETING_PROCESSING_ROUTE, {state:{meetingId:record.meetingId, personId:record.personId}})
+                                }}
                                 >
                                     {locale.locale.Meeting.Process}
                                 </a>

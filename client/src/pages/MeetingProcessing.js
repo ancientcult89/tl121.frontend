@@ -1,21 +1,29 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {useLocation} from "react-router-dom";
 import {getPerson} from "../http/personApi";
+import {getPrevNotesAndFoals} from "../http/meetingApi";
 
 const MeetingProcessing = () => {
     const {state} = useLocation()
     const [personFullName, setPersonFullName] = useState('');
-    getPerson(state.personId)
+    const [previousNotesAndGoals, setPreviousNotesAndGoals] = useState('')
+    useEffect(() => {
+        getPerson(state.personId)
         .then(data => {
-            setPersonFullName(data.lastName + ' ' + data.firstName + ' ' + data.surName);
+                setPersonFullName(data.lastName + ' ' + data.firstName + ' ' + data.surName);
         })
-    console.log(personFullName)
+
+        getPrevNotesAndFoals(state.meetingId, state.personId).then(data => setPreviousNotesAndGoals(data))
+        console.log('render')
+    }, [])
 
     return (
         <div>
             <h3>{personFullName}</h3>
-            {state.meetingId + ' ' + state.personId}
+            <div>
+                <pre>{previousNotesAndGoals}</pre>
+            </div>
         </div>
     );
 };
