@@ -3,10 +3,11 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import {deleteMeeting, getMeetingList} from "../../http/meetingApi";
 import {Button, Checkbox, Dropdown, Popconfirm, Row, Space, Spin, Table} from "antd";
-import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
+import {ADD_MODAL, EDIT_MODAL, MEETING_PROCESSING_ROUTE} from "../../utils/consts";
 import Column from "antd/es/table/Column";
 import {getPersonList} from "../../http/personApi";
 import MeetingModal from "../modals/MeetingModal";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 
 const MeetingList = observer(() => {
     const {meeting, locale, person} = useContext(Context);
@@ -19,6 +20,7 @@ const MeetingList = observer(() => {
     const [selectedPersonFullName, setSelectedPersonFullName] = useState(null);
     const [personDropdownItems, setPersonDropdownItems] = useState([]);
     const [meetings, setMeetings] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         getMeetingList(selectedPersonId)
@@ -145,7 +147,7 @@ const MeetingList = observer(() => {
                     />
                     <Column
                         title={locale.locale.Action}
-                        key="2"
+                        key="5"
                         render={(record) => (
                             <Space size="middle">
                                 <a onClick={() => {
@@ -177,6 +179,18 @@ const MeetingList = observer(() => {
                                         {locale.locale.Delete}
                                     </a>
                                 </Popconfirm>
+                            </Space>
+                        )}
+                    />
+                    <Column
+                        title={locale.locale.Meeting.Processing}
+                        key="6"
+                        render={(record) => (
+                            <Space size="middle">
+                                <a onClick={() => navigate(MEETING_PROCESSING_ROUTE, {state:{meetingId:record.meetingId, personId:record.personId}})}
+                                >
+                                    {locale.locale.Meeting.Process}
+                                </a>
                             </Space>
                         )}
                     />

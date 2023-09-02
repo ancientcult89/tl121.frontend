@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {
     GRADE_ROUTE,
-    LOGIN_ROUTE, MEETING_ROUTE,
+    LOGIN_ROUTE, MEETING_PROCESSING_ROUTE, MEETING_ROUTE,
     ONE_TWO_ONE_DEADLINES_ROUTE,
     PERSON_ROUTE,
     PROJECT_ROUTE,
@@ -15,6 +15,7 @@ import PersonList from "./References/PersonList";
 import OneToOneDeadLineList from "./OneToOneDeadLineList";
 import ProjectList from "./References/ProjectList";
 import MeetingList from "./References/MeetingList";
+import MeetingProcessing from "../pages/MeetingProcessing";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -51,6 +52,12 @@ const AppRouter = () => {
                         key={MEETING_ROUTE}
                         path={MEETING_ROUTE}
                         element={<MeetingList />}
+                        exact
+                    />
+                    <Route
+                        key={MEETING_PROCESSING_ROUTE}
+                        path={MEETING_PROCESSING_ROUTE}
+                        element={<MeetingProcessing />}
                         exact
                     />
                 </React.Fragment>

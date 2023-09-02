@@ -64,6 +64,8 @@ export const enLocale  = {
         FollowUpWasSended: "Follow-up was sended",
         Add: "Add Meeting",
         Edit: "Edit Meeting",
+        Process: "Process",
+        Processing: "Processing",
         DeleteTitle: "Delete the Meeting",
         DeleteConfirmation: "Are you sure to delete this Meeting?",
         ClearFiltering: "Clear",
