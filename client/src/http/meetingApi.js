@@ -29,3 +29,28 @@ export const getPrevNotesAndFoals = async (meetingId, personId) => {
     const {data} = await $authHost.get('api/v1/Meeting/previous', {params: {meetingId: meetingId, personId: personId}})
     return data
 }
+
+export const getMeetingGoals = async (meetingId) => {
+    const {data} = await $authHost.get('api/v1/Meeting/' + meetingId + '/goal/')
+    return data
+}
+
+export const getMeetingNotes = async (meetingId) => {
+    const {data} = await $authHost.get('api/v1/Meeting/' + meetingId + '/note/')
+    return data
+}
+
+export const createMeetingNote = async (meetingNote) => {
+    const {data} = await $authHost.post('api/v1/Meeting/' + meetingNote.meetingId + '/note/', meetingNote);
+    return data
+}
+
+export const updateMeetingNote = async (meetingNote) => {
+    const {data} = await $authHost.put('api/v1/Meeting/' + meetingNote.meetingId + '/note/', meetingNote)
+    return data
+}
+
+export const deleteMeetingNote = async (meetingId, meetingNoteId) => {
+    const {data} = await $authHost.delete('api/v1/Meeting/' + meetingId + '/note/' + meetingNoteId);
+    return data
+}
