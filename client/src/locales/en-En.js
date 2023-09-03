@@ -66,6 +66,7 @@ export const enLocale  = {
             Goals: "Goals",
             Goal: "Goal",
             AddGoal: "Add Goal",
+            EditGoal: "Edit Goal",
             DeleteTitle: "Delete the Goal",
             DeleteConfirmation: "Are you sure to delete this Goal?",
         },

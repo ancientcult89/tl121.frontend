@@ -20,7 +20,6 @@ const MeetingProcessing = () => {
         })
 
         getPrevNotesAndFoals(state.meetingId, state.personId).then(data => setPreviousNotesAndGoals(data))
-        console.log('render')
     }, [])
 
     return (

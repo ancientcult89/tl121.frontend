@@ -63,7 +63,6 @@ const MeetingNotes = ({meetingId}) => {
             setNotes([...notes, newMeetingNote]);
         })
         setNoteText('');
-        console.log(noteText, noteFeedbackState);
     }
 
     return (

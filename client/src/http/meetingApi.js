@@ -35,6 +35,21 @@ export const getMeetingGoals = async (meetingId) => {
     return data
 }
 
+export const createMeetingGoal = async (meetingGoal) => {
+    const {data} = await $authHost.post('api/v1/Meeting/' + meetingGoal.meetingId + '/goal/', meetingGoal);
+    return data
+}
+
+export const updateMeetingGoal = async (meetingGoal) => {
+    const {data} = await $authHost.put('api/v1/Meeting/' + meetingGoal.meetingId + '/goal/', meetingGoal)
+    return data
+}
+
+export const deleteMeetingGoal = async (meetingId, meetingGoalId) => {
+    const {data} = await $authHost.delete('api/v1/Meeting/' + meetingId + '/goal/' + meetingGoalId);
+    return data
+}
+
 export const getMeetingNotes = async (meetingId) => {
     const {data} = await $authHost.get('api/v1/Meeting/' + meetingId + '/note/')
     return data
