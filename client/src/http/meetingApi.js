@@ -71,5 +71,9 @@ export const deleteMeetingNote = async (meetingId, meetingNoteId) => {
 }
 
 export const getFollowUp = async (meetingId, personId) => {
-    const {data} = await $authHost.get('api/v1/Meeting/previous' + meetingId + '/followup/', {params: {meetingId: meetingId, personId: personId}})
+    const {data} = await $authHost.get('api/v1/Meeting/' + meetingId + '/followup/', {params: {meetingId: meetingId, personId: personId}});
+    return data;}
+
+export const sendFollowUp = async (request) => {
+    const {data} = await $authHost.post('api/v1/Meeting/' + request.meetingId + '/followup/', request);
     return data;}

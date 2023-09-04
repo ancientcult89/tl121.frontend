@@ -4,7 +4,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {Button} from "antd";
 import {MEETING_FOLLOWUP_ROUTE, MEETING_ROUTE} from "../../utils/consts";
 import {Context} from "../../index";
-import {getFollowUp} from "../../http/meetingApi";
+import {getFollowUp, sendFollowUp} from "../../http/meetingApi";
 
 const FollowUp = () => {
     const {state} = useLocation();
@@ -16,8 +16,11 @@ const FollowUp = () => {
     }, []);
 
     const senFolloUpHandler = () => {
-        console.log('sended');
-        navigate(MEETING_ROUTE)
+        let formData = {
+            "meetingId": state.meetingId,
+            "personId": state.personId,
+        }
+        sendFollowUp(formData).then(r => navigate(MEETING_ROUTE));
     }
 
     return (
