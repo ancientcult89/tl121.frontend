@@ -78,6 +78,10 @@ export const enLocale  = {
             DeleteTitle: "Delete the Note",
             DeleteConfirmation: "Are you sure to delete this Note?",
         },
+        ProcessingContent: {
+            GenerateFollowUp: "Generate Follow-up",
+            SendFollowUp: "Send Follow-Up",
+        },
         PartOfFollowUp: "Participates in feedback",
         Add: "Add Meeting",
         Edit: "Edit Meeting",

@@ -8,6 +8,7 @@ import Column from "antd/es/table/Column";
 import {getPersonList} from "../../http/personApi";
 import MeetingModal from "../modals/MeetingModal";
 import {useNavigate} from "react-router-dom";
+import MeetingProcessing from "../../pages/MeetingProcessing";
 
 const MeetingList = observer(() => {
     const {meeting, locale, person} = useContext(Context);
