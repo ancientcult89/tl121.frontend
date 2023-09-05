@@ -22,6 +22,7 @@ export const enLocale  = {
     GradeReference: "Grade",
     ProjectReference: "Project",
     MeetingReference: "1-2-1",
+    TaskList: "Task List",
 
     Person: {
         Add: "Add Person",
@@ -91,5 +92,9 @@ export const enLocale  = {
         DeleteConfirmation: "Are you sure to delete this Meeting?",
         ClearFiltering: "Clear",
         SelectPerson: "Select a Person..."
+    },
+    Task: {
+        Description: "Task",
+        Complete: "Complete",
     }
 }

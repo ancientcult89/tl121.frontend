@@ -9,6 +9,7 @@ export const PROJECT_ROUTE = '/project'
 export const MEETING_ROUTE = '/meeting'
 export const MEETING_PROCESSING_ROUTE = '/meetingProcessing'
 export const MEETING_FOLLOWUP_ROUTE = '/meetingProcessing/followup'
+export const TASK_ROUTE = '/tasks'
 
 
 // Modal properties

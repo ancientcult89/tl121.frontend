@@ -7,7 +7,7 @@ import {Button, Divider} from "antd";
 import {Context} from "../index";
 import MeetingNotes from "../components/MeetingProcessing/MeetingNotes";
 import MeetingGoals from "../components/MeetingProcessing/MeetingGoals";
-import {MEETING_FOLLOWUP_ROUTE, MEETING_PROCESSING_ROUTE} from "../utils/consts";
+import {MEETING_FOLLOWUP_ROUTE} from "../utils/consts";
 
 const MeetingProcessing = () => {
     const {state} = useLocation();

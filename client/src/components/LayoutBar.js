@@ -6,6 +6,7 @@ import {
     BookOutlined,
     AppstoreOutlined,
     InsertRowAboveOutlined,
+    UnorderedListOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import {
@@ -14,7 +15,7 @@ import {
     MEETING_ROUTE,
     ONE_TWO_ONE_DEADLINES_ROUTE,
     PERSON_ROUTE,
-    PROJECT_ROUTE
+    PROJECT_ROUTE, TASK_ROUTE
 } from "../utils/consts";
 import AppRouter from "./AppRouter";
 import {enLocale} from "../locales/en-En";
@@ -48,7 +49,8 @@ const LayoutBar = observer(() => {
 
     const items = [
         getItem(locale.locale.Dashboard, ONE_TWO_ONE_DEADLINES_ROUTE, <InsertRowAboveOutlined />),
-        getItem('1-2-1', MEETING_ROUTE, <TeamOutlined />),
+        getItem(locale.locale.MeetingReference, MEETING_ROUTE, <TeamOutlined />),
+        getItem(locale.locale.TaskList, TASK_ROUTE, <UnorderedListOutlined />),
         getItem(locale.locale.References, 'sub1', <BookOutlined />, [
             getItem(locale.locale.PersonReference, PERSON_ROUTE),
             getItem(locale.locale.GradeReference, GRADE_ROUTE),

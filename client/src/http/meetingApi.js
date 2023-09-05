@@ -77,3 +77,8 @@ export const getFollowUp = async (meetingId, personId) => {
 export const sendFollowUp = async (request) => {
     const {data} = await $authHost.post('api/v1/Meeting/' + request.meetingId + '/followup/', request);
     return data;}
+
+export const getTaskList = async (personId) => {
+    const {data} = await $authHost.get('api/v1/Task/', {params : {personId: personId}});
+    return data;
+}
