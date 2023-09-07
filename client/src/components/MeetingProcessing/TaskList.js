@@ -1,0 +1,143 @@
+import React, {useContext, useEffect, useState} from 'react';
+import {observer} from "mobx-react-lite";
+import {Context} from "../../index";
+import {completeTask, deleteMeeting, getTaskList} from "../../http/meetingApi";
+import {getPersonList} from "../../http/personApi";
+import {Button, Dropdown, Popconfirm, Row, Space, Spin, Table} from "antd";
+import Column from "antd/es/table/Column";
+
+const TaskList = () => {
+    const {locale, person} = useContext(Context);
+    const [personDropdownItems, setPersonDropdownItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedPersonId, setSelectedPersonId] = useState(null);
+    const [selectedPersonFullName, setSelectedPersonFullName] = useState(null);
+    const [tasks, setTasks] = useState([]);
+
+    useEffect(() => {
+        getTaskList(selectedPersonId)
+            .then(data => {
+                setTasks(data);
+            })
+            .then(() => {
+                const items = [];
+                getPersonList()
+                    .then(persons => {
+                        person.setPersons(persons)
+                        persons.map((person) => items.push({
+                                label: (
+                                    <div onClick={() => {
+                                        selectedPersonHandler(person.personId);
+                                    }}>
+                                        {person.lastName + ' ' + person.firstName + ' ' + person.surName}
+                                    </div>
+                                ),
+                                key: person.personId,
+                            })
+                        )})
+                    .finally(() => setPersonDropdownItems(items));
+            })
+        setIsLoading(false);
+    }, []);
+
+    const selectedPersonHandler = (personId) => {
+        person.persons.map(item => {
+            if(item.personId === personId)
+            {
+                setSelectedPersonFullName(item.lastName + ' ' + item.firstName + ' ' + item.surName);
+                setSelectedPersonId(item.personId);
+            }
+            filteringTaskList(personId);
+        })
+    }
+
+    const filteringTaskList = (personId) => {
+        getTaskList(personId)
+            .then(data => {
+                setTasks(data);
+            })
+    }
+
+    const clearFilteringTaskList = () => {
+        getTaskList()
+            .then(data => {
+                setTasks(data);
+            })
+        setSelectedPersonFullName(null);
+        setSelectedPersonId(null);
+    }
+
+    return (
+        <div>
+            <Row>
+                <Button onClick={clearFilteringTaskList}>
+                    {locale.locale.Meeting.ClearFiltering}
+                </Button>
+                <Dropdown
+                    menu={{
+                        items: personDropdownItems
+                    }}>
+                    <Button style={{marginLeft: 5}}>
+                        <Space>
+                            {selectedPersonFullName || locale.locale.Meeting.SelectPerson}
+                        </Space>
+                    </Button>
+                </Dropdown>
+            </Row>
+            <Spin tip={locale.locale.Loading} spinning={isLoading}>
+                <Table dataSource={tasks} rowKey={(task) => task.meetingGoalId } style={{marginTop:20}}>
+                    <Column
+                        title={locale.locale.Task.Person}
+                        dataIndex="personName"
+                        key="1"
+                    />
+                    <Column
+                        title={locale.locale.Task.Description}
+                        dataIndex="meetingGoalDescription"
+                        key="2"
+                    />
+                    <Column
+                        title={locale.locale.Task.MeetingDate}
+                        render={(record) => (
+                            <a>{new Date(record.factDate).toLocaleDateString()}</a>
+                        )}
+                        key="3"
+                    />
+                    <Column
+                        title={locale.locale.Action}
+                        key="4"
+                        render={(record) => (
+                            <Space size="middle">
+                                <Popconfirm
+                                    title={locale.locale.Task.CompleteTask}
+                                    description={locale.locale.Task.CompleteTaskConfirmation}
+                                    onConfirm={() => {
+                                        setIsLoading(true);
+                                        let formData = {
+                                            "goalId": record.meetingGoalId,
+                                        }
+                                        completeTask(formData).then(() => {
+                                            getTaskList(selectedPersonId)
+                                                .then(data => {
+                                                    setTasks(data);
+                                                })
+                                                .finally(() => setIsLoading(false));
+                                        })
+                                    }}
+                                    okText={locale.locale.Ok}
+                                    cancelText={locale.locale.NO}
+                                >
+                                    <a>
+                                        {locale.locale.Task.MarkAsCompleted}
+                                    </a>
+                                </Popconfirm>
+                            </Space>
+                        )}
+                    />
+                </Table>
+            </Spin>
+        </div>
+    );
+};
+
+export default observer(TaskList);

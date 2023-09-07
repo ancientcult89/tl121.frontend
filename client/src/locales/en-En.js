@@ -96,5 +96,10 @@ export const enLocale  = {
     Task: {
         Description: "Task",
         Complete: "Complete",
+        Person: "Person",
+        MarkAsCompleted: "Mark as Completed",
+        CompleteTask: "Complete Task",
+        CompleteTaskConfirmation: "Complete this Task? Are you sure?",
+        MeetingDate: "Meeting Date",
     }
 }
