@@ -23,6 +23,7 @@ export const enLocale  = {
     ProjectReference: "Project",
     MeetingReference: "1-2-1",
     TaskList: "Task List",
+    RoleReference: "Role",
 
     Person: {
         Add: "Add Person",
@@ -101,5 +102,12 @@ export const enLocale  = {
         CompleteTask: "Complete Task",
         CompleteTaskConfirmation: "Complete this Task? Are you sure?",
         MeetingDate: "Meeting Date",
-    }
+    },
+    Role: {
+        Add: "Add Role",
+        Edit: "Edit Role",
+        DeleteTitle: "Delete the Role",
+        DeleteConfirmation: "Are you sure to delete this Role?",
+        RoleName: "Role Name",
+    },
 }

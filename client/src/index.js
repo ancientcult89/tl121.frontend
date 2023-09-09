@@ -7,6 +7,7 @@ import PersonStore from "./store/PersonStore";
 import LocaleStore from "./store/LocaleStore";
 import ProjectStore from "./store/ProjectStore";
 import MeetingStore from "./store/MeetingStore";
+import RoleStore from "./store/RoleStore";
 
 export const Context = createContext(null);
 
@@ -20,7 +21,8 @@ root.render(
                 person: new PersonStore(),
                 locale: new LocaleStore(),
                 project: new ProjectStore(),
-                meeting: new MeetingStore()
+                meeting: new MeetingStore(),
+                role: new RoleStore(),
             }}
         >
             <App />

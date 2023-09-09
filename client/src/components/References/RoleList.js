@@ -1,26 +1,26 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Space, Table, Popconfirm, Spin} from 'antd';
-import {Context} from "../../index";
-import {deleteGrade, getGradeList} from "../../http/gradeApi";
-import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
-import GradeModal from "../modals/GradeModal";
 import {observer} from "mobx-react-lite";
+import {Context} from "../../index";
+import {deleteRole, getRoleList} from "../../http/roleApi";
+import {Button, Popconfirm, Space, Spin, Table} from "antd";
+import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
+import RoleModal from "../modals/RoleModal";
+import {deleteGrade, getGradeList} from "../../http/gradeApi";
+import Column from "antd/es/table/Column";
 
-const { Column } = Table;
-
-const GradeList = observer(() => {
-    const {grade, locale} = useContext(Context);
+const RoleList = () => {
+    const {locale, role} = useContext(Context);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalType, setModalType] = useState(null);
-    const [selectedGradeId, setSelectedGradeId] = useState(null);
+    const [selectedRoleId, setSelectedRoleId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [needUpdate, setNeedUpdate] = useState(true);
 
-    useEffect(() => {        
-        getGradeList()
-            .then(data => grade.setGrades(data))
+    useEffect(() => {
+        getRoleList()
+            .then(data => role.setRoles(data))
             .catch()
-            .finally(() => setIsLoading(false));            
+            .finally(() => setIsLoading(false));
     }, [needUpdate])
 
     return (
@@ -31,14 +31,14 @@ const GradeList = observer(() => {
                     setModalType(ADD_MODAL);
                     setModalVisible(true);
                     setIsLoading(true);
-                    setSelectedGradeId(null);
+                    setSelectedRoleId(null);
                 }}
             >
-                {locale.locale.Grade.Add}
+                {locale.locale.Role.Add}
             </Button>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
-                <Table dataSource={grade.grades} rowKey={(record) => record.gradeId } style={{marginTop:20}}>
-                    <Column title={locale.locale.Grade.GradeName} dataIndex="gradeName" key="1" />
+                <Table dataSource={role.roles} rowKey={(record) => record.roleId } style={{marginTop:20}}>
+                    <Column title={locale.locale.Role.RoleName} dataIndex="roleName" key="1" />
                     <Column
                         title={locale.locale.Action}
                         key="2"
@@ -48,21 +48,22 @@ const GradeList = observer(() => {
                                     setModalType(EDIT_MODAL);
                                     setIsLoading(true);
                                     setModalVisible(true);
-                                    setSelectedGradeId(record.gradeId);
+                                    console.log(record.roleId);
+                                    setSelectedRoleId(record.roleId);
                                 }}>
                                     {locale.locale.Edit}
                                 </a>
                                 <Popconfirm
-                                    title={locale.locale.Grade.DeleteTitle}
-                                    description={locale.locale.Grade.DeleteConfirmation}
+                                    title={locale.locale.Role.DeleteTitle}
+                                    description={locale.locale.Role.DeleteConfirmation}
                                     onConfirm={() => {
                                         setIsLoading(true);
-                                        deleteGrade(record.gradeId).then(() => {
-                                            getGradeList().then(data => {
-                                                grade.setGrades(data);
+                                        deleteRole(record.roleId).then(() => {
+                                            getRoleList().then(data => {
+                                                role.setRoles(data);
                                                 setNeedUpdate(!needUpdate);
                                             })
-                                            .finally(() => setIsLoading(false));
+                                                .finally(() => setIsLoading(false));
                                         })
                                     }}
                                     okText={locale.locale.Ok}
@@ -77,18 +78,18 @@ const GradeList = observer(() => {
                     />
                 </Table>
             </Spin>
-            <GradeModal
-            modalType={modalType}
-            open={modalVisible}
-            onCancel={() => {
-                setNeedUpdate(!needUpdate);
-                setIsLoading(false);
-                setModalVisible(false);
-            }}
-                gradeId={modalVisible ? selectedGradeId : null}
+            <RoleModal
+                modalType={modalType}
+                open={modalVisible}
+                onCancel={() => {
+                    setNeedUpdate(!needUpdate);
+                    setIsLoading(false);
+                    setModalVisible(false);
+                }}
+                roleId={modalVisible ? selectedRoleId : null}
             />
         </div>
     );
-});
+};
 
-export default GradeList;
+export default observer(RoleList);

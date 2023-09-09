@@ -15,7 +15,7 @@ import {
     MEETING_ROUTE,
     ONE_TWO_ONE_DEADLINES_ROUTE,
     PERSON_ROUTE,
-    PROJECT_ROUTE, TASK_ROUTE
+    PROJECT_ROUTE, ROLE_ROUTE, TASK_ROUTE
 } from "../utils/consts";
 import AppRouter from "./AppRouter";
 import {enLocale} from "../locales/en-En";
@@ -57,7 +57,7 @@ const LayoutBar = observer(() => {
             getItem(locale.locale.ProjectReference, PROJECT_ROUTE),
         ]),
         getItem(locale.locale.AdminPanel, 'sub2', <AppstoreOutlined />, [
-            getItem("placeholder"),
+            getItem(locale.locale.RoleReference, ROLE_ROUTE),
         ]),
     ];
 

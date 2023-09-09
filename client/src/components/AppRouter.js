@@ -5,7 +5,7 @@ import {
     ONE_TWO_ONE_DEADLINES_ROUTE,
     PERSON_ROUTE,
     PROJECT_ROUTE,
-    REGISTRATION_ROUTE, TASK_ROUTE
+    REGISTRATION_ROUTE, ROLE_ROUTE, TASK_ROUTE
 } from "../utils/consts";
 import GradeList from "./References/GradeList";
 import Auth from "../pages/Auth";
@@ -18,6 +18,7 @@ import MeetingList from "./References/MeetingList";
 import MeetingProcessing from "../pages/MeetingProcessing";
 import FollowUp from "./MeetingProcessing/FollowUp";
 import TaskList from "./MeetingProcessing/TaskList";
+import RoleList from "./References/RoleList";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -72,6 +73,12 @@ const AppRouter = () => {
                         key={TASK_ROUTE}
                         path={TASK_ROUTE}
                         element={<TaskList />}
+                        exact
+                    />
+                    <Route
+                        key={ROLE_ROUTE}
+                        path={ROLE_ROUTE}
+                        element={<RoleList />}
                         exact
                     />
                 </React.Fragment>
