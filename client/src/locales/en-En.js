@@ -24,6 +24,8 @@ export const enLocale  = {
     MeetingReference: "1-2-1",
     TaskList: "Task List",
     RoleReference: "Role",
+    PersonProjectsReference: "Person Projects",
+    UserProjectsReference: "User Projects",
 
     Person: {
         Add: "Add Person",

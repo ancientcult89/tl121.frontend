@@ -24,3 +24,8 @@ export const updateProject = async (projectTeamId, projectTeamName) => {
     const {data} = await $authHost.put('api/v1/Project/' + projectTeamId, {projectTeamId, projectTeamName})
     return data
 }
+
+export const getPersonProjects = async (personId) => {
+    const {data} = await $authHost.get('api/v1/Project/personProjects/' + personId)
+    return data
+}

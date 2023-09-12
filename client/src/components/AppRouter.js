@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {
     GRADE_ROUTE,
     LOGIN_ROUTE, MEETING_FOLLOWUP_ROUTE, MEETING_PROCESSING_ROUTE, MEETING_ROUTE,
-    ONE_TWO_ONE_DEADLINES_ROUTE,
+    ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_PROJECTS_ROUTE,
     PERSON_ROUTE,
     PROJECT_ROUTE,
     REGISTRATION_ROUTE, ROLE_ROUTE, TASK_ROUTE
@@ -19,6 +19,7 @@ import MeetingProcessing from "../pages/MeetingProcessing";
 import FollowUp from "./MeetingProcessing/FollowUp";
 import TaskList from "./MeetingProcessing/TaskList";
 import RoleList from "./References/RoleList";
+import PersonProjects from "./PersonProjects";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -79,6 +80,12 @@ const AppRouter = () => {
                         key={ROLE_ROUTE}
                         path={ROLE_ROUTE}
                         element={<RoleList />}
+                        exact
+                    />
+                    <Route
+                        key={PERSON_PROJECTS_ROUTE}
+                        path={PERSON_PROJECTS_ROUTE}
+                        element={<PersonProjects />}
                         exact
                     />
                 </React.Fragment>
