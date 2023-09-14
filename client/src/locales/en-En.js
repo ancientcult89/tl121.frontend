@@ -112,4 +112,8 @@ export const enLocale  = {
         DeleteConfirmation: "Are you sure to delete this Role?",
         RoleName: "Role Name",
     },
+    PersonProject: {
+        Person: "Person Name",
+        Projects: "Projects"
+    },
 }
