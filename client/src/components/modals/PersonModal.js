@@ -5,6 +5,7 @@ import {Context} from "../../index";
 import {createPerson, getPerson, updatePerson} from "../../http/personApi";
 import {getGradeList} from "../../http/gradeApi";
 import {observer} from "mobx-react-lite";
+import GradeSelector from "../ReferenceSelectors/GradeSelector";
 
 const PersonModal = observer(({modalType, open, onCancel, personId}) => {
     const {grade, person, locale} = useContext(Context)
@@ -150,19 +151,10 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                         <Input value={personEmail} onChange={e => setPersonEmail(e.target.value)}/>
                     </Form.Item>
                 </Spin>
-                <Spin tip={locale.locale.Loading} spinning={!gradeTypesLoaded}>
-                    <Form.Item label={locale.locale.Person.Grade}>
-                        <Dropdown menu={{
-                            items: gradeDropdownItems
-                        }}>
-                            <Button>
-                                <Space>
-                                    {selectedGradeName || locale.locale.Person.SelectGradeQuery}
-                                </Space>
-                            </Button>
-                        </Dropdown>
-                    </Form.Item>
-                </Spin>
+                <GradeSelector
+                    onSelect={selectGradeTypeHandler}
+                    selectedGradeName={selectedGradeName}
+                />
             </Form>
         </Modal>
     );

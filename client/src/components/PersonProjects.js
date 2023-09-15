@@ -5,6 +5,8 @@ import {getPersonList} from "../http/personApi";
 import { Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import {getPersonProjects} from "../http/projectApi";
+import GradeModal from "./modals/GradeModal";
+import PersonProjectsModal from "./modals/PersonProjectsModal";
 
 const PersonProjects = () => {
     const {locale} = useContext(Context);
@@ -12,6 +14,7 @@ const PersonProjects = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [needUpdate, setNeedUpdate] = useState(true);
     const [items, setItems] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
     const [personProjects, setPersonProjects] = useState([]);
 
     useEffect(  () => {
@@ -49,6 +52,7 @@ const PersonProjects = () => {
                                 <a onClick={() => {
                                     setSelectedPerson(record.personId);
                                     setIsLoading(true);
+                                    setModalVisible(true);
                                 }}>
                                     {locale.locale.Edit}
                                 </a>
@@ -57,6 +61,15 @@ const PersonProjects = () => {
                     />
                 </Table>
             </Spin>
+            <PersonProjectsModal
+                open={modalVisible}
+                onCancel={() => {
+                    setNeedUpdate(!needUpdate);
+                    setIsLoading(false);
+                    setModalVisible(false);
+                }}
+                person={modalVisible ? selectedPerson : null}
+            />
         </div>
     );
 };

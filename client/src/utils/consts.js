@@ -12,6 +12,7 @@ export const MEETING_FOLLOWUP_ROUTE = '/meetingProcessing/followup'
 export const TASK_ROUTE = '/task'
 export const ROLE_ROUTE = '/role'
 export const PERSON_PROJECTS_ROUTE = '/personProjects'
+export const USER_PROJECTS_ROUTE = '/userProjects'
 
 
 // Modal properties

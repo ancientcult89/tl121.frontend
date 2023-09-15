@@ -78,13 +78,13 @@ const GradeList = observer(() => {
                 </Table>
             </Spin>
             <GradeModal
-            modalType={modalType}
-            open={modalVisible}
-            onCancel={() => {
-                setNeedUpdate(!needUpdate);
-                setIsLoading(false);
-                setModalVisible(false);
-            }}
+                modalType={modalType}
+                open={modalVisible}
+                onCancel={() => {
+                    setNeedUpdate(!needUpdate);
+                    setIsLoading(false);
+                    setModalVisible(false);
+                }}
                 gradeId={modalVisible ? selectedGradeId : null}
             />
         </div>

@@ -36,7 +36,6 @@ export const enLocale  = {
         FirstName: "FirstName",
         SurName: "SurName",
         ShortName: "ShortName",
-        Grade: "Grade",
         Email: "Email",
         SelectGradeQuery: "Select a grade...",
     },
@@ -115,5 +114,11 @@ export const enLocale  = {
     PersonProject: {
         Person: "Person Name",
         Projects: "Projects"
+    },
+
+    //Selectors
+    GradeSelector: {
+        Grade: "Grade",
+        SelectGradeQuery: "Select a grade...",
     },
 }

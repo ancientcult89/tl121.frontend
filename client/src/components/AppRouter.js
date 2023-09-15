@@ -5,7 +5,7 @@ import {
     ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_PROJECTS_ROUTE,
     PERSON_ROUTE,
     PROJECT_ROUTE,
-    REGISTRATION_ROUTE, ROLE_ROUTE, TASK_ROUTE
+    REGISTRATION_ROUTE, ROLE_ROUTE, TASK_ROUTE, USER_PROJECTS_ROUTE
 } from "../utils/consts";
 import GradeList from "./References/GradeList";
 import Auth from "../pages/Auth";
@@ -20,6 +20,8 @@ import FollowUp from "./MeetingProcessing/FollowUp";
 import TaskList from "./MeetingProcessing/TaskList";
 import RoleList from "./References/RoleList";
 import PersonProjects from "./PersonProjects";
+import GradeSelector from "./ReferenceSelectors/GradeSelector";
+import PersonProjectsModal from "./modals/PersonProjectsModal";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -86,6 +88,12 @@ const AppRouter = () => {
                         key={PERSON_PROJECTS_ROUTE}
                         path={PERSON_PROJECTS_ROUTE}
                         element={<PersonProjects />}
+                        exact
+                    />
+                    <Route
+                        key={USER_PROJECTS_ROUTE}
+                        path={USER_PROJECTS_ROUTE}
+                        element={<PersonProjectsModal />}
                         exact
                     />
                 </React.Fragment>
