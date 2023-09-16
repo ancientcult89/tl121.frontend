@@ -29,3 +29,13 @@ export const getPersonProjects = async (personId) => {
     const {data} = await $authHost.get('api/v1/Project/personProjects/' + personId)
     return data
 }
+
+export const addProjectToPerson = async (formData) => {
+    const {data} = await $authHost.post('api/v1/Project/personProjects/' + formData.personId, formData);
+    return data
+}
+
+export const deleteProjectToPerson = async (formData) => {
+    const {data} = await $authHost.delete('api/v1/Project/personProjects/' + formData.personId, {data: formData});
+    return data
+}

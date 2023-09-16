@@ -5,7 +5,6 @@ import {getPersonList} from "../http/personApi";
 import { Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import {getPersonProjects} from "../http/projectApi";
-import GradeModal from "./modals/GradeModal";
 import PersonProjectsModal from "./modals/PersonProjectsModal";
 
 const PersonProjects = () => {
@@ -15,7 +14,6 @@ const PersonProjects = () => {
     const [needUpdate, setNeedUpdate] = useState(true);
     const [items, setItems] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
-    const [personProjects, setPersonProjects] = useState([]);
 
     useEffect(  () => {
         getPersonList()
@@ -50,7 +48,7 @@ const PersonProjects = () => {
                         render={(record) => (
                             <Space size="middle">
                                 <a onClick={() => {
-                                    setSelectedPerson(record.personId);
+                                    setSelectedPerson(record);
                                     setIsLoading(true);
                                     setModalVisible(true);
                                 }}>
@@ -61,15 +59,17 @@ const PersonProjects = () => {
                     />
                 </Table>
             </Spin>
-            <PersonProjectsModal
-                open={modalVisible}
-                onCancel={() => {
-                    setNeedUpdate(!needUpdate);
-                    setIsLoading(false);
-                    setModalVisible(false);
-                }}
-                person={modalVisible ? selectedPerson : null}
-            />
+            {modalVisible &&
+                <PersonProjectsModal
+                    open={modalVisible}
+                    onCancel={() => {
+                        setNeedUpdate(!needUpdate);
+                        setIsLoading(false);
+                        setModalVisible(false);
+                    }}
+                    person={modalVisible ? selectedPerson : null}
+                />
+            }
         </div>
     );
 };

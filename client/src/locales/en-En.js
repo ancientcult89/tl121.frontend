@@ -113,12 +113,17 @@ export const enLocale  = {
     },
     PersonProject: {
         Person: "Person Name",
-        Projects: "Projects"
+        Projects: "Projects",
+        Add: "Add Project"
     },
 
     //Selectors
     GradeSelector: {
         Grade: "Grade",
         SelectGradeQuery: "Select a grade...",
+    },
+    ProjectSelector: {
+        Project: "Project",
+        SelectProjectQuery: "Select a Project...",
     },
 }

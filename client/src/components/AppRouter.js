@@ -22,6 +22,7 @@ import RoleList from "./References/RoleList";
 import PersonProjects from "./PersonProjects";
 import GradeSelector from "./ReferenceSelectors/GradeSelector";
 import PersonProjectsModal from "./modals/PersonProjectsModal";
+import ProjectSelector from "./ReferenceSelectors/ProjectSelector";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -93,7 +94,7 @@ const AppRouter = () => {
                     <Route
                         key={USER_PROJECTS_ROUTE}
                         path={USER_PROJECTS_ROUTE}
-                        element={<PersonProjectsModal />}
+                        element={<ProjectSelector />}
                         exact
                     />
                 </React.Fragment>
