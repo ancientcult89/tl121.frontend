@@ -5,7 +5,6 @@ import {deleteRole, getRoleList} from "../../http/roleApi";
 import {Button, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import RoleModal from "../modals/RoleModal";
-import {deleteGrade, getGradeList} from "../../http/gradeApi";
 import Column from "antd/es/table/Column";
 
 const RoleList = () => {

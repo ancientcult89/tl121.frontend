@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {useLocation, useNavigate} from "react-router-dom";
 import {Button} from "antd";
-import {MEETING_FOLLOWUP_ROUTE, MEETING_ROUTE} from "../../utils/consts";
+import {MEETING_ROUTE} from "../../utils/consts";
 import {Context} from "../../index";
 import {getFollowUp, sendFollowUp} from "../../http/meetingApi";
 

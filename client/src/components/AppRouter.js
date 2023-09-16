@@ -20,8 +20,6 @@ import FollowUp from "./MeetingProcessing/FollowUp";
 import TaskList from "./MeetingProcessing/TaskList";
 import RoleList from "./References/RoleList";
 import PersonProjects from "./PersonProjects";
-import GradeSelector from "./ReferenceSelectors/GradeSelector";
-import PersonProjectsModal from "./modals/PersonProjectsModal";
 import ProjectSelector from "./ReferenceSelectors/ProjectSelector";
 
 const AppRouter = () => {

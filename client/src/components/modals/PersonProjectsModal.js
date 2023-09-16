@@ -2,7 +2,6 @@ import React, {useContext, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Button, Form, Modal, Popconfirm, Space, Table} from "antd";
 import {Context} from "../../index";
-
 import Column from "antd/es/table/Column";
 import ProjectSelector from "../ReferenceSelectors/ProjectSelector";
 import {addProjectToPerson, deleteProjectToPerson} from "../../http/projectApi";

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Dropdown, Form, Input, Modal, Space, Spin} from "antd";
+import {Form, Input, Modal, Space, Spin} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createPerson, getPerson, updatePerson} from "../../http/personApi";
@@ -10,9 +10,6 @@ import GradeSelector from "../ReferenceSelectors/GradeSelector";
 const PersonModal = observer(({modalType, open, onCancel, personId}) => {
     const {grade, person, locale} = useContext(Context)
     const [personDataLoaded, setPersonDataLoaded] = useState(false);
-    const [gradeTypesLoaded, setGradeTypesLoaded] = useState(false);
-    const [gradeDropdownItems,setGradeDropdownItems] = useState([]);
-
     const [firstName, setFirstName] = useState('');
     const [surName, setSurName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -66,8 +63,6 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                 key: grade.gradeId
             });
         });
-        setGradeDropdownItems(items);
-        setGradeTypesLoaded(true);
     }, [modalType]);
 
     const handleOk = () => {
