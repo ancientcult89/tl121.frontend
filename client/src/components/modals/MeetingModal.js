@@ -39,7 +39,10 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
         if(meetingId != null)
         {
             getMeeting(meetingId).then(data => {
-                setActualDate(dayjs(dateTimeConverter.dateBackEndToDatePicker(data.meetingDate), formatDate));
+                if(data.meetingDate != null)
+                    setActualDate(dayjs(dateTimeConverter.dateBackEndToDatePicker(data.meetingDate), formatDate));
+                else
+                    setActualDate(null);
                 setPlannedDate(dayjs(dateTimeConverter.dateBackEndToDatePicker(data.meetingPlanDate), formatDate));
                 setSelectedPersonId(data.personId);
                 setSelectedPersonFullName(()=> {
