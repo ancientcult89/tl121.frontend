@@ -8,6 +8,7 @@ import Column from "antd/es/table/Column";
 import {getPersonList} from "../../http/personApi";
 import MeetingModal from "../modals/MeetingModal";
 import {useNavigate} from "react-router-dom";
+import PersonSelector from "../ReferenceSelectors/PersonSelector";
 
 const MeetingList = observer(() => {
     const {meeting, locale, person} = useContext(Context);
@@ -18,7 +19,6 @@ const MeetingList = observer(() => {
     const [needUpdate, setNeedUpdate] = useState(true);
     const [selectedPersonId, setSelectedPersonId] = useState(null);
     const [selectedPersonFullName, setSelectedPersonFullName] = useState(null);
-    const [personDropdownItems, setPersonDropdownItems] = useState([]);
     const [meetings, setMeetings] = useState([]);
     const navigate = useNavigate();
 
@@ -32,19 +32,8 @@ const MeetingList = observer(() => {
                 const items = [];
                 getPersonList()
                     .then(persons => {
-                        person.setPersons(persons)
-                        persons.map((person) => items.push({
-                            label: (
-                                <div onClick={() => {
-                                    selectedPersonHandler(person.personId);
-                                }}>
-                                    {person.lastName + ' ' + person.firstName + ' ' + person.surName}
-                                </div>
-                            ),
-                            key: person.personId,
-                        })
-                    )})
-                    .finally(() => setPersonDropdownItems(items));
+                        person.setPersons(persons);
+                    });
             })
             .catch()
             .finally(() => setIsLoading(false));
@@ -82,19 +71,11 @@ const MeetingList = observer(() => {
     return (
         <div>
             <Row>
-                <Button onClick={clearFilteringMeetingList}>
-                    {locale.locale.Meeting.ClearFiltering}
-                </Button>
-                <Dropdown
-                    menu={{
-                    items: personDropdownItems
-                }}>
-                    <Button style={{marginLeft: 5}}>
-                        <Space>
-                            {selectedPersonFullName || locale.locale.Meeting.SelectPerson}
-                        </Space>
-                    </Button>
-                </Dropdown>
+                <PersonSelector
+                    onSelect={selectedPersonHandler}
+                    selectedPersonName={selectedPersonFullName}
+                    onClear={clearFilteringMeetingList}
+                />
             </Row>
             <Button
                 type={"primary"}

@@ -5,6 +5,7 @@ import {completeTask, deleteMeeting, getTaskList} from "../../http/meetingApi";
 import {getPersonList} from "../../http/personApi";
 import {Button, Dropdown, Popconfirm, Row, Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
+import PersonSelector from "../ReferenceSelectors/PersonSelector";
 
 const TaskList = () => {
     const {locale, person} = useContext(Context);
@@ -24,18 +25,7 @@ const TaskList = () => {
                 getPersonList()
                     .then(persons => {
                         person.setPersons(persons)
-                        persons.map((person) => items.push({
-                                label: (
-                                    <div onClick={() => {
-                                        selectedPersonHandler(person.personId);
-                                    }}>
-                                        {person.lastName + ' ' + person.firstName + ' ' + person.surName}
-                                    </div>
-                                ),
-                                key: person.personId,
-                            })
-                        )})
-                    .finally(() => setPersonDropdownItems(items));
+                    });
             })
         setIsLoading(false);
     }, []);
@@ -70,19 +60,11 @@ const TaskList = () => {
     return (
         <div>
             <Row>
-                <Button onClick={clearFilteringTaskList}>
-                    {locale.locale.Meeting.ClearFiltering}
-                </Button>
-                <Dropdown
-                    menu={{
-                        items: personDropdownItems
-                    }}>
-                    <Button style={{marginLeft: 5}}>
-                        <Space>
-                            {selectedPersonFullName || locale.locale.Meeting.SelectPerson}
-                        </Space>
-                    </Button>
-                </Dropdown>
+                <PersonSelector
+                    onSelect={selectedPersonHandler}
+                    selectedPersonName={selectedPersonFullName}
+                    onClear={clearFilteringTaskList}
+                />
             </Row>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={tasks} rowKey={(task) => task.meetingGoalId } style={{marginTop:20}}>
