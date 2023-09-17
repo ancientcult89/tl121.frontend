@@ -116,6 +116,12 @@ export const enLocale  = {
         Projects: "Projects",
         Add: "Add Project"
     },
+    UserProject: {
+        UserName: "User Name",
+        Email: "Email",
+        Projects: "Projects",
+        Add: "Add Project"
+    },
 
     //Selectors
     GradeSelector: {

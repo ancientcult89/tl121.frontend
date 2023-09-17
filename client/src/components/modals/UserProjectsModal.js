@@ -1,16 +1,16 @@
 import React, {useContext, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Button, Form, Modal, Popconfirm, Space, Table} from "antd";
-import {Context} from "../../index";
 import Column from "antd/es/table/Column";
+import {addProjectToUser, deleteProjectToUser} from "../../http/projectApi";
 import ProjectSelector from "../ReferenceSelectors/ProjectSelector";
-import {addProjectToPerson, deleteProjectToPerson} from "../../http/projectApi";
+import {Context} from "../../index";
 
-const PersonProjectsModal = ({open, onCancel, person}) => {
+const UserProjectsModal = ({open, onCancel, user}) => {
     const {project, locale} = useContext(Context);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [selectedProjectName, setSelectedProjectName] = useState('');
-    const [projects, setProjects] = useState(person.projects)
+    const [projects, setProjects] = useState(user.projects)
 
     const selectProjectTypeHandler = (projectId) => {
         project.projects.map(item => {
@@ -31,14 +31,14 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
         if(notExistsBit)
         {
             let formData = {
-                "personId": person.personId,
+                "userId": user.userId,
                 "projectId": selectedProjectId,
             }
 
-            addProjectToPerson(formData)
+            addProjectToUser(formData)
                 .then(() => setProjects([...projects, {
                     projectTeamId: selectedProjectId,
-                    personId: person.personId,
+                    userId: user.userId,
                     projectTeamName: selectedProjectName
                 }]))
                 .catch();
@@ -66,13 +66,18 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                                 title={locale.locale.Project.DeleteTitle}
                                 description={locale.locale.Project.DeleteConfirmation}
                                 onConfirm={() => {
-                                    deleteProjectToPerson({
-                                            "personId": person.personId,
-                                            "projectId": record.projectTeamId,
-                                        })
+                                    console.log(user.userId)
+                                    console.log(record)
+                                    console.log(projects)
+                                    deleteProjectToUser({
+                                        "userId": user.userId,
+                                        "projectId": record.projectTeamId,
+                                    })
                                         .then(() => {
                                             let items = [];
                                             projects.map(project => {
+                                                console.log(projects.projectTeamId)
+                                                console.log(record.projectTeamId)
                                                 if(project.projectTeamId !== record.projectTeamId)
                                                     items.push(project)
                                             })
@@ -108,4 +113,4 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
     );
 };
 
-export default observer(PersonProjectsModal);
+export default observer(UserProjectsModal);

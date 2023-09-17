@@ -19,8 +19,8 @@ import MeetingProcessing from "../pages/MeetingProcessing";
 import FollowUp from "./MeetingProcessing/FollowUp";
 import TaskList from "./MeetingProcessing/TaskList";
 import RoleList from "./References/RoleList";
-import PersonProjects from "./PersonProjects";
-import ProjectSelector from "./ReferenceSelectors/ProjectSelector";
+import PersonProjects from "../pages/PersonProjects";
+import UserProjects from "../pages/UserProjects";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -92,7 +92,7 @@ const AppRouter = () => {
                     <Route
                         key={USER_PROJECTS_ROUTE}
                         path={USER_PROJECTS_ROUTE}
-                        element={<ProjectSelector />}
+                        element={<UserProjects />}
                         exact
                     />
                 </React.Fragment>
