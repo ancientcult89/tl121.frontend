@@ -9,6 +9,7 @@ import {getPersonList} from "../../http/personApi";
 import MeetingModal from "../modals/MeetingModal";
 import {useNavigate} from "react-router-dom";
 import PersonSelector from "../ReferenceSelectors/PersonSelector";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const MeetingList = observer(() => {
     const {meeting, locale, person} = useContext(Context);
@@ -33,28 +34,21 @@ const MeetingList = observer(() => {
                 getPersonList()
                     .then(persons => {
                         person.setPersons(persons);
+                    })
+                    .catch(e => {
+                        unauthRedirect(e);
                     });
             })
-            .catch()
+            .catch(e => {
+                unauthRedirect(e);
+            })
             .finally(() => setIsLoading(false));
     }, [needUpdate, meeting])
 
-    const filteringMeetingList = (personId) => {
-        getMeetingList(personId)
-            .then(data => {
-                meeting.setMeetings(data);
-                setMeetings(data);
-            })
-    }
-
     const clearFilteringMeetingList = () => {
-        getMeetingList()
-            .then(data => {
-                meeting.setMeetings(data);
-                setMeetings(data);
-            })
         setSelectedPersonFullName(null);
         setSelectedPersonId(null);
+        setNeedUpdate(!needUpdate);
     }
 
     const selectedPersonHandler = (personId) => {
@@ -64,7 +58,7 @@ const MeetingList = observer(() => {
                 setSelectedPersonFullName(item.lastName + ' ' + item.firstName + ' ' + item.surName);
                 setSelectedPersonId(item.personId);
             }
-            filteringMeetingList(personId);
+            setNeedUpdate(!needUpdate);
         })
     }
 

@@ -4,9 +4,13 @@ import {getOneTwoOne} from "../http/oneToOneDeadLineApi";
 import {Spin, Table, Tag} from "antd";
 import Column from "antd/es/table/Column";
 import {Context} from "../index";
+import {useNavigate} from "react-router-dom";
+import {LOGIN_ROUTE} from "../utils/consts";
+import {unauthRedirect} from "../utils/unauthRedirect";
 
 const OneToOneDeadLineList = observer(() => {
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
     const {locale} = useContext(Context);
     const [data, setData] = useState([]);
 
@@ -22,10 +26,16 @@ const OneToOneDeadLineList = observer(() => {
     }
 
     useEffect(() => {
-        getOneTwoOne().then(oneTwoOneDeadlines => {
-            setData(oneTwoOneDeadlines);
-            setIsLoading(false);
-        });
+        getOneTwoOne()
+            .then(oneTwoOneDeadlines => {
+                setData(oneTwoOneDeadlines);
+            })
+            .catch(e => {
+                unauthRedirect(e);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, []);
     let tableData = [];
     data.map(item => {
