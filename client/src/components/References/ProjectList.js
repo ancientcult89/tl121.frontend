@@ -5,6 +5,7 @@ import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {deleteProject, getProjectList} from "../../http/projectApi";
 import ProjectModal from "../modals/ProjectModal";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const { Column } = Table;
 
@@ -19,7 +20,9 @@ const ProjectList = observer(() => {
     useEffect(() => {
         getProjectList()
             .then(data => project.setProjects(data))
-            .catch()
+            .catch(e => {
+                unauthRedirect(e);
+            })
             .finally(() => setIsLoading(false));
     }, [needUpdate])
 

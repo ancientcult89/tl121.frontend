@@ -6,6 +6,7 @@ import {createPerson, getPerson, updatePerson} from "../../http/personApi";
 import {getGradeList} from "../../http/gradeApi";
 import {observer} from "mobx-react-lite";
 import GradeSelector from "../ReferenceSelectors/GradeSelector";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const PersonModal = observer(({modalType, open, onCancel, personId}) => {
     const {grade, person, locale} = useContext(Context)
@@ -29,26 +30,34 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
     }
 
     useEffect(() => {
-        getGradeList().then(data => {
+        getGradeList()
+            .then(data => {
             grade.setGrades(data);
-        });
+            })
+            .catch(e => {
+                unauthRedirect(e);
+            });
 
         if(personId != null)
         {
-            getPerson(personId).then(person => {
-                grade.grades.map(item => {
-                    if(item.gradeId === person.gradeId)
-                    {
-                        setSelectedGradeName(item.gradeName);
-                        setSelectedGradeId(item.gradeId)
-                    }
+            getPerson(personId)
+                .then(person => {
+                    grade.grades.map(item => {
+                        if(item.gradeId === person.gradeId)
+                        {
+                            setSelectedGradeName(item.gradeName);
+                            setSelectedGradeId(item.gradeId)
+                        }
+                    });
+                    setFirstName(person.firstName);
+                    setLastName(person.lastName);
+                    setSurName(person.surName);
+                    setShortName(person.shortName);
+                    setPersonEmail(person.email);
+                })
+                .catch(e => {
+                    unauthRedirect(e);
                 });
-                setFirstName(person.firstName);
-                setLastName(person.lastName);
-                setSurName(person.surName);
-                setShortName(person.shortName);
-                setPersonEmail(person.email);
-            });
         }
         setPersonDataLoaded(true);
 

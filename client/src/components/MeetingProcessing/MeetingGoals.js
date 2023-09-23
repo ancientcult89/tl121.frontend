@@ -9,6 +9,7 @@ import {
     updateMeetingGoal,
 } from "../../http/meetingApi";
 import Column from "antd/es/table/Column";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const MeetingGoals = ({meetingId}) => {
     const {locale} = useContext(Context);
@@ -20,7 +21,10 @@ const MeetingGoals = ({meetingId}) => {
 
     useEffect(() => {
         getMeetingGoals(meetingId)
-            .then(data => setGoals(data));
+            .then(data => setGoals(data))
+            .catch(e => {
+                unauthRedirect(e);
+            });
     }, []);
 
     const onSelectEditedGoalHandle = (meetingGoalId, goalContent, completedDescription) => {

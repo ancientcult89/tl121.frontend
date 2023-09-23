@@ -3,6 +3,7 @@ import {observer} from "mobx-react-lite";
 import {Button, Dropdown, Space, Spin} from "antd";
 import {getPersonList} from "../../http/personApi";
 import {Context} from "../../index";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const PersonSelector = ({onSelect, selectedPersonName, onClear}) => {
     const {person, locale} = useContext(Context);
@@ -24,9 +25,13 @@ const PersonSelector = ({onSelect, selectedPersonName, onClear}) => {
                         ),
                         key: person.personId,
                     })
-                )})
-            .finally(() => {
+                )
                 setPersonDropdownItems(items);
+            })
+            .catch(e => {
+                unauthRedirect(e);
+            })
+            .finally(() => {
                 setPersonsLoaded(true);
             });
     }, []);

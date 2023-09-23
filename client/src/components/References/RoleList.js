@@ -6,6 +6,7 @@ import {Button, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import RoleModal from "../modals/RoleModal";
 import Column from "antd/es/table/Column";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const RoleList = () => {
     const {locale, role} = useContext(Context);
@@ -18,7 +19,9 @@ const RoleList = () => {
     useEffect(() => {
         getRoleList()
             .then(data => role.setRoles(data))
-            .catch()
+            .catch(e => {
+                unauthRedirect(e);
+            })
             .finally(() => setIsLoading(false));
     }, [needUpdate])
 

@@ -6,6 +6,7 @@ import Column from "antd/es/table/Column";
 import {deletePerson, getPersonList} from "../../http/personApi";
 import PersonModal from "../modals/PersonModal";
 import {observer} from "mobx-react-lite";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const PersonList = observer(() => {
     const {person, locale} = useContext(Context);
@@ -22,7 +23,9 @@ const PersonList = observer(() => {
                 person.setPersons(data)
                 setItems(person.persons)
             })
-            .catch()
+            .catch(e => {
+                unauthRedirect(e);
+            })
             .finally(() => setIsLoading(false));
     }, [needUpdate])
 

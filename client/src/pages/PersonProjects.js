@@ -6,6 +6,7 @@ import { Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import {getPersonProjects} from "../http/projectApi";
 import PersonProjectsModal from "../components/modals/PersonProjectsModal";
+import {unauthRedirect} from "../utils/unauthRedirect";
 
 const PersonProjects = () => {
     const {locale} = useContext(Context);
@@ -31,6 +32,12 @@ const PersonProjects = () => {
                     })
                 }));
                 setItems(personProjectsTmp);
+
+            })
+            .catch(e => {
+                unauthRedirect(e);
+            })
+            .finally(() => {
                 setIsLoading(false);
             });
 

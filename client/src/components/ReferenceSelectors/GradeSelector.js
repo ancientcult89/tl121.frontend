@@ -3,6 +3,7 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import {Button, Dropdown, Form, Space, Spin} from "antd";
 import {getGradeList} from "../../http/gradeApi";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const GradeSelector = ({onSelect, selectedGradeName}) => {
     const {grade, locale} = useContext(Context);
@@ -13,6 +14,9 @@ const GradeSelector = ({onSelect, selectedGradeName}) => {
         getGradeList()
             .then(data => {
                 grade.setGrades(data);
+            })
+            .catch(e => {
+                unauthRedirect(e);
             })
             .finally(() => {
                 const items = [];

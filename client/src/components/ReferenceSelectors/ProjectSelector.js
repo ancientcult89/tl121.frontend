@@ -3,6 +3,7 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import {Button, Dropdown, Form, Space, Spin} from "antd";
 import {getProjectList} from "../../http/projectApi";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const ProjectSelector = ({onSelect, selectedProjectName}) => {
     const {project, locale} = useContext(Context);
@@ -13,6 +14,9 @@ const ProjectSelector = ({onSelect, selectedProjectName}) => {
         getProjectList()
             .then(data => {
                 project.setProjects(data)
+            })
+            .catch(e => {
+                unauthRedirect(e);
             })
             .finally(() => {
                 const items = [];

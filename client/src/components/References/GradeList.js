@@ -5,6 +5,7 @@ import {deleteGrade, getGradeList} from "../../http/gradeApi";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import GradeModal from "../modals/GradeModal";
 import {observer} from "mobx-react-lite";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const { Column } = Table;
 
@@ -19,7 +20,9 @@ const GradeList = observer(() => {
     useEffect(() => {        
         getGradeList()
             .then(data => grade.setGrades(data))
-            .catch()
+            .catch(e => {
+                unauthRedirect(e);
+            })
             .finally(() => setIsLoading(false));            
     }, [needUpdate])
 

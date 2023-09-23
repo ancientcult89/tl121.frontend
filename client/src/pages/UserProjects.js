@@ -6,6 +6,7 @@ import {Context} from "../index";
 import {getUserProjects} from "../http/projectApi";
 import UserProjectsModal from "../components/modals/UserProjectsModal";
 import {getUserList} from "../http/userApi";
+import {unauthRedirect} from "../utils/unauthRedirect";
 
 const UserProjects = () => {
     const {locale} = useContext(Context);
@@ -21,19 +22,26 @@ const UserProjects = () => {
                 console.log(data)
                 let userProjectsTmp = [];
                 await Promise.all(data.map(async user => {
-                    await getUserProjects(user.id).then(projects => {
-                        let tmp = {
-                            userId: user.id,
-                            userName: user.userName,
-                            email: user.email,
-                            projects: projects,
-                            projectsAsString: projects.map(project => project.projectTeamName).join('; '),
-                        }
-                        userProjectsTmp.push(tmp);
-                    })
+                    await getUserProjects(user.id)
+                        .then(projects => {
+                            let tmp = {
+                                userId: user.id,
+                                userName: user.userName,
+                                email: user.email,
+                                projects: projects,
+                                projectsAsString: projects.map(project => project.projectTeamName).join('; '),
+                            }
+                            userProjectsTmp.push(tmp);
+                        })
+                        .catch(e => {
+                            unauthRedirect(e);
+                        })
                 }));
                 setItems(userProjectsTmp);
 
+            })
+            .catch(e => {
+                unauthRedirect(e);
             })
             .finally(() => {
                 setIsLoading(false);

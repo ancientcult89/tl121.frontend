@@ -6,6 +6,7 @@ import {getPersonList} from "../../http/personApi";
 import {Button, Dropdown, Popconfirm, Row, Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import PersonSelector from "../ReferenceSelectors/PersonSelector";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const TaskList = () => {
     const {locale, person} = useContext(Context);
@@ -25,8 +26,14 @@ const TaskList = () => {
                 getPersonList()
                     .then(persons => {
                         person.setPersons(persons)
+                    })
+                    .catch(e => {
+                        unauthRedirect(e);
                     });
             })
+            .catch(e => {
+                unauthRedirect(e);
+            });
         setIsLoading(false);
     }, []);
 
