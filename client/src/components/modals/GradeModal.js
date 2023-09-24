@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Form, Input, Modal} from 'antd';
+import {Alert, Form, Input, Modal} from 'antd';
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {createGrade, getGrade, updateGrade} from "../../http/gradeApi";
 import {Context} from "../../index";
@@ -11,6 +11,7 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [gradeName, setGradeName] = useState('');
     const [selectedGrade, setSelectedGrade] = useState(null);
+    const [gradeNameError, setGradeNameError] = useState(null)
     const {grade, locale} = useContext(Context);
 
     useEffect(() => {
@@ -26,24 +27,29 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
     }, [gradeId]);
 
     const handleOk = () => {
+        console.log(gradeName != null)
+        console.log(gradeName !== "")
+        if(gradeName == null || gradeName === "")
+        {
+            setGradeNameError(locale.locale.Grade.NameValidationError);
+            return;
+        }
         if(modalType === ADD_MODAL)
         {
             createGrade(gradeName).then(newGrade =>{
                 grade.setGrades([...grade.grades, newGrade])
-                setSelectedGrade(null);
-                setGradeName('');
-                onCancel();
             });
         }
         else if(modalType === EDIT_MODAL)
         {
             updateGrade(selectedGrade.gradeId, gradeName).then((updatedGrade) =>{
                 grade.setGrades(grade.grades.map((item) => item.gradeId === updateGrade.gradeId ? {...updateGrade} : item))
-                setSelectedGrade(null);
-                setGradeName('');
-                onCancel();
             });
         }
+        setSelectedGrade(null);
+        setGradeName('');
+        setGradeNameError(null);
+        onCancel();
     };
 
     return (
@@ -56,11 +62,24 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
             onCancel={onCancel}
         >
             <Form>
-                <Form.Item label={locale.locale.Grade.GradeName}>
+                {gradeNameError &&
+                    <div>
+                        <Alert
+                            message={gradeNameError}
+                            type="error"
+                            showIcon
+                        />
+                        <p></p>
+                    </div>
+
+                }
+                <Form.Item
+                    label={locale.locale.Grade.GradeName}
+                >
                     <Input
                         value={gradeName}
                         onChange={e => {setGradeName(e.target.value)}}
-                    ></Input>
+                    />
                 </Form.Item>
             </Form>
         </Modal>

@@ -1,6 +1,6 @@
 import {observer} from "mobx-react-lite";
 import React, {useContext, useState} from "react";
-import { Button, Form, Input } from 'antd';
+import {Alert, Button, Form, Input} from 'antd';
 import {useLocation, useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE, ONE_TWO_ONE_DEADLINES_ROUTE} from "../utils/consts";
 import {Context} from "../index";
@@ -14,6 +14,7 @@ const Auth = observer(() => {
     const isLogin = location.pathname === LOGIN_ROUTE;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loginError, setLoginError] = useState(null)
     const click = async () => {
         try {
             let authRespose;
@@ -31,7 +32,10 @@ const Auth = observer(() => {
         }
         catch (e)
         {
-            console.log(e.message)
+            if(e.code !== 'ERR_NETWORK' && Number(e.response.status) === 400)
+            {
+                setLoginError(locale.locale.LoginError)
+            }
         }
     }
 
@@ -44,14 +48,24 @@ const Auth = observer(() => {
                 initialValues={{ remember: true }}
                 autoComplete="off"
             >
+                {loginError &&
+                    <div>
+                        <Alert
+                            message={loginError}
+                            type="error"
+                            showIcon
+                        />
+                        <p></p>
+                    </div>
+
+                }
                 <Form.Item
                     label={locale.locale.UserName}
                     name="user"
-                    rules={[{ required: true, message: locale.locale.UserNameRequiredMessage }]}
+                    rules={[{ required: true, message: locale.locale.UserNameRequiredMessage, type: "email" }]}
                 >
                     <Input value={email} onChange={e => setEmail(e.target.value)}/>
                 </Form.Item>
-
                 <Form.Item
                     label={locale.locale.Password}
                     name="password"
@@ -59,9 +73,8 @@ const Auth = observer(() => {
                 >
                     <Input.Password value={password} onChange={e => setPassword(e.target.value)}/>
                 </Form.Item>
-
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" onClick={click}>
+                    <Button type="primary" onClick={click} htmlType={"submit"}>
                         {locale.locale.Submit}
                     </Button>
                 </Form.Item>

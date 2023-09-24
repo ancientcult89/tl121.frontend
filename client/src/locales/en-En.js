@@ -2,8 +2,9 @@ export const enLocale  = {
     //forms
     Loading: "Loading...",
     UserName: "UserName",
-    UserNameRequiredMessage: "Please input your username!",
+    UserNameRequiredMessage: "Please input your email!",
     PasswordRequiredMessage: "Please input your password!",
+    LoginError: "Wrong password or email",
     Password: "Password",
     Submit: "Submit",
     NotSet: "Not Set",
@@ -45,6 +46,7 @@ export const enLocale  = {
         DeleteTitle: "Delete the Grade",
         DeleteConfirmation: "Are you sure to delete this Grade?",
         GradeName: "Grade Name",
+        NameValidationError: "Grade name cannot be empty"
     },
     OneTwoOne: {
         Person: "Person",
