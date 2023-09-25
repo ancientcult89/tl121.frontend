@@ -80,16 +80,18 @@ const RoleList = () => {
                     />
                 </Table>
             </Spin>
-            <RoleModal
-                modalType={modalType}
-                open={modalVisible}
-                onCancel={() => {
-                    setNeedUpdate(!needUpdate);
-                    setIsLoading(false);
-                    setModalVisible(false);
-                }}
-                roleId={modalVisible ? selectedRoleId : null}
-            />
+            {modalVisible &&
+                <RoleModal
+                    modalType={modalType}
+                    open={modalVisible}
+                    onCancel={() => {
+                        setNeedUpdate(!needUpdate);
+                        setIsLoading(false);
+                        setModalVisible(false);
+                    }}
+                    roleId={modalVisible ? selectedRoleId : null}
+                />
+            }
         </div>
     );
 };

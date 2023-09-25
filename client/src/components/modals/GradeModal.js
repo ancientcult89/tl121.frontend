@@ -27,8 +27,6 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
     }, [gradeId]);
 
     const handleOk = () => {
-        console.log(gradeName != null)
-        console.log(gradeName !== "")
         if(gradeName == null || gradeName === "")
         {
             setGradeNameError(locale.locale.Grade.NameValidationError);
@@ -71,7 +69,6 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
                         />
                         <p></p>
                     </div>
-
                 }
                 <Form.Item
                     label={locale.locale.Grade.GradeName}

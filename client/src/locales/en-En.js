@@ -46,7 +46,7 @@ export const enLocale  = {
         DeleteTitle: "Delete the Grade",
         DeleteConfirmation: "Are you sure to delete this Grade?",
         GradeName: "Grade Name",
-        NameValidationError: "Grade name cannot be empty"
+        NameValidationError: "Grade name can not be empty"
     },
     OneTwoOne: {
         Person: "Person",
@@ -61,6 +61,7 @@ export const enLocale  = {
         Edit: "Edit Project",
         DeleteTitle: "Delete the Project",
         DeleteConfirmation: "Are you sure to delete this Project?",
+        NameValidationError: "Project name can not be empty"
     },
     Meeting: {
         Person: "Person",
@@ -112,17 +113,22 @@ export const enLocale  = {
         DeleteTitle: "Delete the Role",
         DeleteConfirmation: "Are you sure to delete this Role?",
         RoleName: "Role Name",
+        NameValidationError: "Role name can not be empty"
     },
     PersonProject: {
         Person: "Person Name",
         Projects: "Projects",
-        Add: "Add Project"
+        Add: "Add Project",
+        NameValidationError: "Please, select a project",
+        AlreadyUsed: "The Project is already used",
     },
     UserProject: {
         UserName: "User Name",
         Email: "Email",
         Projects: "Projects",
-        Add: "Add Project"
+        Add: "Add Project",
+        NameValidationError: "Please, select a project",
+        AlreadyUsed: "The Project is already used",
     },
 
     //Selectors

@@ -3,12 +3,13 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import {createRole, getRole, updateRole} from "../../http/roleApi";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
-import {Form, Input, Modal} from "antd";
+import {Alert, Form, Input, Modal} from "antd";
 
 const RoleModal = ({modalType, open, onCancel, roleId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [roleName, setRoleName] = useState('');
     const [selectedRole, setSelectedRole] = useState(null);
+    const [roleNameError, setRoleNameError] = useState(null)
     const {locale, role} = useContext(Context);
 
     useEffect(() => {
@@ -24,6 +25,11 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
     }, [roleId]);
 
     const handleOk = () => {
+        if(roleName == null || roleName === "")
+        {
+            setRoleNameError(locale.locale.Role.NameValidationError);
+            return;
+        }
         if(modalType === ADD_MODAL)
         {
             createRole(roleName).then(newRole =>{
@@ -53,6 +59,16 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
             confirmLoading={confirmLoading}
             onCancel={onCancel}
         >
+            {roleNameError &&
+                <div>
+                    <Alert
+                        message={roleNameError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             <Form>
                 <Form.Item label={locale.locale.Role.GradeName}>
                     <Input

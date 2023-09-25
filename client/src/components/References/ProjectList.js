@@ -82,16 +82,18 @@ const ProjectList = observer(() => {
                     />
                 </Table>
             </Spin>
-            <ProjectModal
-                modalType={modalType}
-                open={modalVisible}
-                onCancel={() => {
-                    setNeedUpdate(!needUpdate);
-                    setIsLoading(false);
-                    setModalVisible(false);
-                }}
-                projectId={modalVisible ? selectedProjectId : null}
-            />
+            {modalVisible &&
+                <ProjectModal
+                    modalType={modalType}
+                    open={modalVisible}
+                    onCancel={() => {
+                        setNeedUpdate(!needUpdate);
+                        setIsLoading(false);
+                        setModalVisible(false);
+                    }}
+                    projectId={modalVisible ? selectedProjectId : null}
+                />
+            }
         </div>
     );
 });

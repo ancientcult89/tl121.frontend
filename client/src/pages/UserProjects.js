@@ -19,7 +19,6 @@ const UserProjects = () => {
     useEffect(  () => {
         getUserList()
             .then(async data => {
-                console.log(data)
                 let userProjectsTmp = [];
                 await Promise.all(data.map(async user => {
                     await getUserProjects(user.id)
@@ -38,7 +37,6 @@ const UserProjects = () => {
                         })
                 }));
                 setItems(userProjectsTmp);
-
             })
             .catch(e => {
                 unauthRedirect(e);
@@ -46,7 +44,6 @@ const UserProjects = () => {
             .finally(() => {
                 setIsLoading(false);
             });
-
     }, [needUpdate])
 
     return (

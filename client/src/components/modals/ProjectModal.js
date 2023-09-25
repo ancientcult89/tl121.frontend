@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {Form, Input, Modal} from "antd";
+import {Alert, Form, Input, Modal} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createProject, getProject, updateProject} from "../../http/projectApi";
@@ -9,6 +9,7 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [projectName, setProjectName] = useState('');
     const [selectedProject, setSelectedProject] = useState(null);
+    const [projectNameError, setProjectNameError] = useState(null)
     const {project, locale} = useContext(Context);
 
     useEffect(() => {
@@ -24,6 +25,11 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
     }, [projectId]);
 
     const handleOk = () => {
+        if(projectName == null || projectName === "")
+        {
+            setProjectNameError(locale.locale.Project.NameValidationError);
+            return;
+        }
         if(modalType === ADD_MODAL)
         {
             createProject(projectName).then(newProject =>{
@@ -53,6 +59,16 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
             confirmLoading={confirmLoading}
             onCancel={onCancel}
         >
+            {projectNameError &&
+                <div>
+                    <Alert
+                        message={projectNameError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             <Form>
                 <Form.Item label={locale.locale.Project.ProjectName}>
                     <Input

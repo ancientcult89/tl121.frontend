@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {Button, Form, Modal, Popconfirm, Space, Table} from "antd";
+import {Alert, Button, Form, Modal, Popconfirm, Row, Space, Table} from "antd";
 import {Context} from "../../index";
 import Column from "antd/es/table/Column";
 import ProjectSelector from "../ReferenceSelectors/ProjectSelector";
@@ -10,6 +10,8 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
     const {project, locale} = useContext(Context);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [selectedProjectName, setSelectedProjectName] = useState('');
+    const [personNameError, setPersonNameError] = useState(null)
+    const [errorType, setErrorType] = useState(null)
     const [projects, setProjects] = useState(person.projects)
 
     const selectProjectTypeHandler = (projectId) => {
@@ -23,10 +25,21 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
     }
 
     const handleOk = () => {
+        if(selectedProjectName == null || selectedProjectName === "")
+        {
+            setPersonNameError(locale.locale.PersonProject.NameValidationError);
+            setErrorType("error");
+            return;
+        }
         let notExistsBit = true;
         projects.map(project => {
             if(project.projectTeamId === selectedProjectId)
+            {
+                setPersonNameError(locale.locale.PersonProject.AlreadyUsed);
+                setErrorType("warning");
                 notExistsBit = false;
+                return;
+            }
         })
         if(notExistsBit)
         {
@@ -55,7 +68,32 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
             onOk={onCancel}
             onCancel={onCancel}
         >
-            <Table dataSource={projects} rowKey={(record) => record.projectTeamId } style={{marginTop:20}}>
+            <Form>
+                <Row style={{marginTop:20}}>
+                    <Button
+                        type={"primary"}
+                        onClick={handleOk}
+                        style={{marginRight:5}}
+                    >
+                        {locale.locale.PersonProject.Add}
+                    </Button>
+                    <ProjectSelector
+                        onSelect={selectProjectTypeHandler}
+                        selectedProjectName={selectedProjectName}
+                    />
+                </Row>
+            </Form>
+            {personNameError &&
+                <div>
+                    <Alert
+                        message={personNameError}
+                        type={errorType}
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
+            <Table dataSource={projects} rowKey={(record) => record.projectTeamId }>
                 <Column title={locale.locale.Project.ProjectName} dataIndex="projectTeamName" key="1" />
                 <Column
                     title={locale.locale.Action}
@@ -91,19 +129,6 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                     )}
                 />
             </Table>
-            <p/>
-            <Form>
-                <ProjectSelector
-                    onSelect={selectProjectTypeHandler}
-                    selectedProjectName={selectedProjectName}
-                />
-                <Button
-                    type={"primary"}
-                    onClick={handleOk}
-                >
-                    {locale.locale.PersonProject.Add}
-                </Button>
-            </Form>
         </Modal>
     );
 };
