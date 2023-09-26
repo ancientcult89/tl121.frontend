@@ -96,7 +96,9 @@ export const enLocale  = {
         DeleteTitle: "Delete the Meeting",
         DeleteConfirmation: "Are you sure to delete this Meeting?",
         ClearFiltering: "Clear",
-        SelectPerson: "Select a Person..."
+        SelectPerson: "Select a Person...",
+        PlanDateValidationError: "The planned date cannot be empty",
+        PersonValidationError: "Person can not be empty"
     },
     Task: {
         Description: "Task",

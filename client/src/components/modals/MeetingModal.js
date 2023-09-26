@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {Button, Checkbox, DatePicker, Dropdown, Form, Modal, Space} from "antd";
+import {Alert, Button, Checkbox, DatePicker, Dropdown, Form, Modal, Space} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createMeeting, getMeeting, updateMeeting} from "../../http/meetingApi";
@@ -18,6 +18,8 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
     const [selectedPersonFullName, setSelectedPersonFullName] = useState(null);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [followUpIsSended, setFollowUpIsSended] = useState(false);
+    const [personError, setPersonError] = useState(null);
+    const [planedDateError, setPlanedDateError] = useState(null);
     const formatDate = 'YYYY-MM-DD';
 
     useEffect(() => {
@@ -66,6 +68,15 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
         })
     }
     const handleOk = () => {
+        if(plannedDate == null || selectedPersonId == null)
+        {
+            if(plannedDate == null)
+                setPlanedDateError(locale.locale.Meeting.PlanDateValidationError);
+            if(selectedPersonId == null)
+                setPersonError(locale.locale.Meeting.PersonValidationError);
+
+            return;
+        }
         let formData = {
             "meetingPlanDate": dateTimeConverter.datePickerToDate(plannedDate),
             "meetingDate": actualDate != null ? dateTimeConverter.datePickerToDate(actualDate) : null,
@@ -111,6 +122,16 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
             }}
         >
             <Form>
+                {planedDateError &&
+                    <div>
+                        <Alert
+                            message={planedDateError}
+                            type="error"
+                            showIcon
+                        />
+                        <p></p>
+                    </div>
+                }
                 <Form.Item label={locale.locale.Meeting.PlannedDate}>
                     <DatePicker
                         onChange={(e) => {
@@ -129,6 +150,16 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                         value={actualDate}
                     />
                 </Form.Item>
+                {personError &&
+                    <div>
+                        <Alert
+                            message={personError}
+                            type="error"
+                            showIcon
+                        />
+                        <p></p>
+                    </div>
+                }
                 <Form.Item label={locale.locale.Meeting.Person}>
                     <Dropdown
                         menu={{

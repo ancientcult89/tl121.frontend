@@ -11,7 +11,7 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [gradeName, setGradeName] = useState('');
     const [selectedGrade, setSelectedGrade] = useState(null);
-    const [gradeNameError, setGradeNameError] = useState(null)
+    const [gradeNameError, setGradeNameError] = useState(null);
     const {grade, locale} = useContext(Context);
 
     useEffect(() => {

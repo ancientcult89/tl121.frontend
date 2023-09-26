@@ -173,16 +173,18 @@ const MeetingList = observer(() => {
                     />
                 </Table>
             </Spin>
-            <MeetingModal
-                modalType={modalType}
-                open={modalVisible}
-                onCancel={() => {
-                    setNeedUpdate(!needUpdate);
-                    setIsLoading(false);
-                    setModalVisible(false);
-                }}
-                meetingId={modalVisible ? selectedMeetingId : null}
-            />
+            {modalVisible &&
+                <MeetingModal
+                    modalType={modalType}
+                    open={modalVisible}
+                    onCancel={() => {
+                        setNeedUpdate(!needUpdate);
+                        setIsLoading(false);
+                        setModalVisible(false);
+                    }}
+                    meetingId={modalVisible ? selectedMeetingId : null}
+                />
+            }
         </div>
     );
 });
