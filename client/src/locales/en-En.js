@@ -39,6 +39,9 @@ export const enLocale  = {
         ShortName: "ShortName",
         Email: "Email",
         SelectGradeQuery: "Select a grade...",
+        EmailValidationError: "Please, enter valid email",
+        GradeValidationError: "Grade can not be empty",
+        NameValidationError: "First/Last/Sur/Short Name can not be empty"
     },
     Grade: {
         Add: "Add Grade",

@@ -72,8 +72,12 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
         {
             if(plannedDate == null)
                 setPlanedDateError(locale.locale.Meeting.PlanDateValidationError);
+            else
+                setPlanedDateError(null);
             if(selectedPersonId == null)
                 setPersonError(locale.locale.Meeting.PersonValidationError);
+            else
+                setPersonError(null);
 
             return;
         }

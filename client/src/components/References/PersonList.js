@@ -29,6 +29,19 @@ const PersonList = observer(() => {
             .finally(() => setIsLoading(false));
     }, [needUpdate])
 
+    function deletePersonHandler(personId) {
+        deletePerson(personId).then(() => {
+            setIsLoading(true);
+            getPersonList()
+                .then(data => {person.setPersons(data);})
+                .catch()
+                .finally(() => {
+                    setNeedUpdate(!needUpdate);
+                    setIsLoading(false);
+                });
+        })
+    }
+
     return (
         <div>
             <Button
@@ -71,18 +84,7 @@ const PersonList = observer(() => {
                                 <Popconfirm
                                     title={locale.locale.Person.DeleteTitle}
                                     description={locale.locale.Person.DeleteConfirmation}
-                                    onConfirm={() => {
-                                        deletePerson(record.personId).then(() => {
-                                            setIsLoading(true);
-                                            getPersonList()
-                                                .then(data => {person.setPersons(data);})
-                                                .catch()
-                                                .finally(() => {
-                                                    setNeedUpdate(!needUpdate);
-                                                    setIsLoading(false);
-                                                });
-                                        })
-                                    }}
+                                    onConfirm={() => deletePersonHandler(record.personId)}
                                     okText={locale.locale.OK}
                                     cancelText={locale.locale.NO}
                                 >
@@ -95,16 +97,18 @@ const PersonList = observer(() => {
                     />
                 </Table>
             </Spin>
-            <PersonModal
-                modalType={modalType}
-                open={modalVisible}
-                onCancel={() => {
-                    setNeedUpdate(!needUpdate);
-                    setIsLoading(false);
-                    setModalVisible(false);
-                }}
-                personId={modalVisible ? selectedPerson : null}
-            />
+            {modalVisible &&
+                <PersonModal
+                    modalType={modalType}
+                    open={modalVisible}
+                    onCancel={() => {
+                        setNeedUpdate(!needUpdate);
+                        setIsLoading(false);
+                        setModalVisible(false);
+                    }}
+                    personId={modalVisible ? selectedPerson : null}
+                />
+            }
         </div>
     );
 });
