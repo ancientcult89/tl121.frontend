@@ -27,6 +27,9 @@ const MeetingNotes = ({meetingId}) => {
     }
 
     const editNoteHandle = () => {
+        if(noteText == null || noteText === '')
+            return;
+
         let formData = {
             "meetingNoteContent": noteText,
             "feedbackRequired": noteFeedbackState,

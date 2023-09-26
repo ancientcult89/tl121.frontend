@@ -60,11 +60,13 @@ const MeetingGoals = ({meetingId}) => {
     }
 
     const addNoteHandle = () => {
+        if(goalText == null || goalText === '')
+            return;
+        
         let formData = {
             "meetingGoalDescription": goalText,
             "meetingId": meetingId,
-            "meetingGoalId": null,
-            "completeDescription": goalCompleteDescription
+            "meetingGoalId": null
         }
         createMeetingGoal(formData).then(newMeetingGoal => {
             setGoals([...goals, newMeetingGoal]);
