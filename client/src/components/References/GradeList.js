@@ -60,13 +60,17 @@ const GradeList = observer(() => {
                                     description={locale.locale.Grade.DeleteConfirmation}
                                     onConfirm={() => {
                                         setIsLoading(true);
-                                        deleteGrade(record.gradeId).then(() => {
-                                            getGradeList().then(data => {
-                                                grade.setGrades(data);
-                                                setNeedUpdate(!needUpdate);
+                                        deleteGrade(record.gradeId)
+                                            .then(() => {
+                                                getGradeList()
+                                                    .then(data => {
+                                                        grade.setGrades(data);
+                                                        setNeedUpdate(!needUpdate);
+                                                    })
+                                                    .catch(e => unauthRedirect(e))
+                                                .finally(() => setIsLoading(false));
                                             })
-                                            .finally(() => setIsLoading(false));
-                                        })
+                                            .catch(e => unauthRedirect(e))
                                     }}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}

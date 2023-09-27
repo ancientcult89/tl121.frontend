@@ -4,6 +4,7 @@ import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {createGrade, getGrade, updateGrade} from "../../http/gradeApi";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 
 
@@ -18,10 +19,12 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
         setConfirmLoading(true);
         if(gradeId != null)
         {
-            getGrade(gradeId).then(grade => {
-                setGradeName(grade.gradeName);
-                setSelectedGrade(grade)
-            });
+            getGrade(gradeId)
+                .then(grade => {
+                    setGradeName(grade.gradeName);
+                    setSelectedGrade(grade)
+                })
+                .catch(e => unauthRedirect(e));
         }
         setConfirmLoading(false);
     }, [gradeId]);
@@ -34,15 +37,19 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
         }
         if(modalType === ADD_MODAL)
         {
-            createGrade(gradeName).then(newGrade =>{
-                grade.setGrades([...grade.grades, newGrade])
-            });
+            createGrade(gradeName)
+                .then(newGrade =>{
+                    grade.setGrades([...grade.grades, newGrade])
+                })
+                .catch(e => unauthRedirect(e));
         }
         else if(modalType === EDIT_MODAL)
         {
-            updateGrade(selectedGrade.gradeId, gradeName).then((updatedGrade) =>{
-                grade.setGrades(grade.grades.map((item) => item.gradeId === updateGrade.gradeId ? {...updateGrade} : item))
-            });
+            updateGrade(selectedGrade.gradeId, gradeName)
+                .then((updatedGrade) =>{
+                    grade.setGrades(grade.grades.map((item) => item.gradeId === updateGrade.gradeId ? {...updateGrade} : item))
+                })
+                .catch(e => unauthRedirect(e));
         }
         setSelectedGrade(null);
         setGradeName('');

@@ -21,15 +21,17 @@ const PersonProjects = () => {
             .then(async data => {
                 let personProjectsTmp = [];
                 await Promise.all(data.map(async person => {
-                    await getPersonProjects(person.personId).then(projects => {
-                        let tmp = {
-                            personId: person.personId,
-                            personName: person.lastName + ' ' + person.firstName,
-                            projects: projects,
-                            projectsAsString: projects.map(project => project.projectTeamName).join('; '),
-                        }
-                        personProjectsTmp.push(tmp);
-                    })
+                    await getPersonProjects(person.personId)
+                        .then(projects => {
+                            let tmp = {
+                                personId: person.personId,
+                                personName: person.lastName + ' ' + person.firstName,
+                                projects: projects,
+                                projectsAsString: projects.map(project => project.projectTeamName).join('; '),
+                            }
+                            personProjectsTmp.push(tmp);
+                        })
+                        .catch(e => unauthRedirect(e))
                 }));
                 setItems(personProjectsTmp);
 

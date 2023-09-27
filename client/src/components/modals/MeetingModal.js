@@ -7,6 +7,7 @@ import {createMeeting, getMeeting, updateMeeting} from "../../http/meetingApi";
 import dateTimeConverter from "../../utils/dateTimeConverter";
 import {getPersonList} from "../../http/personApi";
 import dayjs from "dayjs";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 
 const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
@@ -37,23 +38,26 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                         key: person.personId,
                     })
                 )})
+            .catch(e => unauthRedirect(e))
             .finally(() => setPersonDropdownItems(items));
         if(meetingId != null)
         {
-            getMeeting(meetingId).then(data => {
-                if(data.meetingDate != null)
-                    setActualDate(dayjs(dateTimeConverter.dateBackEndToDatePicker(data.meetingDate), formatDate));
-                else
-                    setActualDate(null);
-                setPlannedDate(dayjs(dateTimeConverter.dateBackEndToDatePicker(data.meetingPlanDate), formatDate));
-                setSelectedPersonId(data.personId);
-                setSelectedPersonFullName(()=> {
-                    person.persons.map(person => person.personId === data.personId
-                        ? setSelectedPersonFullName(person.lastName + ' ' + person.firstName + ' ' + person.surName)
-                        : locale.locale.Meeting.SelectPerson)
-                });
-                setFollowUpIsSended(data.followUpIsSended);
-            });
+            getMeeting(meetingId)
+                .then(data => {
+                    if(data.meetingDate != null)
+                        setActualDate(dayjs(dateTimeConverter.dateBackEndToDatePicker(data.meetingDate), formatDate));
+                    else
+                        setActualDate(null);
+                    setPlannedDate(dayjs(dateTimeConverter.dateBackEndToDatePicker(data.meetingPlanDate), formatDate));
+                    setSelectedPersonId(data.personId);
+                    setSelectedPersonFullName(()=> {
+                        person.persons.map(person => person.personId === data.personId
+                            ? setSelectedPersonFullName(person.lastName + ' ' + person.firstName + ' ' + person.surName)
+                            : locale.locale.Meeting.SelectPerson)
+                    });
+                    setFollowUpIsSended(data.followUpIsSended);
+                })
+                .catch(e => unauthRedirect(e));
         }
         setConfirmLoading(false);
     }, [modalType, meetingId]);
@@ -89,26 +93,30 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
         }
         if(modalType === ADD_MODAL)
         {
-            createMeeting(formData).then((newMeeting) =>{
-                meeting.setMeetings([...meeting.meetings, newMeeting])
-                setSelectedPersonId(null);
-                setSelectedPersonFullName(null);
-                setPlannedDate(null);
-                setActualDate(null);
-                onCancel();
-            });
+            createMeeting(formData)
+                .then((newMeeting) =>{
+                    meeting.setMeetings([...meeting.meetings, newMeeting])
+                    setSelectedPersonId(null);
+                    setSelectedPersonFullName(null);
+                    setPlannedDate(null);
+                    setActualDate(null);
+                    onCancel();
+                })
+                .catch(e => unauthRedirect(e));
         }
         else if(modalType === EDIT_MODAL)
         {
             formData = {...formData, "meetingId": meetingId};
-            updateMeeting(formData).then((updatedMeeting) =>{
-                meeting.setMeetings(meeting.meetings.map((item) => item.meetingId === meetingId ? {...updatedMeeting} : item))
-                setSelectedPersonId(null);
-                setSelectedPersonFullName(null);
-                setPlannedDate(null);
-                setActualDate(null);
-                onCancel();
-            });
+            updateMeeting(formData)
+                .then((updatedMeeting) =>{
+                    meeting.setMeetings(meeting.meetings.map((item) => item.meetingId === meetingId ? {...updatedMeeting} : item))
+                    setSelectedPersonId(null);
+                    setSelectedPersonFullName(null);
+                    setPlannedDate(null);
+                    setActualDate(null);
+                    onCancel();
+                })
+                .catch(e => unauthRedirect(e));
         }
     };
 

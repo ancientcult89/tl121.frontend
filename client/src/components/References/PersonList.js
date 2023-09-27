@@ -30,16 +30,18 @@ const PersonList = observer(() => {
     }, [needUpdate])
 
     function deletePersonHandler(personId) {
-        deletePerson(personId).then(() => {
-            setIsLoading(true);
-            getPersonList()
-                .then(data => {person.setPersons(data);})
-                .catch()
-                .finally(() => {
-                    setNeedUpdate(!needUpdate);
-                    setIsLoading(false);
-                });
-        })
+        deletePerson(personId)
+            .then(() => {
+                setIsLoading(true);
+                getPersonList()
+                    .then(data => {person.setPersons(data);})
+                    .catch(e => unauthRedirect(e))
+                    .finally(() => {
+                        setNeedUpdate(!needUpdate);
+                        setIsLoading(false);
+                    });
+            })
+            .catch(e => unauthRedirect(e))
     }
 
     return (

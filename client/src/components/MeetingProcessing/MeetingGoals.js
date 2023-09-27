@@ -42,9 +42,13 @@ const MeetingGoals = ({meetingId}) => {
             "completeDescription": goalCompleteDescription
         }
 
-        updateMeetingGoal(formData).then(updatedGoal => {
-            setGoals(goals.map(item => item.meetingGoalId === editedMeetingGoalId ? {...updatedGoal} : item));
-        });
+        updateMeetingGoal(formData)
+            .then(updatedGoal => {
+                setGoals(goals.map(item => item.meetingGoalId === editedMeetingGoalId ? {...updatedGoal} : item));
+            })
+            .catch(e => {
+                unauthRedirect(e);
+            });
 
         setEditedMeetingGoalId(null);
         setGoalText('')
@@ -56,21 +60,25 @@ const MeetingGoals = ({meetingId}) => {
             .then(() =>
                 getMeetingGoals(meetingId)
                     .then(data => setGoals(data))
-            );
+                    .catch(e => unauthRedirect(e))
+            )
+            .catch(e => unauthRedirect(e));
     }
 
     const addNoteHandle = () => {
         if(goalText == null || goalText === '')
             return;
-        
+
         let formData = {
             "meetingGoalDescription": goalText,
             "meetingId": meetingId,
             "meetingGoalId": null
         }
-        createMeetingGoal(formData).then(newMeetingGoal => {
-            setGoals([...goals, newMeetingGoal]);
-        })
+        createMeetingGoal(formData)
+            .then(newMeetingGoal => {
+                setGoals([...goals, newMeetingGoal]);
+            })
+            .catch(e => unauthRedirect(e));
         setGoalText('');
     }
 

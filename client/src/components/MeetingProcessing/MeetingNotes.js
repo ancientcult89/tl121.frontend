@@ -5,6 +5,7 @@ import {Button, Checkbox, Popconfirm, Space, Table} from "antd";
 import {Context} from "../../index";
 import {createMeetingNote, deleteMeetingNote, getMeetingNotes, updateMeetingNote} from "../../http/meetingApi";
 import Column from "antd/es/table/Column";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const MeetingNotes = ({meetingId}) => {
     const {locale} = useContext(Context);
@@ -16,7 +17,8 @@ const MeetingNotes = ({meetingId}) => {
 
     useEffect(() => {
         getMeetingNotes(meetingId)
-            .then(data => setNotes(data));
+            .then(data => setNotes(data))
+            .catch(e => unauthRedirect(e));
     }, [])
 
     const onSelectEditedNoteHandle = (meetingNoteId, noteContent, feedbackIsRequired) => {
@@ -37,9 +39,11 @@ const MeetingNotes = ({meetingId}) => {
             "meetingNoteId": editedMeetingNoteId,
         }
 
-        updateMeetingNote(formData).then(updatedNote => {
-            setNotes(notes.map(item => item.meetingNoteId === editedMeetingNoteId ? {...updatedNote} : item));
-        });
+        updateMeetingNote(formData)
+            .then(updatedNote => {
+                setNotes(notes.map(item => item.meetingNoteId === editedMeetingNoteId ? {...updatedNote} : item));
+            })
+            .catch(e => unauthRedirect(e));
 
         setNoteFeedbackState(true);
         setEditedMeetingNoteId(null);
@@ -52,7 +56,9 @@ const MeetingNotes = ({meetingId}) => {
             .then(() =>
                 getMeetingNotes(meetingId)
                     .then(data => setNotes(data))
-            );
+                    .catch(e => unauthRedirect(e))
+            )
+            .catch(e => unauthRedirect(e));
     }
 
     const addNoteHandle = () => {
@@ -62,9 +68,11 @@ const MeetingNotes = ({meetingId}) => {
             "meetingId": meetingId,
             "meetingNoteId": null,
         }
-        createMeetingNote(formData).then(newMeetingNote => {
-            setNotes([...notes, newMeetingNote]);
-        })
+        createMeetingNote(formData)
+            .then(newMeetingNote => {
+                setNotes([...notes, newMeetingNote]);
+            })
+            .catch(e => unauthRedirect(e))
         setNoteText('');
     }
 

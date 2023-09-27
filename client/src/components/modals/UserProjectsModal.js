@@ -5,6 +5,7 @@ import Column from "antd/es/table/Column";
 import {addProjectToUser, deleteProjectToUser} from "../../http/projectApi";
 import ProjectSelector from "../ReferenceSelectors/ProjectSelector";
 import {Context} from "../../index";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const UserProjectsModal = ({open, onCancel, user}) => {
     const {project, locale} = useContext(Context);
@@ -54,7 +55,7 @@ const UserProjectsModal = ({open, onCancel, user}) => {
                     userId: user.userId,
                     projectTeamName: selectedProjectName
                 }]))
-                .catch();
+                .catch(e => unauthRedirect(e));
         }
 
         setSelectedProjectId(null);
@@ -104,9 +105,6 @@ const UserProjectsModal = ({open, onCancel, user}) => {
                                 title={locale.locale.Project.DeleteTitle}
                                 description={locale.locale.Project.DeleteConfirmation}
                                 onConfirm={() => {
-                                    console.log(user.userId)
-                                    console.log(record)
-                                    console.log(projects)
                                     deleteProjectToUser({
                                         "userId": user.userId,
                                         "projectId": record.projectTeamId,
@@ -114,14 +112,12 @@ const UserProjectsModal = ({open, onCancel, user}) => {
                                         .then(() => {
                                             let items = [];
                                             projects.map(project => {
-                                                console.log(projects.projectTeamId)
-                                                console.log(record.projectTeamId)
                                                 if(project.projectTeamId !== record.projectTeamId)
                                                     items.push(project)
                                             })
-                                            console.log('items', items)
                                             setProjects(items);
-                                        });
+                                        })
+                                        .catch(e => unauthRedirect(e));
                                 }}
                                 okText={locale.locale.Ok}
                                 cancelText={locale.locale.NO}

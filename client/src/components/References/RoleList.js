@@ -60,13 +60,17 @@ const RoleList = () => {
                                     description={locale.locale.Role.DeleteConfirmation}
                                     onConfirm={() => {
                                         setIsLoading(true);
-                                        deleteRole(record.roleId).then(() => {
-                                            getRoleList().then(data => {
-                                                role.setRoles(data);
-                                                setNeedUpdate(!needUpdate);
+                                        deleteRole(record.roleId)
+                                            .then(() => {
+                                                getRoleList()
+                                                    .then(data => {
+                                                        role.setRoles(data);
+                                                        setNeedUpdate(!needUpdate);
+                                                    })
+                                                    .catch(e => unauthRedirect(e))
+                                                    .finally(() => setIsLoading(false));
                                             })
-                                                .finally(() => setIsLoading(false));
-                                        })
+                                            .catch(e => unauthRedirect(e))
                                     }}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}

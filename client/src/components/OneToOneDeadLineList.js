@@ -15,7 +15,6 @@ const OneToOneDeadLineList = observer(() => {
     const [data, setData] = useState([]);
 
     function getDeadLineColor(daysToDeadline) {
-
         if(daysToDeadline < 10 && daysToDeadline >= 5)
             return 'green'
         else if(daysToDeadline < 5 && daysToDeadline > 0)

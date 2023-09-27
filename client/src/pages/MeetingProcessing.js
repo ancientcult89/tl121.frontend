@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {getPerson} from "../http/personApi";
 import {getPrevNotesAndFoals} from "../http/meetingApi";
 import {Button, Divider} from "antd";
@@ -8,21 +8,29 @@ import {Context} from "../index";
 import MeetingNotes from "../components/MeetingProcessing/MeetingNotes";
 import MeetingGoals from "../components/MeetingProcessing/MeetingGoals";
 import {MEETING_FOLLOWUP_ROUTE} from "../utils/consts";
+import {unauthRedirect} from "../utils/unauthRedirect";
 
 const MeetingProcessing = () => {
-    const {state} = useLocation();
     const {locale} = useContext(Context);
     const [personFullName, setPersonFullName] = useState('');
     const [previousNotesAndGoals, setPreviousNotesAndGoals] = useState('');
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        getPerson(state.personId)
-        .then(data => {
-                setPersonFullName(data.lastName + ' ' + data.firstName + ' ' + data.surName);
-        })
+        getPerson(searchParams.get('personId'))
+            .then(data => {
+                    setPersonFullName(data.lastName + ' ' + data.firstName + ' ' + data.surName);
+            })
+            .catch(e => {
+                unauthRedirect(e);
+            });
 
-        getPrevNotesAndFoals(state.meetingId, state.personId).then(data => setPreviousNotesAndGoals(data))
+        getPrevNotesAndFoals(searchParams.get('meetingId'), searchParams.get('personId'))
+            .then(data => setPreviousNotesAndGoals(data))
+            .catch(e => {
+                unauthRedirect(e);
+            });
     }, [])
 
     return (
@@ -31,7 +39,7 @@ const MeetingProcessing = () => {
             <Button
                 type={"primary"}
                 style={{backgroundColor: "green"}}
-                onClick={() => navigate(MEETING_FOLLOWUP_ROUTE, {state: {meetingId: state.meetingId, personId: state.personId}})}
+                onClick={() => navigate(MEETING_FOLLOWUP_ROUTE  + '/?meetingId=' + searchParams.get('meetingId') + '&personId=' + searchParams.get('personId'))}
             >
                 {locale.locale.Meeting.ProcessingContent.GenerateFollowUp}
             </Button>
@@ -40,9 +48,9 @@ const MeetingProcessing = () => {
                 <pre>{previousNotesAndGoals}</pre>
             </div>
             <Divider dashed>{locale.locale.Meeting.Notes.Notes}</Divider>
-            <MeetingNotes meetingId={state.meetingId}/>
+            <MeetingNotes meetingId={searchParams.get('meetingId')}/>
             <Divider dashed>{locale.locale.Meeting.Goals.Goals}</Divider>
-            <MeetingGoals meetingId={state.meetingId}/>
+            <MeetingGoals meetingId={searchParams.get('meetingId')}/>
         </div>
     );
 };

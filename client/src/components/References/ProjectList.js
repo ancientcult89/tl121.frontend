@@ -59,16 +59,18 @@ const ProjectList = observer(() => {
                                     title={locale.locale.Project.DeleteTitle}
                                     description={locale.locale.Project.DeleteConfirmation}
                                     onConfirm={() => {
-                                        deleteProject(record.projectTeamId).then(() => {
-                                            setIsLoading(true);
-                                            getProjectList()
-                                                .then(data => {project.setProjects(data);})
-                                                .catch()
-                                                .finally(() => {
-                                                    setNeedUpdate(!needUpdate);
-                                                    setIsLoading(false);
-                                                });
-                                        })
+                                        deleteProject(record.projectTeamId)
+                                            .then(() => {
+                                                setIsLoading(true);
+                                                getProjectList()
+                                                    .then(data => {project.setProjects(data);})
+                                                    .catch(e => unauthRedirect(e))
+                                                    .finally(() => {
+                                                        setNeedUpdate(!needUpdate);
+                                                        setIsLoading(false);
+                                                    });
+                                            })
+                                            .catch(e => unauthRedirect(e))
                                     }}
                                     okText={locale.locale.OK}
                                     cancelText={locale.locale.NO}

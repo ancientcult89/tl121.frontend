@@ -4,6 +4,7 @@ import {Context} from "../../index";
 import {createRole, getRole, updateRole} from "../../http/roleApi";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Alert, Form, Input, Modal} from "antd";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const RoleModal = ({modalType, open, onCancel, roleId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -32,21 +33,25 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
         }
         if(modalType === ADD_MODAL)
         {
-            createRole(roleName).then(newRole =>{
-                role.setRoles([...role.roles, newRole])
-                setSelectedRole(null);
-                setRoleName('');
-                onCancel();
-            });
+            createRole(roleName)
+                .then(newRole =>{
+                    role.setRoles([...role.roles, newRole])
+                    setSelectedRole(null);
+                    setRoleName('');
+                    onCancel();
+                })
+                .catch(e => unauthRedirect(e));
         }
         else if(modalType === EDIT_MODAL)
         {
-            updateRole(selectedRole.roleId, roleName).then((updatedRole) =>{
-                role.setRoles(role.roles.map((item) => item.roleId === updatedRole.roleId ? {...updatedRole} : item))
-                setSelectedRole(null);
-                setRoleName('');
-                onCancel();
-            });
+            updateRole(selectedRole.roleId, roleName)
+                .then((updatedRole) =>{
+                    role.setRoles(role.roles.map((item) => item.roleId === updatedRole.roleId ? {...updatedRole} : item))
+                    setSelectedRole(null);
+                    setRoleName('');
+                    onCancel();
+                })
+                .catch(e => unauthRedirect(e));
         }
     };
 

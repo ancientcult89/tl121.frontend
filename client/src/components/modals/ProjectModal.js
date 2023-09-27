@@ -4,6 +4,7 @@ import {Alert, Form, Input, Modal} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createProject, getProject, updateProject} from "../../http/projectApi";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -16,10 +17,12 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
         setConfirmLoading(true);
         if(projectId != null)
         {
-            getProject(projectId).then(project => {
-                setProjectName(project.projectTeamName);
-                setSelectedProject(project)
-            });
+            getProject(projectId)
+                .then(project => {
+                    setProjectName(project.projectTeamName);
+                    setSelectedProject(project)
+                })
+                .catch(e => unauthRedirect(e));
         }
         setConfirmLoading(false);
     }, [projectId]);
@@ -32,21 +35,25 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
         }
         if(modalType === ADD_MODAL)
         {
-            createProject(projectName).then(newProject =>{
-                project.setProjects([...project.projects, newProject])
-                setSelectedProject(null);
-                setProjectName('');
-                onCancel();
-            });
+            createProject(projectName)
+                .then(newProject =>{
+                    project.setProjects([...project.projects, newProject])
+                    setSelectedProject(null);
+                    setProjectName('');
+                    onCancel();
+                })
+                .catch(e => unauthRedirect(e));
         }
         else if(modalType === EDIT_MODAL)
         {
-            updateProject(selectedProject.projectTeamId, projectName).then((updatedProject) =>{
-                project.setProjects(project.projects.map((item) => item.projectTeamId === updatedProject.projectTeamId ? {...updatedProject} : item))
-                setSelectedProject(null);
-                setProjectName('');
-                onCancel();
-            });
+            updateProject(selectedProject.projectTeamId, projectName)
+                .then((updatedProject) =>{
+                    project.setProjects(project.projects.map((item) => item.projectTeamId === updatedProject.projectTeamId ? {...updatedProject} : item))
+                    setSelectedProject(null);
+                    setProjectName('');
+                    onCancel();
+                })
+                .catch(e => unauthRedirect(e));
         }
     };
 

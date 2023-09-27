@@ -114,32 +114,36 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
 
         if(modalType === ADD_MODAL)
         {
-            createPerson(formData).then((newPerson) =>{
-                person.setPersons([...person.persons, newPerson])
-                setSelectedGradeId(null);
-                setSelectedGradeName(null);
-                setPersonEmail('');
-                setFirstName(null);
-                setShortName(null);
-                setLastName(null)
-                setSurName(null)
-                onCancel();
-            });
+            createPerson(formData)
+                .then((newPerson) =>{
+                    person.setPersons([...person.persons, newPerson])
+                    setSelectedGradeId(null);
+                    setSelectedGradeName(null);
+                    setPersonEmail('');
+                    setFirstName(null);
+                    setShortName(null);
+                    setLastName(null)
+                    setSurName(null)
+                    onCancel();
+                })
+                .catch(e => unauthRedirect(e));
         }
         else if(modalType === EDIT_MODAL)
         {
             formData = {...formData, "personId": personId};
-            updatePerson(formData).then((updatedPerson) =>{
-                person.setPersons(person.persons.map((item) => item.personId === personId ? {...updatedPerson} : item))
-                setSelectedGradeId(null);
-                setSelectedGradeName(null);
-                setPersonEmail('');
-                setFirstName(null);
-                setShortName(null);
-                setLastName(null)
-                setSurName(null)
-                onCancel();
-            });
+            updatePerson(formData)
+                .then((updatedPerson) =>{
+                    person.setPersons(person.persons.map((item) => item.personId === personId ? {...updatedPerson} : item))
+                    setSelectedGradeId(null);
+                    setSelectedGradeName(null);
+                    setPersonEmail('');
+                    setFirstName(null);
+                    setShortName(null);
+                    setLastName(null)
+                    setSurName(null)
+                    onCancel();
+                })
+                .catch(e => unauthRedirect(e));
         }
     };
 

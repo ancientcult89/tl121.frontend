@@ -53,6 +53,7 @@ const TaskList = () => {
             .then(data => {
                 setTasks(data);
             })
+            .catch(e => unauthRedirect(e))
     }
 
     const clearFilteringTaskList = () => {
@@ -60,6 +61,7 @@ const TaskList = () => {
             .then(data => {
                 setTasks(data);
             })
+            .catch(e => unauthRedirect(e))
         setSelectedPersonFullName(null);
         setSelectedPersonId(null);
     }
@@ -105,13 +107,16 @@ const TaskList = () => {
                                         let formData = {
                                             "goalId": record.meetingGoalId,
                                         }
-                                        completeTask(formData).then(() => {
-                                            getTaskList(selectedPersonId)
-                                                .then(data => {
-                                                    setTasks(data);
-                                                })
-                                                .finally(() => setIsLoading(false));
-                                        })
+                                        completeTask(formData)
+                                            .then(() => {
+                                                getTaskList(selectedPersonId)
+                                                    .then(data => {
+                                                        setTasks(data);
+                                                    })
+                                                    .catch(e => unauthRedirect(e))
+                                                    .finally(() => setIsLoading(false));
+                                            })
+                                            .catch(e => unauthRedirect(e))
                                     }}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}

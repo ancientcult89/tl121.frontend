@@ -1,26 +1,32 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {Button} from "antd";
 import {MEETING_ROUTE} from "../../utils/consts";
 import {Context} from "../../index";
 import {getFollowUp, sendFollowUp} from "../../http/meetingApi";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const FollowUp = () => {
-    const {state} = useLocation();
     const navigate = useNavigate();
     const {locale} = useContext(Context);
     const [followUp, setFollowUp] = useState('');
+    const [searchParams, setSearchParams] = useSearchParams();
+
     useEffect(() => {
-        getFollowUp(state.meetingId, state.personId).then(data => setFollowUp(data));
+        getFollowUp(searchParams.get('meetingId'), searchParams.get('personId')).then(data => setFollowUp(data));
     }, []);
 
     const senFolloUpHandler = () => {
         let formData = {
-            "meetingId": state.meetingId,
-            "personId": state.personId,
+            "meetingId": searchParams.get('meetingId'),
+            "personId": searchParams.get('personId'),
         }
-        sendFollowUp(formData).then(r => navigate(MEETING_ROUTE));
+        sendFollowUp(formData)
+            .then(r => navigate(MEETING_ROUTE))
+            .catch(e => {
+                unauthRedirect(e);
+            });
     }
 
     return (

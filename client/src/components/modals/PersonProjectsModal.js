@@ -5,6 +5,7 @@ import {Context} from "../../index";
 import Column from "antd/es/table/Column";
 import ProjectSelector from "../ReferenceSelectors/ProjectSelector";
 import {addProjectToPerson, deleteProjectToPerson} from "../../http/projectApi";
+import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const PersonProjectsModal = ({open, onCancel, person}) => {
     const {project, locale} = useContext(Context);
@@ -54,7 +55,7 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                     personId: person.personId,
                     projectTeamName: selectedProjectName
                 }]))
-                .catch();
+                .catch(e => unauthRedirect(e));
         }
 
         setSelectedProjectId(null);
@@ -114,9 +115,9 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                                                 if(project.projectTeamId !== record.projectTeamId)
                                                     items.push(project)
                                             })
-                                            console.log('items', items)
                                             setProjects(items);
-                                        });
+                                        })
+                                        .catch(e => unauthRedirect(e));
                                 }}
                                 okText={locale.locale.Ok}
                                 cancelText={locale.locale.NO}

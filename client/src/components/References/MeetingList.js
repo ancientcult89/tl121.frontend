@@ -138,14 +138,17 @@ const MeetingList = observer(() => {
                                     description={locale.locale.Meeting.DeleteConfirmation}
                                     onConfirm={() => {
                                         setIsLoading(true);
-                                        deleteMeeting(record.meetingId).then(() => {
-                                            getMeetingList()
-                                                .then(data => {
-                                                meeting.setMeetings(data);
-                                                setNeedUpdate(!needUpdate);
-                                                })
-                                                .finally(() => setIsLoading(false));
-                                        })
+                                        deleteMeeting(record.meetingId)
+                                            .then(() => {
+                                                getMeetingList()
+                                                    .then(data => {
+                                                    meeting.setMeetings(data);
+                                                    setNeedUpdate(!needUpdate);
+                                                    })
+                                                    .catch(e => unauthRedirect(e))
+                                                    .finally(() => setIsLoading(false));
+                                            })
+                                            .catch(e => unauthRedirect(e))
                                     }}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}
@@ -163,7 +166,9 @@ const MeetingList = observer(() => {
                         render={(record) => (
                             <Space size="middle">
                                 <a onClick={() => {
-                                    navigate(MEETING_PROCESSING_ROUTE, {state:{meetingId:record.meetingId, personId:record.personId}})
+                                    navigate(
+                                        MEETING_PROCESSING_ROUTE + '/?meetingId=' + record.meetingId + '&personId=' + record.personId
+                                    )
                                 }}
                                 >
                                     {locale.locale.Meeting.Process}
