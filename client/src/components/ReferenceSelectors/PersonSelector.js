@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Button, Dropdown, Space, Spin} from "antd";
-import {getPersonList} from "../../http/personApi";
+import {getFilteredPersonList} from "../../http/personApi";
 import {Context} from "../../index";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 
@@ -12,7 +12,7 @@ const PersonSelector = ({onSelect, selectedPersonName, onClear}) => {
 
     useEffect(() => {
         const items = [];
-        getPersonList()
+        getFilteredPersonList()
             .then(persons => {
                 person.setPersons(persons)
                 persons.map((person) => items.push({

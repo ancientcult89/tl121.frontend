@@ -40,6 +40,10 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
             createGrade(gradeName)
                 .then(newGrade =>{
                     grade.setGrades([...grade.grades, newGrade])
+                    setSelectedGrade(null);
+                    setGradeName('');
+                    setGradeNameError(null);
+                    onCancel();
                 })
                 .catch(e => unauthRedirect(e));
         }
@@ -48,13 +52,13 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
             updateGrade(selectedGrade.gradeId, gradeName)
                 .then((updatedGrade) =>{
                     grade.setGrades(grade.grades.map((item) => item.gradeId === updateGrade.gradeId ? {...updateGrade} : item))
+                    setSelectedGrade(null);
+                    setGradeName('');
+                    setGradeNameError(null);
+                    onCancel();
                 })
                 .catch(e => unauthRedirect(e));
         }
-        setSelectedGrade(null);
-        setGradeName('');
-        setGradeNameError(null);
-        onCancel();
     };
 
     return (

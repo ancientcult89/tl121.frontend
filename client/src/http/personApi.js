@@ -5,6 +5,11 @@ export const getPersonList = async () => {
     return data;
 }
 
+export const getFilteredPersonList = async () => {
+    const {data} = await $authHost.get('api/v1/Person/filtered/')
+    return data;
+}
+
 export const getPerson = async (personId) => {
     const {data} = await $authHost.get('api/v1/Person/' + personId)
     return data
