@@ -43,7 +43,7 @@ const MeetingList = observer(() => {
                 unauthRedirect(e);
             })
             .finally(() => setIsLoading(false));
-    }, [needUpdate, meeting])
+    }, [needUpdate, meeting, selectedPersonId])
 
     const clearFilteringMeetingList = () => {
         setSelectedPersonFullName(null);
@@ -57,32 +57,33 @@ const MeetingList = observer(() => {
             {
                 setSelectedPersonFullName(item.lastName + ' ' + item.firstName + ' ' + item.surName);
                 setSelectedPersonId(item.personId);
+                setNeedUpdate(!needUpdate);
             }
-            setNeedUpdate(!needUpdate);
         })
     }
 
     return (
         <div>
             <Row>
+                <Button
+                    type={"primary"}
+                    style={{marginRight: 5}}
+                    onClick={() => {
+                        setModalType(ADD_MODAL);
+                        setModalVisible(true);
+                        setIsLoading(true);
+                        setSelectedMeetingId(null);
+                    }}
+                >
+                    {locale.locale.Meeting.Add}
+                </Button>
                 <PersonSelector
                     onSelect={selectedPersonHandler}
                     selectedPersonName={selectedPersonFullName}
                     onClear={clearFilteringMeetingList}
+                    isClearable={true}
                 />
             </Row>
-            <Button
-                type={"primary"}
-                style={{marginTop: 5}}
-                onClick={() => {
-                    setModalType(ADD_MODAL);
-                    setModalVisible(true);
-                    setIsLoading(true);
-                    setSelectedMeetingId(null);
-                }}
-            >
-                {locale.locale.Meeting.Add}
-            </Button>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={meetings} rowKey={(record) => record.meetingId } style={{marginTop:20}}>
                     <Column

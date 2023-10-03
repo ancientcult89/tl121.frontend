@@ -5,7 +5,7 @@ import {getFilteredPersonList} from "../../http/personApi";
 import {Context} from "../../index";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 
-const PersonSelector = ({onSelect, selectedPersonName, onClear}) => {
+const PersonSelector = ({onSelect, selectedPersonName, onClear, isClearable}) => {
     const {person, locale} = useContext(Context);
     const [personDropdownItems, setPersonDropdownItems] = useState([]);
     const [personsLoaded, setPersonsLoaded] = useState(false);
@@ -38,9 +38,11 @@ const PersonSelector = ({onSelect, selectedPersonName, onClear}) => {
 
     return (
         <Spin tip={locale.locale.Loading} spinning={!personsLoaded}>
-            <Button onClick={onClear}>
-                {locale.locale.Meeting.ClearFiltering}
-            </Button>
+            {isClearable &&
+                <Button onClick={onClear}>
+                    {locale.locale.Meeting.ClearFiltering}
+                </Button>
+            }
             <Dropdown
                 menu={{
                     items: personDropdownItems

@@ -50,7 +50,6 @@ const RoleList = () => {
                                     setModalType(EDIT_MODAL);
                                     setIsLoading(true);
                                     setModalVisible(true);
-                                    console.log(record.roleId);
                                     setSelectedRoleId(record.roleId);
                                 }}>
                                     {locale.locale.Edit}

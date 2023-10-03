@@ -8,11 +8,11 @@ import dateTimeConverter from "../../utils/dateTimeConverter";
 import {getPersonList} from "../../http/personApi";
 import dayjs from "dayjs";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import PersonSelector from "../ReferenceSelectors/PersonSelector";
 
 
 const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
     const {meeting, locale, person} = useContext(Context);
-    const [personDropdownItems, setPersonDropdownItems] = useState([]);
     const [plannedDate, setPlannedDate] = useState(null);
     const [actualDate, setActualDate] = useState(null);
     const [selectedPersonId, setSelectedPersonId] = useState(null);
@@ -38,8 +38,7 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                         key: person.personId,
                     })
                 )})
-            .catch(e => unauthRedirect(e))
-            .finally(() => setPersonDropdownItems(items));
+            .catch(e => unauthRedirect(e));
         if(meetingId != null)
         {
             getMeeting(meetingId)
@@ -173,16 +172,10 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                     </div>
                 }
                 <Form.Item label={locale.locale.Meeting.Person}>
-                    <Dropdown
-                        menu={{
-                            items: personDropdownItems
-                        }}>
-                        <Button style={{marginLeft: 5}}>
-                            <Space>
-                                {selectedPersonFullName || locale.locale.Meeting.SelectPerson}
-                            </Space>
-                        </Button>
-                    </Dropdown>
+                    <PersonSelector
+                        onSelect={selectedPersonHandler}
+                        selectedPersonName={selectedPersonFullName}
+                    />
                 </Form.Item>
                 <Form.Item label={locale.locale.Meeting.FollowUpWasSended}>
                     <Checkbox

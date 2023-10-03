@@ -1,5 +1,5 @@
 import {observer} from "mobx-react-lite";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Alert, Button, Form, Input} from 'antd';
 import {useLocation, useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE, ONE_TWO_ONE_DEADLINES_ROUTE} from "../utils/consts";
@@ -14,7 +14,11 @@ const Auth = observer(() => {
     const isLogin = location.pathname === LOGIN_ROUTE;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loginError, setLoginError] = useState(null)
+    const [loginError, setLoginError] = useState(null);
+
+    useEffect(() => {
+        user.setIsAuth(false);
+    }, [])
     const click = async () => {
         try {
             let authRespose;

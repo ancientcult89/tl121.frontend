@@ -10,7 +10,6 @@ import {unauthRedirect} from "../../utils/unauthRedirect";
 
 const TaskList = () => {
     const {locale, person} = useContext(Context);
-    const [personDropdownItems, setPersonDropdownItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedPersonId, setSelectedPersonId] = useState(null);
     const [selectedPersonFullName, setSelectedPersonFullName] = useState(null);
@@ -73,6 +72,7 @@ const TaskList = () => {
                     onSelect={selectedPersonHandler}
                     selectedPersonName={selectedPersonFullName}
                     onClear={clearFilteringTaskList}
+                    isClearable={true}
                 />
             </Row>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
