@@ -1,4 +1,4 @@
-export const VERSION = 'v0.1.2.0'
+export const VERSION = 'v0.1.2.1'
 
 export const LOGIN_ROUTE = '/login'
 export const REGISTRATION_ROUTE = '/registration'
