@@ -27,6 +27,7 @@ export const enLocale  = {
     RoleReference: "Role",
     PersonProjectsReference: "Person Projects",
     UserProjectsReference: "User Projects",
+    UserReference: "User",
 
     Person: {
         Add: "Add Person",
@@ -144,5 +145,9 @@ export const enLocale  = {
     ProjectSelector: {
         Project: "Project",
         SelectProjectQuery: "Select a Project...",
+    },
+    RoleSelector: {
+        Role: "Role",
+        SelectRoleQuery: "Select a Role...",
     },
 }

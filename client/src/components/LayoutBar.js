@@ -15,7 +15,7 @@ import {
     MEETING_ROUTE,
     ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_PROJECTS_ROUTE,
     PERSON_ROUTE,
-    PROJECT_ROUTE, ROLE_ROUTE, TASK_ROUTE, USER_PROJECTS_ROUTE
+    PROJECT_ROUTE, ROLE_ROUTE, TASK_ROUTE, USER_PROJECTS_ROUTE, USER_ROUTE
 } from "../utils/consts";
 import AppRouter from "./AppRouter";
 import {enLocale} from "../locales/en-En";
@@ -60,6 +60,7 @@ const LayoutBar = observer(() => {
             getItem(locale.locale.RoleReference, ROLE_ROUTE),
             getItem(locale.locale.PersonProjectsReference, PERSON_PROJECTS_ROUTE),
             getItem(locale.locale.UserProjectsReference, USER_PROJECTS_ROUTE),
+            getItem(locale.locale.UserReference, USER_ROUTE),
         ]),
     ];
 
