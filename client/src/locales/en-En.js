@@ -144,7 +144,15 @@ export const enLocale  = {
         DeleteTitle: "Delete the User",
         DeleteConfirmation: "Are you sure to delete this User?",
         EmailValidationError: "Please, enter valid email",
-        NameValidationError: "UserName can not be empty"
+        NameValidationError: "UserName can not be empty",
+        PasswordConfirmationError: "Wrong new password or it confirmation",
+        CurrentPassValidationError: "Current password can not be empty",
+        NewPassValidationError: "New password can not be empty",
+        ConfirmPassValidationError: "Confirmation password can not be empty",
+        ChangePassword: "Set as change Password",
+        CurrentPassword: "Current password",
+        NewPassword: "New password",
+        ConfirmPassword: "Confirm password",
     },
 
     //Selectors

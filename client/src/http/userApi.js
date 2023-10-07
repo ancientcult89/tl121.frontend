@@ -40,3 +40,8 @@ export const updateUser = async (user) => {
     const {data} = await $authHost.put('api/v1/User/' + user.userId, user)
     return data
 }
+
+export const changePassword = async (request) => {
+    const {data} = await $authHost.put('api/v1/User/' + request.userId + '/changepassword/', request)
+    return data
+}
