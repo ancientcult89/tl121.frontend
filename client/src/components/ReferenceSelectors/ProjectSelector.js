@@ -38,17 +38,15 @@ const ProjectSelector = ({onSelect, selectedProjectName}) => {
     return (
         <div>
             <Spin tip={locale.locale.Loading} spinning={!projectLoaded}>
-                <Form.Item label={locale.locale.ProjectSelector.Project}>
-                    <Dropdown menu={{
-                        items: projectDropdownItems
-                    }}>
-                        <Button>
-                            <Space>
-                                {selectedProjectName || locale.locale.ProjectSelector.SelectProjectQuery}
-                            </Space>
-                        </Button>
-                    </Dropdown>
-                </Form.Item>
+                <Dropdown menu={{
+                    items: projectDropdownItems
+                }}>
+                    <Button>
+                        <Space>
+                            {selectedProjectName || locale.locale.ProjectSelector.SelectProjectQuery}
+                        </Space>
+                    </Button>
+                </Dropdown>
             </Spin>
         </div>
     );

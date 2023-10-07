@@ -132,7 +132,9 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                 onCancel();
             }}
         >
-            <Form>
+            <Form
+                labelCol={{ span: 8 }}
+            >
                 {planedDateError &&
                     <div>
                         <Alert

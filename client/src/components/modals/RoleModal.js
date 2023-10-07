@@ -74,7 +74,9 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
                     <p></p>
                 </div>
             }
-            <Form>
+            <Form
+                labelCol={{ span: 8 }}
+            >
                 <Form.Item label={locale.locale.Role.GradeName}>
                     <Input
                         value={roleName}

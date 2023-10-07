@@ -37,17 +37,15 @@ const GradeSelector = ({onSelect, selectedGradeName}) => {
 
     return (
         <Spin tip={locale.locale.Loading} spinning={!gradeLoaded}>
-            <Form.Item label={locale.locale.GradeSelector.Grade}>
-                <Dropdown menu={{
-                    items: gradeDropdownItems
-                }}>
-                    <Button>
-                        <Space>
-                            {selectedGradeName || locale.locale.GradeSelector.SelectGradeQuery}
-                        </Space>
-                    </Button>
-                </Dropdown>
-            </Form.Item>
+            <Dropdown menu={{
+                items: gradeDropdownItems
+            }}>
+                <Button>
+                    <Space>
+                        {selectedGradeName || locale.locale.GradeSelector.SelectGradeQuery}
+                    </Space>
+                </Button>
+            </Dropdown>
         </Spin>
     );
 };

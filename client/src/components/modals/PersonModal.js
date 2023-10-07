@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, Form, Input, Modal, Space, Spin} from "antd";
+import {Alert, Button, Dropdown, Form, Input, Modal, Space, Spin} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createPerson, getPerson, updatePerson} from "../../http/personApi";
@@ -154,7 +154,9 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
             onOk={handleOk}
             onCancel={onCancel}
         >
-            <Form>
+            <Form
+                labelCol={{ span: 5 }}
+            >
                 <Spin tip={locale.locale.Loading} spinning={!personDataLoaded}>
                     {nameError &&
                         <div>
@@ -217,10 +219,12 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                         <p></p>
                     </div>
                 }
-                <GradeSelector
-                    onSelect={selectGradeTypeHandler}
-                    selectedGradeName={selectedGradeName}
-                />
+                <Form.Item label={locale.locale.GradeSelector.Grade}>
+                    <GradeSelector
+                        onSelect={selectGradeTypeHandler}
+                        selectedGradeName={selectedGradeName}
+                    />
+                </Form.Item>
             </Form>
         </Modal>
     );

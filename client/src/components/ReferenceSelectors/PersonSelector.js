@@ -26,6 +26,7 @@ const PersonSelector = ({onSelect, selectedPersonName, onClear, isClearable}) =>
                         key: person.personId,
                     })
                 )
+                console.log(person);
                 setPersonDropdownItems(items);
             })
             .catch(e => {
@@ -39,7 +40,10 @@ const PersonSelector = ({onSelect, selectedPersonName, onClear, isClearable}) =>
     return (
         <Spin tip={locale.locale.Loading} spinning={!personsLoaded}>
             {isClearable &&
-                <Button onClick={onClear}>
+                <Button
+                    onClick={onClear}
+                    style={{marginRight: 5}}
+                >
                     {locale.locale.Meeting.ClearFiltering}
                 </Button>
             }
@@ -47,7 +51,7 @@ const PersonSelector = ({onSelect, selectedPersonName, onClear, isClearable}) =>
                 menu={{
                     items: personDropdownItems
                 }}>
-                <Button style={{marginLeft: 5}}>
+                <Button>
                     <Space>
                         {selectedPersonName || locale.locale.Meeting.SelectPerson}
                     </Space>

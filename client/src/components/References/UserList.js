@@ -1,13 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
-import {deleteRole, getRoleList} from "../../http/roleApi";
 import {unauthRedirect} from "../../utils/unauthRedirect";
-import {getUserList} from "../../http/userApi";
+import {deleteUser, getUserList} from "../../http/userApi";
 import {Popconfirm, Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import {EDIT_MODAL} from "../../utils/consts";
-import RoleModal from "../modals/RoleModal";
 import UserModal from "../modals/UserModal";
 
 const UserList = () => {
@@ -20,32 +18,39 @@ const UserList = () => {
     const [needUpdate, setNeedUpdate] = useState(true);
 
     useEffect(() => {
+        getUsers();
+    }, [needUpdate])
+
+    function getUsers() {
         getUserList()
             .then(data => {
-
-                let users = [];
-                data.map(user => users.push({
-                    id: user.id,
-                    userName: user.userName,
-                    email: user.email,
-                    roleName: user.role.roleName,
-                    roleId: user.roleId,
-                }))
-                setUsers(users);
+                setUsers(formUsers(data));
             })
             .catch(e => {
                 unauthRedirect(e);
             })
             .finally(() => setIsLoading(false));
-    }, [needUpdate])
+    }
+
+    function formUsers(data) {
+        let users = [];
+        data.map(user => users.push({
+            id: user.id,
+            userName: user.userName,
+            email: user.email,
+            roleName: user.role.roleName,
+            roleId: user.roleId,
+        }))
+        return users;
+    }
 
     return (
         <div>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={users} rowKey={(record) => record.id } style={{marginTop:20}}>
-                    <Column title={locale.locale.Role.RoleName} dataIndex="userName" key="1" />
-                    <Column title={locale.locale.Role.RoleName} dataIndex="email" key="2" />
-                    <Column title={locale.locale.Role.RoleName} dataIndex="roleName" key="3" />
+                    <Column title={locale.locale.User.UserName} dataIndex="userName" key="1" />
+                    <Column title={locale.locale.User.Email} dataIndex="email" key="2" />
+                    <Column title={locale.locale.User.Role} dataIndex="roleName" key="3" />
                     <Column
                         title={locale.locale.Action}
                         key="4"
@@ -54,27 +59,20 @@ const UserList = () => {
                                 <a onClick={() => {
                                     setModalType(EDIT_MODAL);
                                     setIsLoading(true);
+                                    setSelectedUserId(record.id);
                                     setModalVisible(true);
-                                    setSelectedUserId(record.roleId);
                                 }}>
                                     {locale.locale.Edit}
                                 </a>
                                 <Popconfirm
-                                    title={locale.locale.Role.DeleteTitle}
-                                    description={locale.locale.Role.DeleteConfirmation}
+                                    title={locale.locale.User.DeleteTitle}
+                                    description={locale.locale.User.DeleteConfirmation}
                                     onConfirm={() => {
-                                        // setIsLoading(true);
-                                        // deleteRole(record.roleId)
-                                        //     .then(() => {
-                                        //         getRoleList()
-                                        //             .then(data => {
-                                        //                 role.setRoles(data);
-                                        //                 setNeedUpdate(!needUpdate);
-                                        //             })
-                                        //             .catch(e => unauthRedirect(e))
-                                        //             .finally(() => setIsLoading(false));
-                                        //     })
-                                        //     .catch(e => unauthRedirect(e))
+                                        setIsLoading(true);
+                                        deleteUser(record.id)
+                                            .then(() => getUsers())
+                                            .catch(e => unauthRedirect(e))
+                                            .finally(() => setIsLoading(false));
                                     }}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}
@@ -97,7 +95,7 @@ const UserList = () => {
                         setIsLoading(false);
                         setModalVisible(false);
                     }}
-                    roleId={modalVisible ? selectedUserId : null}
+                    userId={modalVisible ? selectedUserId : null}
                 />
             }
         </div>

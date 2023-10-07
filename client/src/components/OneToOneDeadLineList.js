@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {getOneTwoOne} from "../http/oneToOneDeadLineApi";
-import {Spin, Table, Tag} from "antd";
+import {Calendar, Col, Row, Spin, Table, Tag} from "antd";
 import Column from "antd/es/table/Column";
 import {Context} from "../index";
 import {useNavigate} from "react-router-dom";
@@ -10,7 +10,6 @@ import {unauthRedirect} from "../utils/unauthRedirect";
 
 const OneToOneDeadLineList = observer(() => {
     const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
     const {locale} = useContext(Context);
     const [data, setData] = useState([]);
 
@@ -49,13 +48,15 @@ const OneToOneDeadLineList = observer(() => {
     });
 
     return (
-        <Spin tip={locale.locale.Loading} spinning={isLoading}>
-            <Table dataSource={tableData} rowKey={(record) => record.personId } style={{marginTop:20}}>
-                <Column title={locale.locale.OneTwoOne.Person} dataIndex="fullname" key="1" />
-                <Column title={locale.locale.OneTwoOne.Grade} dataIndex="gradeName" key="2" />
-                <Column title={locale.locale.OneTwoOne.LastMeeting} dataIndex="lastMeeting" key="3" />
-                <Column title={locale.locale.OneTwoOne.DeadLine} dataIndex="deadLine" key="4" />
-                <Column title={locale.locale.OneTwoOne.DaysForDeadline}
+        <div>
+            <Spin tip={locale.locale.Loading} spinning={isLoading}>
+                <Table dataSource={tableData} rowKey={(record) => record.personId } style={{marginTop:20}}>
+                    <Column title={locale.locale.OneTwoOne.Person} dataIndex="fullname" key="1" />
+                    <Column title={locale.locale.OneTwoOne.Grade} dataIndex="gradeName" key="2" />
+                    <Column title={locale.locale.OneTwoOne.LastMeeting} dataIndex="lastMeeting" key="3" />
+                    <Column title={locale.locale.OneTwoOne.DeadLine} dataIndex="deadLine" key="4" />
+                    <Column
+                        title={locale.locale.OneTwoOne.DaysForDeadline}
                         dataIndex="dayToDeadLine"
                         key="5"
                         render={(record) =>
@@ -63,9 +64,11 @@ const OneToOneDeadLineList = observer(() => {
                                 {record}
                             </Tag>)
                         }
-                />
-            </Table>
-        </Spin>
+                    />
+                </Table>
+            </Spin>
+        </div>
+
     );
 });
 

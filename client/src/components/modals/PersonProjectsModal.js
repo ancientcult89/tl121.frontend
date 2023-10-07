@@ -69,7 +69,9 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
             onOk={onCancel}
             onCancel={onCancel}
         >
-            <Form>
+            <Form
+                labelCol={{ span: 8 }}
+            >
                 <Row style={{marginTop:20}}>
                     <Button
                         type={"primary"}

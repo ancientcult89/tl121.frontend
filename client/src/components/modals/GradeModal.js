@@ -70,7 +70,9 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
             confirmLoading={confirmLoading}
             onCancel={onCancel}
         >
-            <Form>
+            <Form
+                labelCol={{ span: 5 }}
+            >
                 {gradeNameError &&
                     <div>
                         <Alert

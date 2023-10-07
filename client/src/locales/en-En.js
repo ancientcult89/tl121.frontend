@@ -136,6 +136,16 @@ export const enLocale  = {
         NameValidationError: "Please, select a project",
         AlreadyUsed: "The Project is already used",
     },
+    User: {
+        UserName: "User Name",
+        Email: "Email",
+        Role: "Role",
+        Edit: "Edit User",
+        DeleteTitle: "Delete the User",
+        DeleteConfirmation: "Are you sure to delete this User?",
+        EmailValidationError: "Please, enter valid email",
+        NameValidationError: "UserName can not be empty"
+    },
 
     //Selectors
     GradeSelector: {

@@ -76,7 +76,9 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
                     <p></p>
                 </div>
             }
-            <Form>
+            <Form
+                labelCol={{ span: 5 }}
+            >
                 <Form.Item label={locale.locale.Project.ProjectName}>
                     <Input
                         value={projectName}

@@ -36,18 +36,16 @@ const RoleSelector = ({onSelect, selectedRoleName}) => {
     }, []);
 
     return (
-        <Spin tip={locale.locale.Loading} spinning={!gradeLoaded}>
-            <Form.Item label={locale.locale.GradeSelector.Grade}>
-                <Dropdown menu={{
-                    items: roleDropdownItems
-                }}>
-                    <Button>
-                        <Space>
-                            {selectedRoleName || locale.locale.RoleSelector.SelectRoleQuery}
-                        </Space>
-                    </Button>
-                </Dropdown>
-            </Form.Item>
+        <Spin tip={locale.locale.Loading} spinning={!roleLoaded}>
+            <Dropdown menu={{
+                items: roleDropdownItems
+            }}>
+                <Button>
+                    <Space>
+                        {selectedRoleName || locale.locale.RoleSelector.SelectRoleQuery}
+                    </Space>
+                </Button>
+            </Dropdown>
         </Spin>
     );
 };
