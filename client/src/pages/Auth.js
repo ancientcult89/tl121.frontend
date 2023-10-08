@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {ONE_TWO_ONE_DEADLINES_ROUTE} from "../utils/consts";
 import {Context} from "../index";
 import {login, registration} from "../http/userApi";
+import {emailValidator} from "../utils/emailValidator";
 
 
 const Auth = observer(({isLogin}) => {
@@ -22,18 +23,21 @@ const Auth = observer(({isLogin}) => {
     }, [])
     const click = async () => {
         try {
+            let emailIsValid = emailValidator(email);
+            if(password === '' || !emailIsValid)
+            {
+                console.log(1)
+                return;
+            }
             if(isLoginState) {
-                console.log(isLoginState)
-                console.log(isLogin)
                 await login(email, password);
                 user.setUser(user);
                 user.setIsAuth(true);
                 navigate(ONE_TWO_ONE_DEADLINES_ROUTE);
             }
             else {
-                console.log(isLogin)
-                console.log(isLoginState)
-                if(userName === '' || email === '' || password === '' || confirmPassword === '' || password !== confirmPassword)
+                let emailIsValid = emailValidator(email);
+                if(userName === '' || !emailIsValid || password === '' || confirmPassword === '' || password !== confirmPassword)
                 {
                     return;
                 }
@@ -77,7 +81,7 @@ const Auth = observer(({isLogin}) => {
                         <Input value={userName} onChange={e => setUserName(e.target.value)}/>
                     </Form.Item>
                 }
-                {loginError &&
+                {loginError && isLoginState &&
                     <div>
                         <Alert
                             message={loginError}
@@ -106,7 +110,7 @@ const Auth = observer(({isLogin}) => {
                     <Form.Item
                         label={locale.locale.ConfirmPassword}
                         name="confirmPassword"
-                        rules={[{ required: true, message: locale.locale.PasswordRequiredMessage }]}
+                        rules={[{ required: true, message: locale.locale.PasswordConfirmationRequiredMessage }]}
                     >
                         <Input.Password value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
                     </Form.Item>
