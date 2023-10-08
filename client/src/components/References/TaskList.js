@@ -1,9 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
-import {completeTask, deleteMeeting, getTaskList} from "../../http/meetingApi";
-import {getPersonList} from "../../http/personApi";
-import {Button, Dropdown, Popconfirm, Row, Space, Spin, Table} from "antd";
+import {completeTask, getTaskList} from "../../http/meetingApi";
+import {Popconfirm, Row, Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import PersonSelector from "../ReferenceSelectors/PersonSelector";
 import {unauthRedirect} from "../../utils/unauthRedirect";
@@ -11,43 +10,26 @@ import {unauthRedirect} from "../../utils/unauthRedirect";
 const TaskList = () => {
     const {locale, person} = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedPersonId, setSelectedPersonId] = useState(null);
-    const [selectedPersonFullName, setSelectedPersonFullName] = useState(null);
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
-        getTaskList(selectedPersonId)
-            .then(data => {
-                setTasks(data);
-            })
-            .then(() => {
-                const items = [];
-                getPersonList()
-                    .then(persons => {
-                        person.setPersons(persons)
-                    })
-                    .catch(e => {
-                        unauthRedirect(e);
-                    });
-            })
-            .catch(e => {
-                unauthRedirect(e);
-            });
+        getTasks(person.selectedPerson.personId);
         setIsLoading(false);
-    }, []);
+    }, [person.selectedPerson.personId]);
 
     const selectedPersonHandler = (personId) => {
         person.persons.map(item => {
             if(item.personId === personId)
             {
-                setSelectedPersonFullName(item.lastName + ' ' + item.firstName + ' ' + item.surName);
-                setSelectedPersonId(item.personId);
+                person.setSelectedPerson({
+                    personId: item.personId,
+                    personName: item.lastName + ' ' + item.firstName + ' ' + item.surName
+                });
             }
-            filteringTaskList(personId);
         })
     }
 
-    const filteringTaskList = (personId) => {
+    const getTasks = (personId) => {
         getTaskList(personId)
             .then(data => {
                 setTasks(data);
@@ -56,13 +38,23 @@ const TaskList = () => {
     }
 
     const clearFilteringTaskList = () => {
-        getTaskList()
-            .then(data => {
-                setTasks(data);
+        person.setSelectedPerson({
+            personId: null,
+            personName: ''
+        });
+    }
+
+    function completeTaskHandler(meetingGoalId) {
+        setIsLoading(true);
+        let formData = {
+            "goalId": meetingGoalId,
+        }
+        completeTask(formData)
+            .then(() => {
+                getTasks(person.selectedPerson.personId);
             })
             .catch(e => unauthRedirect(e))
-        setSelectedPersonFullName(null);
-        setSelectedPersonId(null);
+            .finally(() => setIsLoading(false))
     }
 
     return (
@@ -70,7 +62,7 @@ const TaskList = () => {
             <Row>
                 <PersonSelector
                     onSelect={selectedPersonHandler}
-                    selectedPersonName={selectedPersonFullName}
+                    selectedPersonName={person.selectedPerson.personName}
                     onClear={clearFilteringTaskList}
                     isClearable={true}
                 />
@@ -102,22 +94,7 @@ const TaskList = () => {
                                 <Popconfirm
                                     title={locale.locale.Task.CompleteTask}
                                     description={locale.locale.Task.CompleteTaskConfirmation}
-                                    onConfirm={() => {
-                                        setIsLoading(true);
-                                        let formData = {
-                                            "goalId": record.meetingGoalId,
-                                        }
-                                        completeTask(formData)
-                                            .then(() => {
-                                                getTaskList(selectedPersonId)
-                                                    .then(data => {
-                                                        setTasks(data);
-                                                    })
-                                                    .catch(e => unauthRedirect(e))
-                                                    .finally(() => setIsLoading(false));
-                                            })
-                                            .catch(e => unauthRedirect(e))
-                                    }}
+                                    onConfirm={() => completeTaskHandler(record.meetingGoalId)}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}
                                 >

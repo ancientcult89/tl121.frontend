@@ -17,13 +17,25 @@ const RoleList = () => {
     const [needUpdate, setNeedUpdate] = useState(true);
 
     useEffect(() => {
+        getRoles();
+        setIsLoading(false);
+    }, [needUpdate])
+
+    function getRoles() {
         getRoleList()
             .then(data => role.setRoles(data))
             .catch(e => {
                 unauthRedirect(e);
             })
+    }
+
+    function delRole(roleId) {
+        setIsLoading(true);
+        deleteRole(roleId)
+            .then(() => getRoles())
+            .catch(e => unauthRedirect(e))
             .finally(() => setIsLoading(false));
-    }, [needUpdate])
+    }
 
     return (
         <div>
@@ -57,20 +69,7 @@ const RoleList = () => {
                                 <Popconfirm
                                     title={locale.locale.Role.DeleteTitle}
                                     description={locale.locale.Role.DeleteConfirmation}
-                                    onConfirm={() => {
-                                        setIsLoading(true);
-                                        deleteRole(record.roleId)
-                                            .then(() => {
-                                                getRoleList()
-                                                    .then(data => {
-                                                        role.setRoles(data);
-                                                        setNeedUpdate(!needUpdate);
-                                                    })
-                                                    .catch(e => unauthRedirect(e))
-                                                    .finally(() => setIsLoading(false));
-                                            })
-                                            .catch(e => unauthRedirect(e))
-                                    }}
+                                    onConfirm={() => delRole(record.roleId)}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}
                                 >

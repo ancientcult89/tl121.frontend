@@ -18,13 +18,25 @@ const ProjectList = observer(() => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        getProjects();
+        setIsLoading(false);
+    }, [needUpdate])
+
+    function getProjects() {
         getProjectList()
             .then(data => project.setProjects(data))
             .catch(e => {
                 unauthRedirect(e);
             })
+    }
+
+    function delProject(projectId) {
+        setIsLoading(true);
+        deleteProject(projectId)
+            .then(() => getProjects())
+            .catch(e => unauthRedirect(e))
             .finally(() => setIsLoading(false));
-    }, [needUpdate])
+    }
 
     return (
         <div>
@@ -58,20 +70,7 @@ const ProjectList = observer(() => {
                                 <Popconfirm
                                     title={locale.locale.Project.DeleteTitle}
                                     description={locale.locale.Project.DeleteConfirmation}
-                                    onConfirm={() => {
-                                        deleteProject(record.projectTeamId)
-                                            .then(() => {
-                                                setIsLoading(true);
-                                                getProjectList()
-                                                    .then(data => {project.setProjects(data);})
-                                                    .catch(e => unauthRedirect(e))
-                                                    .finally(() => {
-                                                        setNeedUpdate(!needUpdate);
-                                                        setIsLoading(false);
-                                                    });
-                                            })
-                                            .catch(e => unauthRedirect(e))
-                                    }}
+                                    onConfirm={() => delProject(record.projectTeamId)}
                                     okText={locale.locale.OK}
                                     cancelText={locale.locale.NO}
                                 >

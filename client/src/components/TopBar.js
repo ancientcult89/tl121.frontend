@@ -33,20 +33,6 @@ const TopBar = observer(() => {
                         {user.isAuth &&
                             <Button style={{marginTop: marginTopButtons, marginLeft: 5}} type={"primary"} onClick={logOut}>{locale.locale.LogOut}</Button>
                         }
-                        {!user.isAuth &&
-                            <div>
-                                <Button
-                                    style={{marginTop: marginTopButtons, marginLeft: 5}}
-                                    type={"primary"}
-                                    onClick={signIn}
-                                >
-                                    {locale.locale.SignIn}
-                                </Button>
-                                <Button style={{marginTop: marginTopButtons, marginLeft: 5}} type={"primary"}>
-                                    {locale.locale.Register}
-                                </Button>
-                            </div>
-                        }
                     </div>
                 </Col>
             </Row>

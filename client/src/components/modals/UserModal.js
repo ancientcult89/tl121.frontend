@@ -1,9 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
-import {createRole, getRole, updateRole} from "../../http/roleApi";
 import {changePassword, getUser, updateUser} from "../../http/userApi";
-import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {Alert, Form, Input, Modal, Row, Switch} from "antd";
 import RoleSelector from "../ReferenceSelectors/RoleSelector";
@@ -95,20 +93,16 @@ const UserModal = ({modalType, open, onCancel, userId}) => {
             let emailIsValid = emailValidator(userEmail);
             if(userName == null || userName === "" || userEmail == null || !emailIsValid)
             {
-                if(userName == null || userName === "")
-                {
+                if(userName == null || userName === "") {
                     setUserNameError(locale.locale.User.NameValidationError);
                 }
-                else
-                {
+                else {
                     setUserNameError(null);
                 }
-                if(userEmail == null || !emailIsValid)
-                {
+                if(userEmail == null || !emailIsValid) {
                     setEmailNameError(locale.locale.User.EmailValidationError);
                 }
-                else
-                {
+                else {
                     setEmailNameError(null);
                 }
                 return;
@@ -139,7 +133,7 @@ const UserModal = ({modalType, open, onCancel, userId}) => {
 
     return (
         <Modal
-            title={modalType === ADD_MODAL ? locale.locale.User.Add : locale.locale.User.Edit}
+            title={modalType === locale.locale.User.Edit}
             open={open}
             destroyOnClose={true}
             onOk={handleOk}

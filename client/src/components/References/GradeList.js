@@ -18,13 +18,27 @@ const GradeList = observer(() => {
     const [needUpdate, setNeedUpdate] = useState(true);
 
     useEffect(() => {        
+        getGrades();
+        setIsLoading(false);
+    }, [needUpdate])
+
+    function getGrades() {
         getGradeList()
             .then(data => grade.setGrades(data))
             .catch(e => {
                 unauthRedirect(e);
+            });
+    }
+
+    function delGrade(gradeId) {
+        setIsLoading(true);
+        deleteGrade(gradeId)
+            .then(() => getGrades())
+            .catch(e => unauthRedirect(e))
+            .finally(() => {
+                setIsLoading(false);
             })
-            .finally(() => setIsLoading(false));            
-    }, [needUpdate])
+    }
 
     return (
         <div>
@@ -58,20 +72,7 @@ const GradeList = observer(() => {
                                 <Popconfirm
                                     title={locale.locale.Grade.DeleteTitle}
                                     description={locale.locale.Grade.DeleteConfirmation}
-                                    onConfirm={() => {
-                                        setIsLoading(true);
-                                        deleteGrade(record.gradeId)
-                                            .then(() => {
-                                                getGradeList()
-                                                    .then(data => {
-                                                        grade.setGrades(data);
-                                                        setNeedUpdate(!needUpdate);
-                                                    })
-                                                    .catch(e => unauthRedirect(e))
-                                                .finally(() => setIsLoading(false));
-                                            })
-                                            .catch(e => unauthRedirect(e))
-                                    }}
+                                    onConfirm={() => delGrade(record.gradeId)}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}
                                 >

@@ -26,7 +26,6 @@ const PersonSelector = ({onSelect, selectedPersonName, onClear, isClearable}) =>
                         key: person.personId,
                     })
                 )
-                console.log(person);
                 setPersonDropdownItems(items);
             })
             .catch(e => {

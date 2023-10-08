@@ -38,10 +38,18 @@ const UserList = () => {
             id: user.id,
             userName: user.userName,
             email: user.email,
-            roleName: user.role.roleName,
+            roleName: user.role?.roleName,
             roleId: user.roleId,
         }))
         return users;
+    }
+
+    function delUser(userId) {
+        setIsLoading(true);
+        deleteUser(userId)
+            .then(() => getUsers())
+            .catch(e => unauthRedirect(e))
+            .finally(() => setIsLoading(false));
     }
 
     return (
@@ -67,13 +75,7 @@ const UserList = () => {
                                 <Popconfirm
                                     title={locale.locale.User.DeleteTitle}
                                     description={locale.locale.User.DeleteConfirmation}
-                                    onConfirm={() => {
-                                        setIsLoading(true);
-                                        deleteUser(record.id)
-                                            .then(() => getUsers())
-                                            .catch(e => unauthRedirect(e))
-                                            .finally(() => setIsLoading(false));
-                                    }}
+                                    onConfirm={() => delUser(record.id)}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}
                                 >

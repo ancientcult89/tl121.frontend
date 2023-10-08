@@ -109,19 +109,19 @@ const AppRouter = () => {
                     <Route
                         key={LOGIN_ROUTE}
                         path={LOGIN_ROUTE}
-                        element={<Auth />}
+                        element={<Auth isLogin={true}/>}
                         exact
                     />
                     <Route
                         key={REGISTRATION_ROUTE}
                         path={REGISTRATION_ROUTE}
-                        element={<Auth />}
+                        element={<Auth isLogin={false}/>}
                         exact
                     />
                 </React.Fragment>
             }
             {/* автоматически редирект на главную страницу */}
-            <Route path="*" element={<Auth />} />
+            <Route path="*" element={<Auth isLogin={true}/>} />
         </Routes>
     );
 };

@@ -2,10 +2,9 @@ import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import {deleteMeeting, getMeetingList} from "../../http/meetingApi";
-import {Button, Checkbox, Dropdown, Popconfirm, Row, Space, Spin, Table} from "antd";
+import {Button, Checkbox, Popconfirm, Row, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL, MEETING_PROCESSING_ROUTE} from "../../utils/consts";
 import Column from "antd/es/table/Column";
-import {getPersonList} from "../../http/personApi";
 import MeetingModal from "../modals/MeetingModal";
 import {useNavigate} from "react-router-dom";
 import PersonSelector from "../ReferenceSelectors/PersonSelector";
@@ -17,47 +16,49 @@ const MeetingList = observer(() => {
     const [modalType, setModalType] = useState(null);
     const [selectedMeetingId, setSelectedMeetingId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [needUpdate, setNeedUpdate] = useState(true);
-    const [selectedPersonId, setSelectedPersonId] = useState(null);
-    const [selectedPersonFullName, setSelectedPersonFullName] = useState(null);
     const [meetings, setMeetings] = useState([]);
+    const [needUpdate, setNeedUpdate] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        getMeetingList(selectedPersonId)
+        getMeetings(person.selectedPerson.personId);
+        setIsLoading(false)
+    }, [needUpdate, person.selectedPerson.personId])
+
+    const clearFilteringMeetingList = () => {
+        person.setSelectedPerson({
+            personId: null,
+            personName: ''
+        });
+    }
+
+    function getMeetings(personId) {
+        getMeetingList(personId)
             .then(data => {
                 meeting.setMeetings(data);
                 setMeetings(data);
             })
-            .then(() => {
-                const items = [];
-                getPersonList()
-                    .then(persons => {
-                        person.setPersons(persons);
-                    })
-                    .catch(e => {
-                        unauthRedirect(e);
-                    });
-            })
             .catch(e => {
                 unauthRedirect(e);
-            })
-            .finally(() => setIsLoading(false));
-    }, [needUpdate, meeting, selectedPersonId])
+            });
+    }
 
-    const clearFilteringMeetingList = () => {
-        setSelectedPersonFullName(null);
-        setSelectedPersonId(null);
-        setNeedUpdate(!needUpdate);
+    function delMeeting(meetingId) {
+        setIsLoading(true);
+        deleteMeeting(meetingId)
+            .then(() => getMeetings(person.selectedPerson.personId))
+            .catch(e => unauthRedirect(e))
+            .finally(() => setIsLoading(false));
     }
 
     const selectedPersonHandler = (personId) => {
         person.persons.map(item => {
             if(item.personId === personId)
             {
-                setSelectedPersonFullName(item.lastName + ' ' + item.firstName + ' ' + item.surName);
-                setSelectedPersonId(item.personId);
-                setNeedUpdate(!needUpdate);
+                person.setSelectedPerson({
+                    personId: item.personId,
+                    personName: item.lastName + ' ' + item.firstName + ' ' + item.surName
+                });
             }
         })
     }
@@ -79,7 +80,7 @@ const MeetingList = observer(() => {
                 </Button>
                 <PersonSelector
                     onSelect={selectedPersonHandler}
-                    selectedPersonName={selectedPersonFullName}
+                    selectedPersonName={person.selectedPerson.personName}
                     onClear={clearFilteringMeetingList}
                     isClearable={true}
                 />
@@ -137,20 +138,7 @@ const MeetingList = observer(() => {
                                 <Popconfirm
                                     title={locale.locale.Meeting.DeleteTitle}
                                     description={locale.locale.Meeting.DeleteConfirmation}
-                                    onConfirm={() => {
-                                        setIsLoading(true);
-                                        deleteMeeting(record.meetingId)
-                                            .then(() => {
-                                                getMeetingList()
-                                                    .then(data => {
-                                                    meeting.setMeetings(data);
-                                                    setNeedUpdate(!needUpdate);
-                                                    })
-                                                    .catch(e => unauthRedirect(e))
-                                                    .finally(() => setIsLoading(false));
-                                            })
-                                            .catch(e => unauthRedirect(e))
-                                    }}
+                                    onConfirm={() => delMeeting(record.meetingId)}
                                     okText={locale.locale.Ok}
                                     cancelText={locale.locale.NO}
                                 >

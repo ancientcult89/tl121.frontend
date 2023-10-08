@@ -18,6 +18,11 @@ const PersonList = observer(() => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
+        getPersons()
+        setIsLoading(false)
+    }, [needUpdate])
+
+    function getPersons() {
         getPersonList()
             .then(data => {
                 person.setPersons(data)
@@ -25,23 +30,15 @@ const PersonList = observer(() => {
             })
             .catch(e => {
                 unauthRedirect(e);
-            })
-            .finally(() => setIsLoading(false));
-    }, [needUpdate])
+            });
+    }
 
     function deletePersonHandler(personId) {
+        setIsLoading(true);
         deletePerson(personId)
-            .then(() => {
-                setIsLoading(true);
-                getPersonList()
-                    .then(data => {person.setPersons(data);})
-                    .catch(e => unauthRedirect(e))
-                    .finally(() => {
-                        setNeedUpdate(!needUpdate);
-                        setIsLoading(false);
-                    });
-            })
+            .then(() => getPersons())
             .catch(e => unauthRedirect(e))
+            .finally(() => setIsLoading(false))
     }
 
     return (
