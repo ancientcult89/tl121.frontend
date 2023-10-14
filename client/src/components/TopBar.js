@@ -4,6 +4,7 @@ import {Context} from "../index";
 import {useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE, VERSION} from "../utils/consts";
 import {observer} from "mobx-react-lite";
+import LocaleSelector from "./LocaleSelector";
 
 const TopBar = observer(() => {
     const {locale, user} = useContext(Context)
@@ -33,6 +34,7 @@ const TopBar = observer(() => {
                         {user.isAuth &&
                             <Button style={{marginTop: marginTopButtons, marginLeft: 5}} type={"primary"} onClick={logOut}>{locale.locale.LogOut}</Button>
                         }
+                        <LocaleSelector />
                     </div>
                 </Col>
             </Row>

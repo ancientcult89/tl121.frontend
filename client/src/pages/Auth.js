@@ -21,6 +21,7 @@ const Auth = observer(({isLogin}) => {
     useEffect(() => {
         user.setIsAuth(false);
     }, [])
+
     const click = async () => {
         try {
             let emailIsValid = emailValidator(email);

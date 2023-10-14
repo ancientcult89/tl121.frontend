@@ -1,5 +1,6 @@
 import {makeAutoObservable} from "mobx";
 import {enLocale} from "../locales/en-En";
+import {ruLocale} from "../locales/ru-Ru";
 
 export default class LocaleStore {
     constructor() {
@@ -10,8 +11,10 @@ export default class LocaleStore {
     }
 
     setLocale(localeType) {
-        if(localeType === 'En')
+        if(localeType === 'en-US')
             this._locale = enLocale;
+        if(localeType === 'ru-RU')
+            this._locale = ruLocale;
         else
             this._locale = enLocale;
     }

@@ -21,7 +21,7 @@ const App = observer(() => {
             user.setIsAuth(true)
         }
         setSelectedLocale(enLocale);
-        locale.setLocale("En");
+        locale.setLocale("en-US");
         setLoading(false)
     }, [user])
 
