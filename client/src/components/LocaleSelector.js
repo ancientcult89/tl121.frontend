@@ -1,15 +1,31 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, Dropdown, Space} from "antd";
 import {localeList} from "../locales/localeList";
 import {Context} from "../index";
 
 const LocaleSelector = () => {
     const {locale} = useContext(Context);
-    const [currentLocale, setCurrentLocale] = useState(localeList[0]);
+    const [currentLocale, setCurrentLocale] = useState({
+        locale: locale.locale,
+        localeName: locale.localeName,
+    });
+
+    useEffect(() => {
+        if(locale.locale == null || locale.localeName === '')
+        {
+            locale.setLocale(localeList[1].localeName);
+            setCurrentLocale({
+                locale: localeList[1].locale,
+                localeName: localeList[1].localeName
+            })
+        }
+    }, [])
     function onSelect(selectedLocale) {
-        setCurrentLocale(selectedLocale)
+        setCurrentLocale({
+            locale: selectedLocale.locale,
+            localeName: selectedLocale.localeName
+        })
         locale.setLocale(selectedLocale.localeName);
-        console.log(selectedLocale.localeName);
     }
     const items = [
         {
@@ -29,7 +45,6 @@ const LocaleSelector = () => {
             ),
         },
     ];
-
 
     return (
         <Dropdown menu={{

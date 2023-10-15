@@ -27,12 +27,12 @@ const Auth = observer(({isLogin}) => {
             let emailIsValid = emailValidator(email);
             if(password === '' || !emailIsValid)
             {
-                console.log(1)
                 return;
             }
             if(isLoginState) {
-                await login(email, password);
-                user.setUser(user);
+                const loginResponse = await login(email, password);
+                user.setUser(loginResponse.user);
+                user.setRole(loginResponse.role?.roleName);
                 user.setIsAuth(true);
                 navigate(ONE_TWO_ONE_DEADLINES_ROUTE);
             }

@@ -4,6 +4,7 @@ export default class UserStore {
     constructor() {
         this._isAuth = false;
         this._user = {};
+        this._role = -1;
         // отслеживает состояние и при изменении вызывает ререндер
         makeAutoObservable(this);
     }
@@ -21,5 +22,13 @@ export default class UserStore {
 
     get user() {
         return this._user;
+    }
+
+    setRole(roleName) {
+        this._role = roleName;
+    }
+
+    get role() {
+        return this._role;
     }
 }

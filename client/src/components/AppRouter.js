@@ -25,11 +25,48 @@ import UserList from "./References/UserList";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
-
+    console.log(user.role === 0)
     return (
         <Routes>
+            {user.role === 'Admin' && user.isAuth && (
+                <React.Fragment>
+                    <Route
+                        key={ROLE_ROUTE}
+                        path={ROLE_ROUTE}
+                        element={<RoleList />}
+                        exact
+                    />
+                    <Route
+                        key={PERSON_PROJECTS_ROUTE}
+                        path={PERSON_PROJECTS_ROUTE}
+                        element={<PersonProjects />}
+                        exact
+                    />
+                    <Route
+                        key={USER_PROJECTS_ROUTE}
+                        path={USER_PROJECTS_ROUTE}
+                        element={<UserProjects />}
+                        exact
+                    />
+                    <Route
+                        key={USER_ROUTE}
+                        path={USER_ROUTE}
+                        element={<UserList />}
+                        exact
+                    />
+                </React.Fragment>
+            )}
+            {user.isAuth && (
+                <Route path="*" element={<OneToOneDeadLineList/>} />
+            )}
             {user.isAuth && (
                 <React.Fragment>
+                    <Route
+                        key={ONE_TWO_ONE_DEADLINES_ROUTE}
+                        path={ONE_TWO_ONE_DEADLINES_ROUTE}
+                        element={<OneToOneDeadLineList />}
+                        exact
+                    />
                     <Route
                         key={GRADE_ROUTE}
                         path={GRADE_ROUTE}
@@ -40,12 +77,6 @@ const AppRouter = () => {
                         key={PERSON_ROUTE}
                         path={PERSON_ROUTE}
                         element={<PersonList />}
-                        exact
-                    />
-                    <Route
-                        key={ONE_TWO_ONE_DEADLINES_ROUTE}
-                        path={ONE_TWO_ONE_DEADLINES_ROUTE}
-                        element={<OneToOneDeadLineList />}
                         exact
                     />
                     <Route
@@ -76,30 +107,6 @@ const AppRouter = () => {
                         key={TASK_ROUTE}
                         path={TASK_ROUTE}
                         element={<TaskList />}
-                        exact
-                    />
-                    <Route
-                        key={ROLE_ROUTE}
-                        path={ROLE_ROUTE}
-                        element={<RoleList />}
-                        exact
-                    />
-                    <Route
-                        key={PERSON_PROJECTS_ROUTE}
-                        path={PERSON_PROJECTS_ROUTE}
-                        element={<PersonProjects />}
-                        exact
-                    />
-                    <Route
-                        key={USER_PROJECTS_ROUTE}
-                        path={USER_PROJECTS_ROUTE}
-                        element={<UserProjects />}
-                        exact
-                    />
-                    <Route
-                        key={USER_ROUTE}
-                        path={USER_ROUTE}
-                        element={<UserList />}
                         exact
                     />
                 </React.Fragment>

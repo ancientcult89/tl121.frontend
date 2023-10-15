@@ -1,11 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {getOneTwoOne} from "../http/oneToOneDeadLineApi";
-import {Calendar, Col, Row, Spin, Table, Tag} from "antd";
+import {Spin, Table, Tag} from "antd";
 import Column from "antd/es/table/Column";
 import {Context} from "../index";
-import {useNavigate} from "react-router-dom";
-import {LOGIN_ROUTE} from "../utils/consts";
 import {unauthRedirect} from "../utils/unauthRedirect";
 
 const OneToOneDeadLineList = observer(() => {

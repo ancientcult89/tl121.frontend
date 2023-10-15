@@ -11,14 +11,12 @@ import {
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import {
     GRADE_ROUTE,
-    LOGIN_ROUTE,
     MEETING_ROUTE,
     ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_PROJECTS_ROUTE,
     PERSON_ROUTE,
     PROJECT_ROUTE, ROLE_ROUTE, TASK_ROUTE, USER_PROJECTS_ROUTE, USER_ROUTE
 } from "../utils/consts";
 import AppRouter from "./AppRouter";
-import {enLocale} from "../locales/en-En";
 import {observer} from "mobx-react-lite";
 
 const { Content, Sider } = Layout;
@@ -36,7 +34,6 @@ const LayoutBar = observer(() => {
     const navigate = useNavigate();
     const [current, setCurrent] = useState('mail');
     const {locale, user} = useContext(Context);
-    const [selectedLocale, setSelectedLocale] = useState(enLocale)
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
