@@ -10,21 +10,12 @@ const LocaleSelector = () => {
         localeName: locale.localeName,
     });
 
-    useEffect(() => {
-        if(locale.locale == null || locale.localeName === '')
-        {
-            locale.setLocale(localeList[1].localeName);
-            setCurrentLocale({
-                locale: localeList[1].locale,
-                localeName: localeList[1].localeName
-            })
-        }
-    }, [])
     function onSelect(selectedLocale) {
         setCurrentLocale({
             locale: selectedLocale.locale,
             localeName: selectedLocale.localeName
         })
+        localStorage.setItem('locale', selectedLocale.localeName);
         locale.setLocale(selectedLocale.localeName);
     }
     const items = [

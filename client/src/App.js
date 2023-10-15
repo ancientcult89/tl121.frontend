@@ -19,9 +19,17 @@ const App = observer(() => {
             user.setUser(true);
             user.setIsAuth(true)
         }
-        if(locale.locale == null || locale.localeName === '')
+        const storageLocale = localStorage.getItem('locale');
+
+        if(storageLocale == null || storageLocale === '')
         {
+            locale.setLocale(localeList[1]);
             locale.setLocale(localeList[1].localeName);
+            localStorage.setItem('locale', localeList[1].localeName);
+        }
+        else
+        {
+            locale.setLocale(storageLocale);
         }
         setLoading(false)
     }, [user])

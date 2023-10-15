@@ -25,7 +25,6 @@ import UserList from "./References/UserList";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
-    console.log(user.role === 0)
     return (
         <Routes>
             {user.role === 'Admin' && user.isAuth && (
