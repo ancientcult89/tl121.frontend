@@ -1,6 +1,6 @@
 билдим образ в каталоге(точка последним параметром обязательна)
 docker build -t imagename:tag .
-(в моём случае docker build -t frontend:0.1.2.1 .)
+(в моём случае docker build -t frontend:0.1.3.1 .)
 (в моём случае docker build -t frontend:latest .)
 
 тегаем название для удалённого репозитория

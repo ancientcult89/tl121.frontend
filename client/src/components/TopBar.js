@@ -14,6 +14,8 @@ const TopBar = observer(() => {
         localStorage.setItem('token', '');
         user.setIsAuth(false);
         user.setUser(null);
+        user.setRole('');
+        localStorage.setItem('role', '');
         navigate(LOGIN_ROUTE);
     }
     const marginTopButtons = 8;

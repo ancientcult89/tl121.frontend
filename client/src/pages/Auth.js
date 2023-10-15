@@ -6,6 +6,7 @@ import {ONE_TWO_ONE_DEADLINES_ROUTE} from "../utils/consts";
 import {Context} from "../index";
 import {login, registration} from "../http/userApi";
 import {emailValidator} from "../utils/emailValidator";
+import {localeList} from "../locales/localeList";
 
 
 const Auth = observer(({isLogin}) => {
@@ -33,6 +34,7 @@ const Auth = observer(({isLogin}) => {
                 const loginResponse = await login(email, password);
                 user.setUser(loginResponse.user);
                 user.setRole(loginResponse.role?.roleName);
+                localStorage.setItem('role', loginResponse.role?.roleName);
                 user.setIsAuth(true);
                 navigate(ONE_TWO_ONE_DEADLINES_ROUTE);
             }

@@ -9,9 +9,8 @@ import './global.css';
 import {localeList} from "./locales/localeList";
 
 const App = observer(() => {
-    const {user} = useContext(Context)
+    const {user, locale} = useContext(Context)
     const [loading, setLoading] = useState(true)
-    const {locale} = useContext(Context)
     useEffect(() => {
         let token = localStorage.getItem('token');
         if(token != null ?? token !== '')
@@ -31,6 +30,7 @@ const App = observer(() => {
         {
             locale.setLocale(storageLocale);
         }
+        user.setRole(localStorage.getItem('role'))
         setLoading(false)
     }, [user])
 
