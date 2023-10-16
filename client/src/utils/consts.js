@@ -1,4 +1,4 @@
-export const VERSION = 'v0.1.3.1'
+export const VERSION = 'v0.1.3.2'
 
 export const LOGIN_ROUTE = '/login'
 export const REGISTRATION_ROUTE = '/registration'
@@ -14,6 +14,7 @@ export const ROLE_ROUTE = '/role'
 export const PERSON_PROJECTS_ROUTE = '/personProjects'
 export const USER_PROJECTS_ROUTE = '/userProjects'
 export const USER_ROUTE = '/user'
+export const DENIED_ROUTE = '/denied'
 
 
 // Modal properties

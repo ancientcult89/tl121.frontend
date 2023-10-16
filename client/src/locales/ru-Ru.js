@@ -18,6 +18,7 @@ export const ruLocale  = {
     Delete: "Удалить",
     Action: "Действия",
     SignIn: "Войти",
+    Back: "Назад",
     Register: "Зарегистрироваться",
     LogOut: "Выйти",
     References: "Справочники",
@@ -32,6 +33,8 @@ export const ruLocale  = {
     PersonProjectsReference: "Проекты сотрудника",
     UserProjectsReference: "Проекты пользователя",
     UserReference: "Пользователь",
+    AccessDeniedTitle: "Доступ запрещён",
+    AccessDeniedMessage: "Пожалуйста авторизуйтесь или убедитесь что у вас есть права к данному разделу",
 
     Person: {
         Add: "Добавить сотрудника",

@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import {
+    DENIED_ROUTE,
     GRADE_ROUTE,
     LOGIN_ROUTE, MEETING_FOLLOWUP_ROUTE, MEETING_PROCESSING_ROUTE, MEETING_ROUTE,
     ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_PROJECTS_ROUTE,
@@ -22,6 +23,7 @@ import RoleList from "./References/RoleList";
 import PersonProjects from "../pages/PersonProjects";
 import UserProjects from "../pages/UserProjects";
 import UserList from "./References/UserList";
+import AccessDenied from "./AccessDenied";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -54,9 +56,6 @@ const AppRouter = () => {
                         exact
                     />
                 </React.Fragment>
-            )}
-            {user.isAuth && (
-                <Route path="*" element={<OneToOneDeadLineList/>} />
             )}
             {user.isAuth && (
                 <React.Fragment>
@@ -127,7 +126,11 @@ const AppRouter = () => {
                 </React.Fragment>
             }
             {/* автоматически редирект на главную страницу */}
-            <Route path="*" element={<Auth isLogin={true}/>} />
+            <Route
+                path={'*'}
+                element={<AccessDenied />}
+                exact
+            />
         </Routes>
     );
 };

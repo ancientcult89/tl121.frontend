@@ -18,6 +18,7 @@ export const enLocale  = {
     Delete: "Delete",
     Action: "Action",
     SignIn: "Sign In",
+    Back: "Back",
     Register: "Register",
     LogOut: "LogOut",
     References: "References",
@@ -32,6 +33,8 @@ export const enLocale  = {
     PersonProjectsReference: "Person Projects",
     UserProjectsReference: "User Projects",
     UserReference: "User",
+    AccessDeniedTitle: "Access Denied",
+    AccessDeniedMessage: "Please log in or make sure you have rights to this section",
 
     Person: {
         Add: "Add Person",
