@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {Alert, Button, Checkbox, DatePicker, Dropdown, Form, Modal, Space} from "antd";
+import {Alert, Checkbox, DatePicker, Form, Modal} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createMeeting, getMeeting, updateMeeting} from "../../http/meetingApi";
@@ -154,15 +154,17 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                         value={plannedDate}
                     />
                 </Form.Item>
-                <Form.Item label={locale.locale.Meeting.ActualDate}>
-                    <DatePicker
-                        onChange={(e) => {
-                            if(e != null)
-                                setActualDate(e)
-                        }}
-                        value={actualDate}
-                    />
-                </Form.Item>
+                {meetingId &&
+                    <Form.Item label={locale.locale.Meeting.ActualDate}>
+                        <DatePicker
+                            onChange={(e) => {
+                                if(e != null)
+                                    setActualDate(e)
+                            }}
+                            value={actualDate}
+                        />
+                    </Form.Item>
+                }
                 {personError &&
                     <div>
                         <Alert
