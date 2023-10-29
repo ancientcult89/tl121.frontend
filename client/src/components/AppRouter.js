@@ -1,6 +1,5 @@
 import React, {useContext} from 'react';
 import {
-    DENIED_ROUTE,
     GRADE_ROUTE,
     LOGIN_ROUTE, MEETING_FOLLOWUP_ROUTE, MEETING_PROCESSING_ROUTE, MEETING_ROUTE,
     ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_PROJECTS_ROUTE,
@@ -18,12 +17,12 @@ import ProjectList from "./References/ProjectList";
 import MeetingList from "./References/MeetingList";
 import MeetingProcessing from "../pages/MeetingProcessing";
 import FollowUp from "./MeetingProcessing/FollowUp";
-import TaskList from "./References/TaskList";
 import RoleList from "./References/RoleList";
 import PersonProjects from "../pages/PersonProjects";
 import UserProjects from "../pages/UserProjects";
 import UserList from "./References/UserList";
 import AccessDenied from "./AccessDenied";
+import Tasks from "../pages/Tasks";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -104,7 +103,7 @@ const AppRouter = () => {
                     <Route
                         key={TASK_ROUTE}
                         path={TASK_ROUTE}
-                        element={<TaskList />}
+                        element={<Tasks />}
                         exact
                     />
                 </React.Fragment>

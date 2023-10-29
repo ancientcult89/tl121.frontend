@@ -2,32 +2,19 @@ import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import {completeTask, getTaskList} from "../../http/meetingApi";
-import {Popconfirm, Row, Space, Spin, Table} from "antd";
+import {Popconfirm, Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
-import PersonSelector from "../ReferenceSelectors/PersonSelector";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 
-const TaskList = () => {
+const TaskList = ({personId}) => {
     const {locale, person} = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
-        getTasks(person.selectedPerson.personId);
+        getTasks(personId);
         setIsLoading(false);
-    }, [person.selectedPerson.personId]);
-
-    const selectedPersonHandler = (personId) => {
-        person.persons.map(item => {
-            if(item.personId === personId)
-            {
-                person.setSelectedPerson({
-                    personId: item.personId,
-                    personName: item.lastName + ' ' + item.firstName + ' ' + item.surName
-                });
-            }
-        })
-    }
+    }, [personId]);
 
     const getTasks = (personId) => {
         getTaskList(personId)
@@ -35,13 +22,6 @@ const TaskList = () => {
                 setTasks(data);
             })
             .catch(e => unauthRedirect(e))
-    }
-
-    const clearFilteringTaskList = () => {
-        person.setSelectedPerson({
-            personId: null,
-            personName: ''
-        });
     }
 
     function completeTaskHandler(meetingGoalId) {
@@ -59,14 +39,6 @@ const TaskList = () => {
 
     return (
         <div>
-            <Row>
-                <PersonSelector
-                    onSelect={selectedPersonHandler}
-                    selectedPersonName={person.selectedPerson.personName}
-                    onClear={clearFilteringTaskList}
-                    isClearable={true}
-                />
-            </Row>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={tasks} rowKey={(task) => task.meetingGoalId } style={{marginTop:20}}>
                     <Column

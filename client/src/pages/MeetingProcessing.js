@@ -9,6 +9,7 @@ import MeetingNotes from "../components/MeetingProcessing/MeetingNotes";
 import MeetingGoals from "../components/MeetingProcessing/MeetingGoals";
 import {MEETING_FOLLOWUP_ROUTE} from "../utils/consts";
 import {unauthRedirect} from "../utils/unauthRedirect";
+import TaskList from "../components/References/TaskList";
 
 const MeetingProcessing = () => {
     const {locale} = useContext(Context);
@@ -47,6 +48,7 @@ const MeetingProcessing = () => {
             <div>
                 <pre>{previousNotesAndGoals}</pre>
             </div>
+            <TaskList personId={searchParams.get('personId')}/>
             <Divider dashed>{locale.locale.Meeting.Notes.Notes}</Divider>
             <MeetingNotes meetingId={searchParams.get('meetingId')}/>
             <Divider dashed>{locale.locale.Meeting.Goals.Goals}</Divider>
