@@ -2,11 +2,12 @@ import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import {deleteRole, getRoleList} from "../../http/roleApi";
-import {Button, Popconfirm, Space, Spin, Table} from "antd";
+import {Alert, Button, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import RoleModal from "../modals/RoleModal";
 import Column from "antd/es/table/Column";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 const RoleList = () => {
     const {locale, role} = useContext(Context);
@@ -15,6 +16,7 @@ const RoleList = () => {
     const [selectedRoleId, setSelectedRoleId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [needUpdate, setNeedUpdate] = useState(true);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
         getRoles();
@@ -33,7 +35,10 @@ const RoleList = () => {
         setIsLoading(true);
         deleteRole(roleId)
             .then(() => getRoles())
-            .catch(e => unauthRedirect(e))
+            .catch(e => {
+                unauthRedirect(e);
+                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+            })
             .finally(() => setIsLoading(false));
     }
 
@@ -50,6 +55,18 @@ const RoleList = () => {
             >
                 {locale.locale.Role.Add}
             </Button>
+            {httpNotFoundRequestResponseError &&
+                <div style={{marginTop:5}}>
+                    <Alert
+                        message={httpNotFoundRequestResponseError}
+                        type="error"
+                        closable={true}
+                        onClick={() => setHttpNotFoundRequestResponseError(null)}
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={role.roles} rowKey={(record) => record.roleId } style={{marginTop:20}}>
                     <Column title={locale.locale.Role.RoleName} dataIndex="roleName" key="1" />

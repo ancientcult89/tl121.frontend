@@ -1,11 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Space, Table, Popconfirm, Spin} from 'antd';
+import {Button, Space, Table, Popconfirm, Spin, Alert} from 'antd';
 import {Context} from "../../index";
 import {deleteGrade, getGradeList} from "../../http/gradeApi";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import GradeModal from "../modals/GradeModal";
 import {observer} from "mobx-react-lite";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 const { Column } = Table;
 
@@ -15,6 +16,7 @@ const GradeList = observer(() => {
     const [modalType, setModalType] = useState(null);
     const [selectedGradeId, setSelectedGradeId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
     const [needUpdate, setNeedUpdate] = useState(true);
 
     useEffect(() => {        
@@ -34,7 +36,10 @@ const GradeList = observer(() => {
         setIsLoading(true);
         deleteGrade(gradeId)
             .then(() => getGrades())
-            .catch(e => unauthRedirect(e))
+            .catch(e => {
+                unauthRedirect(e);
+                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+            })
             .finally(() => {
                 setIsLoading(false);
             })
@@ -53,6 +58,18 @@ const GradeList = observer(() => {
             >
                 {locale.locale.Grade.Add}
             </Button>
+            {httpNotFoundRequestResponseError &&
+                <div style={{marginTop:5}}>
+                    <Alert
+                        message={httpNotFoundRequestResponseError}
+                        type="error"
+                        closable={true}
+                        onClick={() => setHttpNotFoundRequestResponseError(null)}
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={grade.grades} rowKey={(record) => record.gradeId } style={{marginTop:20}}>
                     <Column title={locale.locale.Grade.GradeName} dataIndex="gradeName" key="1" />

@@ -56,8 +56,8 @@ export const ruLocale  = {
         Edit: "Редактировать грейд",
         DeleteTitle: "Удалить грейд",
         DeleteConfirmation: "Вы уверены, что хотите удалить этот грейд?",
-        GradeName: "Название грейда",
-        NameValidationError: "Название грейда не может быть пустым"
+        GradeName: "Название",
+        NameValidationError: "Название грейда не может быть пустым",
     },
     OneTwoOne: {
         Person: "Сотрудник",

@@ -5,27 +5,56 @@ import {createRole, getRole, updateRole} from "../../http/roleApi";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Alert, Form, Input, Modal} from "antd";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 const RoleModal = ({modalType, open, onCancel, roleId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [roleName, setRoleName] = useState('');
     const [selectedRole, setSelectedRole] = useState(null);
-    const [roleNameError, setRoleNameError] = useState(null)
+    const [roleNameError, setRoleNameError] = useState(null);
+    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
     const {locale, role} = useContext(Context);
 
     useEffect(() => {
         setConfirmLoading(true);
         if(roleId != null)
         {
-            getRole(roleId).then(role => {
-                setRoleName(role.roleName);
-                setSelectedRole(role)
-            });
+            getRole(roleId)
+                .then(role => {
+                    setRoleName(role.roleName);
+                    setSelectedRole(role)
+                })
+                .catch(e => {
+                    executeErrorHandlers(e);
+                });
         }
         setConfirmLoading(false);
     }, [roleId]);
 
+    const successfullyRequestHandler = () => {
+        setSelectedRole(null);
+        setRoleNameError('');
+        onCancel();
+    }
+    const clearErrors = () => {
+        setRoleNameError(null);
+        setHttpBadRequestResponseError(null);
+    }
+
+    const executeErrorHandlers = (e) => {
+        unauthRedirect(e);
+        setHttpBadRequestResponseError(badHttpRequestHandler(e));
+        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+    }
+
     const handleOk = () => {
+        if(httpNotFoundRequestResponseError !== null)
+        {
+            return;
+        }
+        clearErrors();
         if(roleName == null || roleName === "")
         {
             setRoleNameError(locale.locale.Role.NameValidationError);
@@ -36,22 +65,18 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
             createRole(roleName)
                 .then(newRole =>{
                     role.setRoles([...role.roles, newRole])
-                    setSelectedRole(null);
-                    setRoleName('');
-                    onCancel();
+                    successfullyRequestHandler();
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => executeErrorHandlers(e));
         }
         else if(modalType === EDIT_MODAL)
         {
             updateRole(selectedRole.roleId, roleName)
                 .then((updatedRole) =>{
                     role.setRoles(role.roles.map((item) => item.roleId === updatedRole.roleId ? {...updatedRole} : item))
-                    setSelectedRole(null);
-                    setRoleName('');
-                    onCancel();
+                    successfullyRequestHandler();
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => executeErrorHandlers(e));
         }
     };
 
@@ -64,6 +89,26 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
             confirmLoading={confirmLoading}
             onCancel={onCancel}
         >
+            {httpNotFoundRequestResponseError &&
+                <div>
+                    <Alert
+                        message={httpNotFoundRequestResponseError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
+            {httpBadRequestResponseError &&
+                <div>
+                    <Alert
+                        message={httpBadRequestResponseError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             {roleNameError &&
                 <div>
                     <Alert

@@ -57,7 +57,7 @@ export const enLocale  = {
         DeleteTitle: "Delete the Grade",
         DeleteConfirmation: "Are you sure to delete this Grade?",
         GradeName: "Grade Name",
-        NameValidationError: "Grade name can not be empty"
+        NameValidationError: "Grade name can not be empty",
     },
     OneTwoOne: {
         Person: "Person",

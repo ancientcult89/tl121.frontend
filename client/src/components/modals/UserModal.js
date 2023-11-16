@@ -30,7 +30,6 @@ const UserModal = ({modalType, open, onCancel, userId}) => {
         if(userId != null)
         {
             getUser(userId).then(user => {
-                console.log(user)
                 setUserName(user.userName);
                 setUserEmail(user.email);
                 setSelectedRoleId(user.roleId);
