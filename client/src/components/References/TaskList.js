@@ -2,14 +2,16 @@ import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import {completeTask, getTaskList} from "../../http/meetingApi";
-import {Popconfirm, Space, Spin, Table} from "antd";
+import {Alert, Popconfirm, Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 const TaskList = ({personId}) => {
     const {locale, person} = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
     const [tasks, setTasks] = useState([]);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
         getTasks(personId);
@@ -33,12 +35,27 @@ const TaskList = ({personId}) => {
             .then(() => {
                 getTasks(person.selectedPerson.personId);
             })
-            .catch(e => unauthRedirect(e))
+            .catch(e => {
+                unauthRedirect(e);
+                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+            })
             .finally(() => setIsLoading(false))
     }
 
     return (
         <div>
+            {httpNotFoundRequestResponseError &&
+                <div style={{marginTop:5}}>
+                    <Alert
+                        message={httpNotFoundRequestResponseError}
+                        type="error"
+                        closable={true}
+                        onClick={() => setHttpNotFoundRequestResponseError(null)}
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={tasks} rowKey={(task) => task.meetingGoalId } style={{marginTop:20}}>
                     <Column
