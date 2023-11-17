@@ -9,6 +9,8 @@ import {getPersonList} from "../../http/personApi";
 import dayjs from "dayjs";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import PersonSelector from "../ReferenceSelectors/PersonSelector";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 
 const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
@@ -22,6 +24,8 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
     const [personError, setPersonError] = useState(null);
     const [planedDateError, setPlanedDateError] = useState(null);
     const formatDate = 'YYYY-MM-DD';
+    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
         setConfirmLoading(true);
@@ -56,10 +60,29 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                     });
                     setFollowUpIsSended(data.followUpIsSended);
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => executeErrorHandlers(e));
         }
         setConfirmLoading(false);
     }, [modalType, meetingId]);
+
+    const successfullyRequestHandler = () => {
+        setSelectedPersonId(null);
+        setSelectedPersonFullName(null);
+        setPlannedDate(null);
+        setActualDate(null);
+        onCancel();
+    }
+    const clearErrors = () => {
+        setPlanedDateError(null);
+        setPersonError(null);
+        setHttpBadRequestResponseError(null);
+    }
+
+    const executeErrorHandlers = (e) => {
+        unauthRedirect(e);
+        setHttpBadRequestResponseError(badHttpRequestHandler(e));
+        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+    }
 
     const selectedPersonHandler = (personId) => {
         person.persons.map(item => {
@@ -71,16 +94,18 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
         })
     }
     const handleOk = () => {
+        if(httpNotFoundRequestResponseError !== null)
+        {
+            return;
+        }
+        clearErrors();
         if(plannedDate == null || selectedPersonId == null)
         {
             if(plannedDate == null)
                 setPlanedDateError(locale.locale.Meeting.PlanDateValidationError);
-            else
-                setPlanedDateError(null);
+
             if(selectedPersonId == null)
                 setPersonError(locale.locale.Meeting.PersonValidationError);
-            else
-                setPersonError(null);
 
             return;
         }
@@ -95,13 +120,9 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
             createMeeting(formData)
                 .then((newMeeting) =>{
                     meeting.setMeetings([...meeting.meetings, newMeeting])
-                    setSelectedPersonId(null);
-                    setSelectedPersonFullName(null);
-                    setPlannedDate(null);
-                    setActualDate(null);
-                    onCancel();
+                    successfullyRequestHandler();
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => executeErrorHandlers(e));
         }
         else if(modalType === EDIT_MODAL)
         {
@@ -109,13 +130,9 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
             updateMeeting(formData)
                 .then((updatedMeeting) =>{
                     meeting.setMeetings(meeting.meetings.map((item) => item.meetingId === meetingId ? {...updatedMeeting} : item))
-                    setSelectedPersonId(null);
-                    setSelectedPersonFullName(null);
-                    setPlannedDate(null);
-                    setActualDate(null);
-                    onCancel();
+                    successfullyRequestHandler();
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => executeErrorHandlers(e));
         }
     };
 
@@ -135,6 +152,26 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
             <Form
                 labelCol={{ span: 8 }}
             >
+                {httpNotFoundRequestResponseError &&
+                    <div>
+                        <Alert
+                            message={httpNotFoundRequestResponseError}
+                            type="error"
+                            showIcon
+                        />
+                        <p></p>
+                    </div>
+                }
+                {httpBadRequestResponseError &&
+                    <div>
+                        <Alert
+                            message={httpBadRequestResponseError}
+                            type="error"
+                            showIcon
+                        />
+                        <p></p>
+                    </div>
+                }
                 {planedDateError &&
                     <div>
                         <Alert

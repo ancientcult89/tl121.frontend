@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, Button, Dropdown, Form, Input, Modal, Space, Spin} from "antd";
+import {Alert, Form, Input, Modal, Spin} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createPerson, getPerson, updatePerson} from "../../http/personApi";
@@ -144,14 +144,7 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
             createPerson(formData)
                 .then((newPerson) =>{
                     person.setPersons([...person.persons, newPerson])
-                    setSelectedGradeId(null);
-                    setSelectedGradeName(null);
-                    setPersonEmail('');
-                    setFirstName(null);
-                    setShortName(null);
-                    setLastName(null)
-                    setSurName(null)
-                    onCancel();
+                    successfullyRequestHandler();
                 })
                 .catch(e => {
                     unauthRedirect(e);
@@ -167,7 +160,6 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                     successfullyRequestHandler();
                 })
                 .catch(e => {
-                    unauthRedirect(e);
                     executeErrorHandlers(e);
                 });
         }

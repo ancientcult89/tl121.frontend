@@ -5,6 +5,8 @@ import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createProject, getProject, updateProject} from "../../http/projectApi";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -12,6 +14,8 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
     const [selectedProject, setSelectedProject] = useState(null);
     const [projectNameError, setProjectNameError] = useState(null)
     const {project, locale} = useContext(Context);
+    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
         setConfirmLoading(true);
@@ -27,7 +31,27 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
         setConfirmLoading(false);
     }, [projectId]);
 
+    const successfullyRequestHandler = () => {
+        setSelectedProject(null);
+        setProjectName('');
+        onCancel();
+    }
+    const clearErrors = () => {
+
+        setHttpBadRequestResponseError(null);
+    }
+
+    const executeErrorHandlers = (e) => {
+        unauthRedirect(e);
+        setHttpBadRequestResponseError(badHttpRequestHandler(e));
+        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+    }
+
     const handleOk = () => {
+        if(httpNotFoundRequestResponseError !== null)
+        {
+            return;
+        }
         if(projectName == null || projectName === "")
         {
             setProjectNameError(locale.locale.Project.NameValidationError);
@@ -38,22 +62,18 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
             createProject(projectName)
                 .then(newProject =>{
                     project.setProjects([...project.projects, newProject])
-                    setSelectedProject(null);
-                    setProjectName('');
-                    onCancel();
+                    successfullyRequestHandler();
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => executeErrorHandlers(e));
         }
         else if(modalType === EDIT_MODAL)
         {
             updateProject(selectedProject.projectTeamId, projectName)
                 .then((updatedProject) =>{
                     project.setProjects(project.projects.map((item) => item.projectTeamId === updatedProject.projectTeamId ? {...updatedProject} : item))
-                    setSelectedProject(null);
-                    setProjectName('');
-                    onCancel();
+                    successfullyRequestHandler();
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => executeErrorHandlers(e));
         }
     };
 
@@ -66,6 +86,26 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
             confirmLoading={confirmLoading}
             onCancel={onCancel}
         >
+            {httpNotFoundRequestResponseError &&
+                <div>
+                    <Alert
+                        message={httpNotFoundRequestResponseError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
+            {httpBadRequestResponseError &&
+                <div>
+                    <Alert
+                        message={httpBadRequestResponseError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             {projectNameError &&
                 <div>
                     <Alert

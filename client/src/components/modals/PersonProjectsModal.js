@@ -6,14 +6,19 @@ import Column from "antd/es/table/Column";
 import ProjectSelector from "../ReferenceSelectors/ProjectSelector";
 import {addProjectToPerson, deleteProjectToPerson} from "../../http/projectApi";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import {deleteRole} from "../../http/roleApi";
 
 const PersonProjectsModal = ({open, onCancel, person}) => {
     const {project, locale} = useContext(Context);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [selectedProjectName, setSelectedProjectName] = useState('');
-    const [personNameError, setPersonNameError] = useState(null)
-    const [errorType, setErrorType] = useState(null)
-    const [projects, setProjects] = useState(person.projects)
+    const [personNameError, setPersonNameError] = useState(null);
+    const [errorType, setErrorType] = useState(null);
+    const [projects, setProjects] = useState(person.projects);
+    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     const selectProjectTypeHandler = (projectId) => {
         project.projects.map(item => {
@@ -23,6 +28,30 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                 setSelectedProjectId(item.projectTeamId)
             }
         })
+    }
+
+    const executeErrorHandlers = (e) => {
+        unauthRedirect(e);
+        setHttpBadRequestResponseError(badHttpRequestHandler(e));
+        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+    }
+
+    function delPersonProject(personId, projectTeamId) {
+        deleteProjectToPerson({
+            "personId": personId,
+            "projectId": projectTeamId,
+        })
+            .then(() => {
+                let items = [];
+                projects.map(project => {
+                    if(project.projectTeamId !== projectTeamId)
+                        items.push(project)
+                })
+                setProjects(items);
+            })
+            .catch(e => {
+                executeErrorHandlers(e);
+            });
     }
 
     const handleOk = () => {
@@ -55,7 +84,9 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                     personId: person.personId,
                     projectTeamName: selectedProjectName
                 }]))
-                .catch(e => unauthRedirect(e));
+                .catch(e => {
+                    executeErrorHandlers(e);
+                });
         }
 
         setSelectedProjectId(null);
@@ -69,6 +100,26 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
             onOk={onCancel}
             onCancel={onCancel}
         >
+            {httpNotFoundRequestResponseError &&
+                <div>
+                    <Alert
+                        message={httpNotFoundRequestResponseError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
+            {httpBadRequestResponseError &&
+                <div>
+                    <Alert
+                        message={httpBadRequestResponseError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             <Form
                 labelCol={{ span: 8 }}
             >
@@ -107,19 +158,7 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                                 title={locale.locale.Project.DeleteTitle}
                                 description={locale.locale.Project.DeleteConfirmation}
                                 onConfirm={() => {
-                                    deleteProjectToPerson({
-                                            "personId": person.personId,
-                                            "projectId": record.projectTeamId,
-                                        })
-                                        .then(() => {
-                                            let items = [];
-                                            projects.map(project => {
-                                                if(project.projectTeamId !== record.projectTeamId)
-                                                    items.push(project)
-                                            })
-                                            setProjects(items);
-                                        })
-                                        .catch(e => unauthRedirect(e));
+                                    delPersonProject(record.personId, record.projectTeamId);
                                 }}
                                 okText={locale.locale.Ok}
                                 cancelText={locale.locale.NO}

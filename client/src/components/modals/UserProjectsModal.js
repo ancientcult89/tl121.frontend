@@ -6,14 +6,18 @@ import {addProjectToUser, deleteProjectToUser} from "../../http/projectApi";
 import ProjectSelector from "../ReferenceSelectors/ProjectSelector";
 import {Context} from "../../index";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 const UserProjectsModal = ({open, onCancel, user}) => {
     const {project, locale} = useContext(Context);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [selectedProjectName, setSelectedProjectName] = useState('');
-    const [personNameError, setPersonNameError] = useState(null)
-    const [errorType, setErrorType] = useState(null)
-    const [projects, setProjects] = useState(user.projects)
+    const [personNameError, setPersonNameError] = useState(null);
+    const [errorType, setErrorType] = useState(null);
+    const [projects, setProjects] = useState(user.projects);
+    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     const selectProjectTypeHandler = (projectId) => {
         project.projects.map(item => {
@@ -23,6 +27,28 @@ const UserProjectsModal = ({open, onCancel, user}) => {
                 setSelectedProjectId(item.projectTeamId)
             }
         })
+    }
+
+    const executeErrorHandlers = (e) => {
+        unauthRedirect(e);
+        setHttpBadRequestResponseError(badHttpRequestHandler(e));
+        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+    }
+
+    function delPersonProject(userId, projectTeamId) {
+        deleteProjectToUser({
+            "userId": userId,
+            "projectId": projectTeamId,
+        })
+            .then(() => {
+                let items = [];
+                projects.map(project => {
+                    if(project.projectTeamId !== projectTeamId)
+                        items.push(project)
+                })
+                setProjects(items);
+            })
+            .catch(e => executeErrorHandlers(e));
     }
 
     const handleOk = () => {
@@ -55,7 +81,7 @@ const UserProjectsModal = ({open, onCancel, user}) => {
                     userId: user.userId,
                     projectTeamName: selectedProjectName
                 }]))
-                .catch(e => unauthRedirect(e));
+                .catch(e => executeErrorHandlers(e));
         }
 
         setSelectedProjectId(null);
@@ -69,6 +95,26 @@ const UserProjectsModal = ({open, onCancel, user}) => {
             onOk={onCancel}
             onCancel={onCancel}
         >
+            {httpNotFoundRequestResponseError &&
+                <div>
+                    <Alert
+                        message={httpNotFoundRequestResponseError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
+            {httpBadRequestResponseError &&
+                <div>
+                    <Alert
+                        message={httpBadRequestResponseError}
+                        type="error"
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             <Form
                 labelCol={{ span: 8 }}
             >
@@ -107,19 +153,7 @@ const UserProjectsModal = ({open, onCancel, user}) => {
                                 title={locale.locale.Project.DeleteTitle}
                                 description={locale.locale.Project.DeleteConfirmation}
                                 onConfirm={() => {
-                                    deleteProjectToUser({
-                                        "userId": user.userId,
-                                        "projectId": record.projectTeamId,
-                                    })
-                                        .then(() => {
-                                            let items = [];
-                                            projects.map(project => {
-                                                if(project.projectTeamId !== record.projectTeamId)
-                                                    items.push(project)
-                                            })
-                                            setProjects(items);
-                                        })
-                                        .catch(e => unauthRedirect(e));
+                                    delPersonProject(user.userId, record.projectTeamId);
                                 }}
                                 okText={locale.locale.Ok}
                                 cancelText={locale.locale.NO}

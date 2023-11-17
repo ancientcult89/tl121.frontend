@@ -1,14 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
-import {deleteMeeting, getMeetingList} from "../../http/meetingApi";
-import {Button, Checkbox, Popconfirm, Row, Space, Spin, Table} from "antd";
+import {deleteMeeting, getMeeting, getMeetingList} from "../../http/meetingApi";
+import {Alert, Button, Checkbox, Popconfirm, Row, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL, MEETING_PROCESSING_ROUTE} from "../../utils/consts";
 import Column from "antd/es/table/Column";
 import MeetingModal from "../modals/MeetingModal";
 import {useNavigate} from "react-router-dom";
 import PersonSelector from "../ReferenceSelectors/PersonSelector";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 const MeetingList = observer(() => {
     const {meeting, locale, person} = useContext(Context);
@@ -19,6 +20,7 @@ const MeetingList = observer(() => {
     const [meetings, setMeetings] = useState([]);
     const [needUpdate, setNeedUpdate] = useState(true);
     const navigate = useNavigate();
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
         getMeetings(person.selectedPerson.personId);
@@ -32,6 +34,17 @@ const MeetingList = observer(() => {
         });
     }
 
+    function processMeeting(meetingId, personId) {
+        getMeeting(meetingId)
+            .then(() => {
+                navigate(
+                    MEETING_PROCESSING_ROUTE + '/?meetingId=' + meetingId + '&personId=' + personId
+                )
+            })
+            .catch((e) => {
+                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+            })
+    }
     function getMeetings(personId) {
         getMeetingList(personId)
             .then(data => {
@@ -47,7 +60,10 @@ const MeetingList = observer(() => {
         setIsLoading(true);
         deleteMeeting(meetingId)
             .then(() => getMeetings(person.selectedPerson.personId))
-            .catch(e => unauthRedirect(e))
+            .catch(e => {
+                unauthRedirect(e);
+                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+            })
             .finally(() => setIsLoading(false));
     }
 
@@ -86,6 +102,18 @@ const MeetingList = observer(() => {
                 />
             </Row>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
+                {httpNotFoundRequestResponseError &&
+                    <div style={{marginTop:5}}>
+                        <Alert
+                            message={httpNotFoundRequestResponseError}
+                            type="error"
+                            closable={true}
+                            onClick={() => setHttpNotFoundRequestResponseError(null)}
+                            showIcon
+                        />
+                        <p></p>
+                    </div>
+                }
                 <Table dataSource={meetings} rowKey={(record) => record.meetingId } style={{marginTop:20}}>
                     <Column
                         title={locale.locale.Meeting.Person}
@@ -154,11 +182,7 @@ const MeetingList = observer(() => {
                         key="6"
                         render={(record) => (
                             <Space size="middle">
-                                <a onClick={() => {
-                                    navigate(
-                                        MEETING_PROCESSING_ROUTE + '/?meetingId=' + record.meetingId + '&personId=' + record.personId
-                                    )
-                                }}
+                                <a onClick={() => processMeeting(record.meetingId, record.personId)}
                                 >
                                     {locale.locale.Meeting.Process}
                                 </a>
