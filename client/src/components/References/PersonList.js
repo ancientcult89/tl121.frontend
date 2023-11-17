@@ -1,12 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
-import {Button, Popconfirm, Space, Spin, Table} from "antd";
+import {Alert, Button, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import Column from "antd/es/table/Column";
 import {deletePerson, getPersonList} from "../../http/personApi";
 import PersonModal from "../modals/PersonModal";
 import {observer} from "mobx-react-lite";
 import {unauthRedirect} from "../../utils/unauthRedirect";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 const PersonList = observer(() => {
     const {person, locale} = useContext(Context);
@@ -16,6 +17,7 @@ const PersonList = observer(() => {
     const [needUpdate, setNeedUpdate] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [items, setItems] = useState([]);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
         getPersons()
@@ -37,7 +39,10 @@ const PersonList = observer(() => {
         setIsLoading(true);
         deletePerson(personId)
             .then(() => getPersons())
-            .catch(e => unauthRedirect(e))
+            .catch(e => {
+                unauthRedirect(e);
+                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+            })
             .finally(() => setIsLoading(false))
     }
 
@@ -54,11 +59,24 @@ const PersonList = observer(() => {
             >
                 {locale.locale.Person.Add}
             </Button>
+            {httpNotFoundRequestResponseError &&
+                <div style={{marginTop:5}}>
+                    <Alert
+                        message={httpNotFoundRequestResponseError}
+                        type="error"
+                        closable={true}
+                        onClick={() => setHttpNotFoundRequestResponseError(null)}
+                        showIcon
+                    />
+                    <p></p>
+                </div>
+            }
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={items} rowKey={(record) => record.personId } style={{marginTop: 20}}>
                     <Column title={locale.locale.Person.LastName} dataIndex="lastName" key="lastName"/>
                     <Column title={locale.locale.Person.FirstName} dataIndex="firstName" key="firstName"/>
                     <Column title={locale.locale.Person.SurName} dataIndex="surName" key="surName"/>
+                    <Column title={locale.locale.Person.Email} dataIndex="email" key="email"/>
                     <Column
                         title={locale.locale.Person.Grade}
                         dataIndex="grade"

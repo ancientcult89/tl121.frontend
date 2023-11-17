@@ -46,6 +46,7 @@ export const ruLocale  = {
         SurName: "Отчество",
         ShortName: "Короткое имя",
         Email: "Почта",
+        Grade: "Грейд",
         SelectGradeQuery: "Выберите грейд...",
         EmailValidationError: "Введите валидный адрес почты",
         GradeValidationError: "Грейд не может быть пустым",

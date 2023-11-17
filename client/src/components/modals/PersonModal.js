@@ -8,6 +8,8 @@ import {observer} from "mobx-react-lite";
 import GradeSelector from "../ReferenceSelectors/GradeSelector";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {emailValidator} from "../../utils/emailValidator";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
 const PersonModal = observer(({modalType, open, onCancel, personId}) => {
     const {grade, person, locale} = useContext(Context)
@@ -22,6 +24,8 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
     const [emailError, setEmailError] = useState(null);
     const [gradeError, setGradeError] = useState(null);
     const [nameError, setNameError] = useState(null);
+    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     const selectGradeTypeHandler = (gradeId) => {
         grade.grades.map(item => {
@@ -60,7 +64,7 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                     setPersonEmail(person.email);
                 })
                 .catch(e => {
-                    unauthRedirect(e);
+                    executeErrorHandlers(e);
                 });
         }
         setPersonDataLoaded(true);
@@ -78,28 +82,51 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
         });
     }, [modalType]);
 
+    const successfullyRequestHandler = () => {
+        setSelectedGradeId(null);
+        setSelectedGradeName(null);
+        setPersonEmail('');
+        setFirstName(null);
+        setShortName(null);
+        setLastName(null)
+        setSurName(null)
+        onCancel();
+    }
+    const clearErrors = () => {
+
+        setHttpBadRequestResponseError(null);
+    }
+
+    const executeErrorHandlers = (e) => {
+        unauthRedirect(e);
+        setHttpBadRequestResponseError(badHttpRequestHandler(e));
+        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+    }
+
     const handleOk = () => {
+        if(httpNotFoundRequestResponseError !== null)
+        {
+            return;
+        }
+        clearErrors();
         let emailIsValid = emailValidator(personEmail);
         if(selectedGradeId == null || !emailIsValid || firstName == null || firstName === ''
-            || lastName == null || lastName == '' || surName == null || surName === ''
+            || lastName == null || lastName === '' || surName == null || surName === ''
             || shortName == null || shortName === '')
         {
             if(selectedGradeId == null)
                 setGradeError(locale.locale.Person.GradeValidationError);
-            else
-                setGradeError(null);
+
             if(!emailIsValid)
                 setEmailError(locale.locale.Person.EmailValidationError);
-            else
-                setEmailError(null);
+
             if(firstName == null || firstName === ''
-                || lastName == null || lastName == '' || surName == null || surName === ''
+                || lastName == null || lastName === '' || surName == null || surName === ''
                 || shortName == null || shortName === '')
             {
                 setNameError(locale.locale.Person.NameValidationError)
             }
-            else
-                setNameError(null)
+
             return;
         }
 
@@ -126,7 +153,10 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                     setSurName(null)
                     onCancel();
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => {
+                    unauthRedirect(e);
+                    executeErrorHandlers(e);
+                });
         }
         else if(modalType === EDIT_MODAL)
         {
@@ -134,16 +164,12 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
             updatePerson(formData)
                 .then((updatedPerson) =>{
                     person.setPersons(person.persons.map((item) => item.personId === personId ? {...updatedPerson} : item))
-                    setSelectedGradeId(null);
-                    setSelectedGradeName(null);
-                    setPersonEmail('');
-                    setFirstName(null);
-                    setShortName(null);
-                    setLastName(null)
-                    setSurName(null)
-                    onCancel();
+                    successfullyRequestHandler();
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => {
+                    unauthRedirect(e);
+                    executeErrorHandlers(e);
+                });
         }
     };
 
@@ -158,6 +184,26 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                 labelCol={{ span: 5 }}
             >
                 <Spin tip={locale.locale.Loading} spinning={!personDataLoaded}>
+                    {httpNotFoundRequestResponseError &&
+                        <div>
+                            <Alert
+                                message={httpNotFoundRequestResponseError}
+                                type="error"
+                                showIcon
+                            />
+                            <p></p>
+                        </div>
+                    }
+                    {httpBadRequestResponseError &&
+                        <div>
+                            <Alert
+                                message={httpBadRequestResponseError}
+                                type="error"
+                                showIcon
+                            />
+                            <p></p>
+                        </div>
+                    }
                     {nameError &&
                         <div>
                             <Alert
