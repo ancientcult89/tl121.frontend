@@ -124,7 +124,7 @@ const Auth = observer(({isLogin}) => {
                     <Button type="primary" onClick={click} htmlType={"submit"} style={{marginRight: 5}}>
                         {isLoginState ? locale.locale.SignIn : locale.locale.Register}
                     </Button>
-                    Or <a onClick={() => {
+                    {locale.locale.Or} <a onClick={() => {
                         setIsLoginState(!isLoginState);
                     }}>
                         {!isLoginState ? locale.locale.SignIn : locale.locale.Register}
