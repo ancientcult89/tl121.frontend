@@ -6,7 +6,7 @@ import {ONE_TWO_ONE_DEADLINES_ROUTE} from "../utils/consts";
 import {Context} from "../index";
 import {login, registration} from "../http/userApi";
 import {emailValidator} from "../utils/emailValidator";
-import {localeList} from "../locales/localeList";
+import {localeConverter} from "../utils/localeConverter";
 
 
 const Auth = observer(({isLogin}) => {
@@ -33,6 +33,8 @@ const Auth = observer(({isLogin}) => {
             if(isLoginState) {
                 const loginResponse = await login(email, password);
                 user.setUser(loginResponse.user);
+                let usersLocale = localeConverter.idToString(loginResponse.user.locale);
+                locale.setLocale(usersLocale);
                 user.setRole(loginResponse.role?.roleName);
                 localStorage.setItem('role', loginResponse.role?.roleName);
                 user.setIsAuth(true);

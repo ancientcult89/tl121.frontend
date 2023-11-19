@@ -44,3 +44,9 @@ export const changePassword = async (request) => {
     const {data} = await $authHost.put('api/v1/User/' + request.userId + '/changepassword/', request)
     return data
 }
+
+export const changeLocale = async (locale) => {
+    await $authHost.post('api/v1/user/changelocale', {locale})
+
+    return;
+}
