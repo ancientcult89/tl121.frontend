@@ -51,7 +51,15 @@ const OneToOneDeadLineList = observer(() => {
                 <Table dataSource={tableData} rowKey={(record) => record.personId } style={{marginTop:20}}>
                     <Column title={locale.locale.OneTwoOne.Person} dataIndex="fullname" key="1" />
                     <Column title={locale.locale.OneTwoOne.Grade} dataIndex="gradeName" key="2" />
-                    <Column title={locale.locale.OneTwoOne.LastMeeting} dataIndex="lastMeeting" key="3" />
+                    <Column
+                        title={locale.locale.OneTwoOne.LastMeeting}
+                        key="3"
+                        render={(record) => (
+                            <a>
+                                {record.meetingDate != null ? new Date(record.meetingDate).toLocaleDateString() : locale.locale.NotSet}
+                            </a>
+                        )}
+                    />
                     <Column title={locale.locale.OneTwoOne.DeadLine} dataIndex="deadLine" key="4" />
                     <Column
                         title={locale.locale.OneTwoOne.DaysForDeadline}
