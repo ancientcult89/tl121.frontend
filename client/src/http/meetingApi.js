@@ -15,6 +15,11 @@ export const createMeeting = async (meeting) => {
     return data;
 }
 
+export const createMeetingForProcessing = async (personId) => {
+    const {data} = await $authHost.post('api/v1/Meeting/' + personId);
+    return data;
+}
+
 export const deleteMeeting = async (meetingId) => {
     const {data} = await $authHost.delete('api/v1/Meeting/' + meetingId);
     return data;
