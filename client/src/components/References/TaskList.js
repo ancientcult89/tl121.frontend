@@ -7,7 +7,7 @@ import Column from "antd/es/table/Column";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
-const TaskList = ({personId}) => {
+const TaskList = ({personId, showPersonField = true}) => {
     const {locale, person} = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
     const [tasks, setTasks] = useState([]);
@@ -58,11 +58,14 @@ const TaskList = ({personId}) => {
             }
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={tasks} rowKey={(task) => task.meetingGoalId } style={{marginTop:20}}>
-                    <Column
-                        title={locale.locale.Task.Person}
-                        dataIndex="personName"
-                        key="1"
-                    />
+                    {showPersonField &&
+                        <Column
+                            title={locale.locale.Task.Person}
+                            dataIndex="personName"
+                            key="1"
+                        />
+                    }
+
                     <Column
                         title={locale.locale.Task.Description}
                         dataIndex="meetingGoalDescription"
