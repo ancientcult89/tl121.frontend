@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
-import {deleteMeeting, getMeeting, getMeetingList} from "../../http/meetingApi";
+import {deleteMeeting, getMeeting, getPagedMeetingList} from "../../http/meetingApi";
 import {Alert, Button, Checkbox, Popconfirm, Row, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL, MEETING_PROCESSING_ROUTE} from "../../utils/consts";
 import Column from "antd/es/table/Column";
@@ -21,6 +21,10 @@ const MeetingList = observer(() => {
     const [needUpdate, setNeedUpdate] = useState(true);
     const navigate = useNavigate();
     const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
+    const [pageInfo, setPageInfo] = useState({
+        totalRecords: 1,
+        currentPage: 1
+    })
 
     useEffect(() => {
         getMeetings(person.selectedPerson.personId);
@@ -30,7 +34,7 @@ const MeetingList = observer(() => {
     const clearFilteringMeetingList = () => {
         person.setSelectedPerson({
             personId: null,
-            personName: ''
+            personName: '',
         });
     }
 
@@ -45,11 +49,28 @@ const MeetingList = observer(() => {
                 setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
             })
     }
-    function getMeetings(personId) {
-        getMeetingList(personId)
+
+    const onPageChange = (pageNumber) => {
+        getMeetings(person.selectedPerson.personId, pageNumber, 10);
+    };
+    const onShowSizeChange = (currentPage, pageSize) => {
+        getMeetings(person.selectedPerson.personId, currentPage, pageSize);
+    };
+    function getMeetings(personId, currentPage = 1, pageSize = 10) {
+        const meetingPagedRequest = {
+            personId: personId,
+            currentPage: currentPage,
+            pageSize: pageSize
+        };
+
+        getPagedMeetingList(meetingPagedRequest)
             .then(data => {
-                meeting.setMeetings(data);
-                setMeetings(data);
+                meeting.setMeetings(data.meetings);
+                setMeetings(data.meetings);
+                setPageInfo({
+                    totalRecords: data.pageInfo.totalItems,
+                    currentPage: data.pageInfo.currentPage
+                });
             })
             .catch(e => {
                 unauthRedirect(e);
@@ -114,7 +135,19 @@ const MeetingList = observer(() => {
                         <p></p>
                     </div>
                 }
-                <Table dataSource={meetings} rowKey={(record) => record.meetingId } style={{marginTop:20}}>
+                <Table
+                    dataSource={meetings}
+                    rowKey={(record) => record.meetingId }
+                    style={{marginTop:20}}
+                    pagination={{
+                        defaultCurrent: 1,
+                        onChange: onPageChange,
+                        showSizeChanger : true,
+                        onShowSizeChange: onShowSizeChange,
+                        total: pageInfo.totalRecords,
+                        position: ["topLeft"]
+                    }}
+                >
                     <Column
                         title={locale.locale.Meeting.Person}
                         dataIndex="person"

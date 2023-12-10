@@ -5,6 +5,15 @@ export const getMeetingList = async (personId) => {
     return data;
 }
 
+export const getPagedMeetingList = async (meetingPagedRequest) => {
+    const {data} = await $authHost.get('api/v2/Meeting/', {params : {
+        personId: meetingPagedRequest.personId,
+        currentPage: meetingPagedRequest.currentPage,
+        pageSize: meetingPagedRequest.pageSize,
+    }});
+    return data;
+}
+
 export const getMeeting = async (meetingId) => {
     const {data} = await $authHost.get('api/v1/Meeting/' + meetingId);
     return data;
