@@ -33,7 +33,7 @@ const TaskList = ({personId, showPersonField = true}) => {
         }
         completeTask(formData)
             .then(() => {
-                getTasks(person.selectedPerson.personId);
+                getTasks(personId);
             })
             .catch(e => {
                 unauthRedirect(e);
