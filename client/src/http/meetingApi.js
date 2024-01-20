@@ -1,10 +1,5 @@
 import {$authHost} from "./index";
 
-export const getMeetingList = async (personId) => {
-    const {data} = await $authHost.get('api/v1/Meeting/', {params : {personId: personId}});
-    return data;
-}
-
 export const getPagedMeetingList = async (meetingPagedRequest) => {
     const {data} = await $authHost.get('api/v2/Meeting/', {params : {
         personId: meetingPagedRequest.personId,
@@ -93,8 +88,11 @@ export const sendFollowUp = async (request) => {
     return data;
 }
 
-export const getTaskList = async (personId) => {
-    const {data} = await $authHost.get('api/v1/Task/', {params : {personId: personId}});
+export const getTaskList = async (personId, currentMeetingId) => {
+    const {data} = await $authHost.get('api/v1/Task/', {params : {
+        personId: personId,
+        currentMeetingId: currentMeetingId
+    }});
     return data;
 }
 

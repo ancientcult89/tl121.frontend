@@ -48,7 +48,7 @@ const MeetingProcessing = () => {
             <div>
                 <pre>{previousNotesAndGoals}</pre>
             </div>
-            <TaskList personId={searchParams.get('personId')} showPersonField={false}/>
+            <TaskList personId={searchParams.get('personId')} showPersonField={false} currentMeetingId={searchParams.get('meetingId')}/>
             <Divider dashed>{locale.locale.Meeting.Notes.Notes}</Divider>
             <MeetingNotes meetingId={searchParams.get('meetingId')}/>
             <Divider dashed>{locale.locale.Meeting.Goals.Goals}</Divider>

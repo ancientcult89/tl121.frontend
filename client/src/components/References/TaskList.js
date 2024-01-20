@@ -7,19 +7,19 @@ import Column from "antd/es/table/Column";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 
-const TaskList = ({personId, showPersonField = true}) => {
-    const {locale, person} = useContext(Context);
+const TaskList = ({personId, showPersonField = true, currentMeetingId = null}) => {
+    const {locale} = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
     const [tasks, setTasks] = useState([]);
     const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
-        getTasks(personId);
+        getTasks(personId, currentMeetingId);
         setIsLoading(false);
     }, [personId]);
 
-    const getTasks = (personId) => {
-        getTaskList(personId)
+    const getTasks = (personId, currentMeetingId) => {
+        getTaskList(personId, currentMeetingId)
             .then(data => {
                 setTasks(data);
             })
@@ -33,7 +33,7 @@ const TaskList = ({personId, showPersonField = true}) => {
         }
         completeTask(formData)
             .then(() => {
-                getTasks(personId);
+                getTasks(personId, currentMeetingId);
             })
             .catch(e => {
                 unauthRedirect(e);
@@ -65,7 +65,6 @@ const TaskList = ({personId, showPersonField = true}) => {
                             key="1"
                         />
                     }
-
                     <Column
                         title={locale.locale.Task.Description}
                         dataIndex="meetingGoalDescription"
