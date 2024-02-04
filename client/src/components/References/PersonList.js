@@ -3,7 +3,7 @@ import {Context} from "../../index";
 import {Alert, Button, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import Column from "antd/es/table/Column";
-import {deletePerson, getPersonList} from "../../http/personApi";
+import {archivePerson, deletePerson, getPersonList} from "../../http/personApi";
 import PersonModal from "../modals/PersonModal";
 import {observer} from "mobx-react-lite";
 import {unauthRedirect} from "../../utils/unauthRedirect";
@@ -27,6 +27,7 @@ const PersonList = observer(() => {
     function getPersons() {
         getPersonList()
             .then(data => {
+                console.log(data)
                 person.setPersons(data)
                 setItems(person.persons)
             })
@@ -44,6 +45,17 @@ const PersonList = observer(() => {
                 setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
             })
             .finally(() => setIsLoading(false))
+    }
+
+    function archivePersonHandler(personId) {
+        setIsLoading(true);
+        archivePerson(personId)
+            .then(() => getPersons())
+            .catch(e => {
+                unauthRedirect(e);
+                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+            })
+            .finally(() => setIsLoading(false));
     }
 
     return (
@@ -85,6 +97,9 @@ const PersonList = observer(() => {
                             <a>{grade.gradeName}</a>
                         )}
                     />
+                    <Column title={"isArchive"} dataIndex="isArchive" key="isArchive" render={(isArchive) => (
+                        <a>{isArchive ? "Yes" : "No"}</a>
+                    )}/>
                     <Column
                         title={locale.locale.Action}
                         key="action"
@@ -98,6 +113,17 @@ const PersonList = observer(() => {
                                 }}>
                                     {locale.locale.Edit}
                                 </a>
+                                <Popconfirm
+                                    title={locale.locale.Person.ArchiveTitle}
+                                    description={locale.locale.Person.ArchiveConfirmation}
+                                    onConfirm={() => archivePersonHandler(record.personId)}
+                                    okText={locale.locale.OK}
+                                    cancelText={locale.locale.NO}
+                                >
+                                    <a>
+                                        {locale.locale.Archive}
+                                    </a>
+                                </Popconfirm>
                                 <Popconfirm
                                     title={locale.locale.Person.DeleteTitle}
                                     description={locale.locale.Person.DeleteConfirmation}

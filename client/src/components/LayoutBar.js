@@ -47,8 +47,8 @@ const LayoutBar = observer(() => {
 
     const items = [
         getItem(locale.locale.Dashboard, ONE_TWO_ONE_DEADLINES_ROUTE, <InsertRowAboveOutlined />),
-        getItem(locale.locale.MeetingReference, MEETING_ROUTE, <TeamOutlined />),
         getItem(locale.locale.TaskList, TASK_ROUTE, <UnorderedListOutlined />),
+        getItem(locale.locale.MeetingReference, MEETING_ROUTE, <TeamOutlined />),
         getItem(locale.locale.References, 'sub1', <BookOutlined />, [
             getItem(locale.locale.PersonReference, PERSON_ROUTE),
             getItem(locale.locale.GradeReference, GRADE_ROUTE),

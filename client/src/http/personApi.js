@@ -25,6 +25,11 @@ export const deletePerson = async (personId) => {
     return data
 }
 
+export const archivePerson = async (personId) => {
+    const {data} = await $authHost.put('api/v1/Person/archive/' + personId);
+    return data
+}
+
 export const updatePerson = async (person) => {
     const {data} = await $authHost.put('api/v1/Person/' + person.personId, person)
     return data
