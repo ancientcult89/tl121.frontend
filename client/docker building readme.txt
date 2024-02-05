@@ -5,7 +5,7 @@ docker build -t imagename:tag .
 
 тегаем название для удалённого репозитория
 docker tag frontend:latest hakon051/tl121pet.front:latest
-docker tag frontend:0.1.5.3 hakon051/tl121pet.front:0.1.6.1
+docker tag frontend:0.1.6.1 hakon051/tl121pet.front:0.1.6.1
 
 публикуем
 docker push hakon051/tl121pet.front:0.1.6.1
