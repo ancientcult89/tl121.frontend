@@ -30,6 +30,12 @@ export const archivePerson = async (personId) => {
     return data
 }
 
+export const sendGreetingMessage = async (personId) => {
+    const {data} = await $authHost.put('api/v1/Person/testmail/' + personId);
+    return data
+}
+
+
 export const updatePerson = async (person) => {
     const {data} = await $authHost.put('api/v1/Person/' + person.personId, person)
     return data

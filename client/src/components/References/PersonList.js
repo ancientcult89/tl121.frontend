@@ -3,7 +3,7 @@ import {Context} from "../../index";
 import {Alert, Button, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import Column from "antd/es/table/Column";
-import {archivePerson, deletePerson, getPersonList} from "../../http/personApi";
+import {archivePerson, deletePerson, getPersonList, sendGreetingMessage} from "../../http/personApi";
 import PersonModal from "../modals/PersonModal";
 import {observer} from "mobx-react-lite";
 import {unauthRedirect} from "../../utils/unauthRedirect";
@@ -51,6 +51,16 @@ const PersonList = observer(() => {
         setIsLoading(true);
         archivePerson(personId)
             .then(() => getPersons())
+            .catch(e => {
+                unauthRedirect(e);
+                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+            })
+            .finally(() => setIsLoading(false));
+    }
+
+    function sendingGreetingMessageHandler(personId) {
+        setIsLoading(true);
+        sendGreetingMessage(personId)
             .catch(e => {
                 unauthRedirect(e);
                 setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
@@ -138,6 +148,17 @@ const PersonList = observer(() => {
                             </Space>
                         )}
                     />
+                    <Column title={locale.locale.Person.GreetingMail} key="testMeil" render={(record) => (
+                        <a>
+                            <Button
+                                type={"primary"}
+                                style={{backgroundColor: "green"}}
+                                onClick={() => {sendingGreetingMessageHandler(record.personId)}}
+                            >
+                                {locale.locale.Person.SendGreetingMail}
+                            </Button>
+                        </a>
+                    )}/>
                 </Table>
             </Spin>
             {modalVisible &&

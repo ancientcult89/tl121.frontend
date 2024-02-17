@@ -54,7 +54,9 @@ export const ruLocale  = {
         SelectGradeQuery: "Выберите грейд...",
         EmailValidationError: "Введите валидный адрес почты",
         GradeValidationError: "Грейд не может быть пустым",
-        NameValidationError: "Имя/Фамилия/Отчество/Короткое имя не могут быть пустыми"
+        NameValidationError: "Имя/Фамилия/Отчество/Короткое имя не могут быть пустыми",
+        GreetingMail: "Приветственное письмо",
+        SendGreetingMail: "Отправить"
     },
     Grade: {
         Add: "Добавить грейд",

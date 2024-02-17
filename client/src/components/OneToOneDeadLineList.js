@@ -106,7 +106,12 @@ const OneToOneDeadLineList = observer(() => {
                         <p></p>
                     </div>
                 }
-                <Table dataSource={tableData} rowKey={(record) => record.personId } style={{marginTop:20}}>
+                <Table
+                    dataSource={tableData}
+                    rowKey={(record) => record.personId }
+                    style={{marginTop:20}}
+                    pagination={false}
+                >
                     <Column title={locale.locale.OneTwoOne.Person} dataIndex="fullname" key="1" />
                     <Column title={locale.locale.OneTwoOne.Grade} dataIndex="gradeName" key="2" />
                     <Column
