@@ -167,6 +167,8 @@ export const ruLocale  = {
         CurrentPassword: "Текущий пароль",
         NewPassword: "Новый пароль",
         ConfirmPassword: "Подтвердить пароль",
+        ForgotThePassword: "Забыли пароль?",
+        RecoveryPasswordConfirmation: "Вы действительно хотите восстановить пароль?",
     },
 
     //Selectors

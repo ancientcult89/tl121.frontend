@@ -167,6 +167,8 @@ export const enLocale  = {
         CurrentPassword: "Current password",
         NewPassword: "New password",
         ConfirmPassword: "Confirm password",
+        ForgotThePassword: "Forgot the Password?",
+        RecoveryPasswordConfirmation: "Do you really want to recover your password?",
     },
 
     //Selectors

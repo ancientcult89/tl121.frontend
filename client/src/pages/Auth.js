@@ -1,10 +1,10 @@
 import {observer} from "mobx-react-lite";
 import React, {useContext, useEffect, useState} from "react";
-import {Alert, Button, Form, Input} from 'antd';
+import {Alert, Button, Form, Input, Popconfirm, Space} from 'antd';
 import {useNavigate} from "react-router-dom";
 import {ONE_TWO_ONE_DEADLINES_ROUTE} from "../utils/consts";
 import {Context} from "../index";
-import {login, registration} from "../http/userApi";
+import {login, recoveryPassword, registration} from "../http/userApi";
 import {emailValidator} from "../utils/emailValidator";
 import {localeConverter} from "../utils/localeConverter";
 
@@ -18,10 +18,36 @@ const Auth = observer(({isLogin}) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isLoginState, setIsLoginState] = useState(isLogin);
     const [loginError, setLoginError] = useState(null);
+    const [recoveryError, setRecoveryError] = useState(null);
 
     useEffect(() => {
         user.setIsAuth(false);
     }, [])
+
+    function completeTaskHandler(email) {
+        recoveryPassword(email)
+            .then(() => { setLoginError(null)})
+            .catch(e => {
+                setRecoveryError(e.response.data);
+                setLoginError(null);
+            });
+    }
+
+    const loginErrorBar = (
+        <Space size="middle">
+            <Popconfirm
+                title={locale.locale.Task.CompleteTask}
+                description={locale.locale.User.RecoveryPasswordConfirmation}
+                onConfirm={() => completeTaskHandler(email)}
+                okText={locale.locale.Ok}
+                cancelText={locale.locale.NO}
+            >
+                <a>
+                    {loginError + ". " + locale.locale.User.ForgotThePassword}
+                </a>
+            </Popconfirm>
+        </Space>
+    );
 
     const click = async () => {
         try {
@@ -89,13 +115,22 @@ const Auth = observer(({isLogin}) => {
                 {loginError && isLoginState &&
                     <div>
                         <Alert
-                            message={loginError}
+                            message={loginErrorBar}
                             type="error"
                             showIcon
                         />
                         <p></p>
                     </div>
-
+                }
+                {recoveryError &&
+                    <div>
+                        <Alert
+                            message={recoveryError}
+                            type="error"
+                            showIcon
+                        />
+                        <p></p>
+                    </div>
                 }
                 <Form.Item
                     label={locale.locale.Email}

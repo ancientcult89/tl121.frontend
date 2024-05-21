@@ -14,6 +14,12 @@ export const login = async (email, password) => {
     return data
 }
 
+export const recoveryPassword = async (email) => {
+    const {data} = await $host.post('api/v1/user/recoverypassword', {email})
+
+    return data
+}
+
 export const check = async () => {
     const {data} = await $authHost.get('api/v1/user/auth' )
     localStorage.setItem('token', data.token)
