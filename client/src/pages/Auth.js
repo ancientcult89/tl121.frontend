@@ -34,19 +34,22 @@ const Auth = observer(({isLogin}) => {
     }
 
     const loginErrorBar = (
-        <Space size="middle">
-            <Popconfirm
-                title={locale.locale.Task.CompleteTask}
-                description={locale.locale.User.RecoveryPasswordConfirmation}
-                onConfirm={() => completeTaskHandler(email)}
-                okText={locale.locale.Ok}
-                cancelText={locale.locale.NO}
-            >
-                <a>
-                    {loginError + ". " + locale.locale.User.ForgotThePassword}
-                </a>
-            </Popconfirm>
-        </Space>
+        <div>
+            <span>{loginError}. </span>
+            <Space size="middle">
+                <Popconfirm
+                    title={locale.locale.Task.CompleteTask}
+                    description={locale.locale.User.RecoveryPasswordConfirmation}
+                    onConfirm={() => completeTaskHandler(email)}
+                    okText={locale.locale.Ok}
+                    cancelText={locale.locale.NO}
+                >
+                    <a>
+                        {locale.locale.User.ForgotThePassword}
+                    </a>
+                </Popconfirm>
+            </Space>
+        </div>
     );
 
     const click = async () => {
