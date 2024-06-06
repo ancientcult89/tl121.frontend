@@ -8,7 +8,6 @@ import {addProjectToPerson, deleteProjectToPerson} from "../../http/projectApi";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
-import {deleteRole} from "../../http/roleApi";
 
 const PersonProjectsModal = ({open, onCancel, person}) => {
     const {project, locale} = useContext(Context);
@@ -158,7 +157,7 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                                 title={locale.locale.Project.DeleteTitle}
                                 description={locale.locale.Project.DeleteConfirmation}
                                 onConfirm={() => {
-                                    delPersonProject(record.personId, record.projectTeamId);
+                                    delPersonProject(person.personId, record.projectTeamId);
                                 }}
                                 okText={locale.locale.Ok}
                                 cancelText={locale.locale.NO}
