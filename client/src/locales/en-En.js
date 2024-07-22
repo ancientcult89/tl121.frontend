@@ -171,6 +171,13 @@ export const enLocale  = {
         RecoveryPasswordConfirmation: "Do you really want to recover your password?",
     },
 
+    UserMailSettings: {
+        DisplayName: "Display Name",
+        EmailPassword: "Email Password",
+        EmailHostAddress: "Email Host Address",
+        EmailPort: "Email Port",
+    },
+
     //Selectors
     GradeSelector: {
         Grade: "Grade",

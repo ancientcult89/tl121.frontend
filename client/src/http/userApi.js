@@ -56,3 +56,19 @@ export const changeLocale = async (locale) => {
 
     return;
 }
+
+export const getCurrentUser = async (id) => {
+    const {data} = await $authHost.get('api/v1/User/currentUserId')
+    return data
+}
+
+export const getUserMailSettings = async (id) => {
+    const {data} = await $authHost.get('api/v1/User/' + id + '/mailsettings/')
+    return data
+}
+
+export const setUserMailSettings = async (userMailSettings) => {
+    console.log()
+    const {data} = await $authHost.put('api/v1/User/' + userMailSettings.userId + '/mailsettings/', userMailSettings)
+    return data
+}

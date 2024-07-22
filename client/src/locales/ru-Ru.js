@@ -171,6 +171,13 @@ export const ruLocale  = {
         RecoveryPasswordConfirmation: "Вы действительно хотите восстановить пароль?",
     },
 
+    UserMailSettings: {
+        DisplayName: "Выводимое имя",
+        EmailPassword: "Email пароль",
+        EmailHostAddress: "Адрес сервера",
+        EmailPort: "Порт",
+    },
+
     //Selectors
     GradeSelector: {
         Grade: "Грейд",
