@@ -1,3 +1,5 @@
+import {useState} from "react";
+
 export const ruLocale  = {
     //forms
     Loading: "Загрузка...",
@@ -176,6 +178,10 @@ export const ruLocale  = {
         EmailPassword: "Email пароль",
         EmailHostAddress: "Адрес сервера",
         EmailPort: "Порт",
+        DisplayNameError: "Введите выводимое имя",
+        EmailPasswordError: "Введите пароль от email",
+        EmailHostAddressError: "Введите адрес почтового сервера",
+        EmailPortError: "Введите порт почтового cервера",
     },
 
     //Selectors

@@ -176,6 +176,10 @@ export const enLocale  = {
         EmailPassword: "Email Password",
         EmailHostAddress: "Email Host Address",
         EmailPort: "Email Port",
+        DisplayNameError: "Enter the display name",
+        EmailPasswordError: "Enter the password",
+        EmailHostAddressError: "Enter the email host address",
+        EmailPortError: "Enter the email server port",
     },
 
     //Selectors

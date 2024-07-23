@@ -29,10 +29,16 @@ const UserModal = ({modalType, open, onCancel, userId}) => {
                 </Form.Item>
             </Row>
             {!changePasswordFlag &&
-                <UserMailSettings
-                    userId={userId}
-                    onCancel={onCancel}
-                />
+                <div>
+                    <UserCommonSettings
+                        userId={userId}
+                        onCancel={onCancel}
+                    />
+                    <UserMailSettings
+                        userId={userId}
+                        onCancel={onCancel}
+                    />
+                </div>
             }
             {changePasswordFlag &&
                 <UserPasswordSettings
