@@ -39,6 +39,7 @@ export const ruLocale  = {
     AccessDeniedTitle: "Доступ запрещён",
     AccessDeniedMessage: "Пожалуйста авторизуйтесь или убедитесь что у вас есть права к данному разделу",
     Or: "Или",
+    Profile: "Профиль",
 
     Person: {
         Add: "Добавить сотрудника",

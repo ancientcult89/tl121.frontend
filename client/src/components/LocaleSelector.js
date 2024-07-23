@@ -59,7 +59,7 @@ const LocaleSelector = () => {
             items: items
         }}
         >
-            <Button style={{marginTop: 8, marginLeft: 5}}>
+            <Button style={{marginLeft: 5}}>
                 <Space>
                     {currentLocale.localeName}
                 </Space>

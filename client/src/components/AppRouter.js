@@ -5,7 +5,7 @@ import {
     ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_PROJECTS_ROUTE,
     PERSON_ROUTE,
     PROJECT_ROUTE,
-    REGISTRATION_ROUTE, ROLE_ROUTE, TASK_ROUTE, USER_PROJECTS_ROUTE, USER_ROUTE
+    REGISTRATION_ROUTE, ROLE_ROUTE, TASK_ROUTE, USER_PROFILE_ROUTE, USER_PROJECTS_ROUTE, USER_ROUTE
 } from "../utils/consts";
 import GradeList from "./References/GradeList";
 import Auth from "../pages/Auth";
@@ -23,6 +23,7 @@ import UserProjects from "../pages/UserProjects";
 import UserList from "./References/UserList";
 import AccessDenied from "./AccessDenied";
 import Tasks from "../pages/Tasks";
+import UserSettings from "../pages/UserSettings";
 
 const AppRouter = () => {
     const { user } = useContext(Context);
@@ -58,6 +59,12 @@ const AppRouter = () => {
             )}
             {user.isAuth && (
                 <React.Fragment>
+                    <Route
+                        key={USER_PROFILE_ROUTE}
+                        path={USER_PROFILE_ROUTE}
+                        element={<UserSettings />}
+                        exact
+                    />
                     <Route
                         key={ONE_TWO_ONE_DEADLINES_ROUTE}
                         path={ONE_TWO_ONE_DEADLINES_ROUTE}

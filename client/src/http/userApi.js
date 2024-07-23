@@ -57,7 +57,7 @@ export const changeLocale = async (locale) => {
     return;
 }
 
-export const getCurrentUser = async (id) => {
+export const getCurrentUser = async () => {
     const {data} = await $authHost.get('api/v1/User/currentUserId')
     return data
 }

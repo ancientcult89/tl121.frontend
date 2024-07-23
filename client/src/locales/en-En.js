@@ -37,6 +37,7 @@ export const enLocale  = {
     AccessDeniedTitle: "Access Denied",
     AccessDeniedMessage: "Please log in or make sure you have rights to this section",
     Or: "Or",
+    Profile: "Profile",
 
     Person: {
         Add: "Add Person",
