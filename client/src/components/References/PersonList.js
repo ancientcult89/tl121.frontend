@@ -27,7 +27,6 @@ const PersonList = observer(() => {
     function getPersons() {
         getPersonList()
             .then(data => {
-                console.log(data)
                 person.setPersons(data)
                 setItems(person.persons)
             })

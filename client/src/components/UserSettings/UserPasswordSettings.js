@@ -34,7 +34,6 @@ const UserPasswordSettings = ({userId, onCancel}) => {
                 setConfirmationError(locale.locale.User.PasswordConfirmationError);
             else
                 setConfirmationError(null);
-
             return;
         }
 
@@ -46,7 +45,6 @@ const UserPasswordSettings = ({userId, onCancel}) => {
         }
         changePassword(formData)
             .then(data =>{
-                onCancel();
             })
             .catch(e => unauthRedirect(e));
     };

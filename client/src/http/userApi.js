@@ -68,7 +68,6 @@ export const getUserMailSettings = async (id) => {
 }
 
 export const setUserMailSettings = async (userMailSettings) => {
-    console.log()
     const {data} = await $authHost.put('api/v1/User/' + userMailSettings.userId + '/mailsettings/', userMailSettings)
     return data
 }

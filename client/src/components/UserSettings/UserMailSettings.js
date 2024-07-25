@@ -35,7 +35,7 @@ const UserMailSettings = ({userId}) => {
     }, [userId]);
     const handleOk = () => {
         if(isNullOrWhiteSpace(displayName) || isNullOrWhiteSpace(displayName)
-            || isNullOrWhiteSpace(emailPassword) || isNullOrWhiteSpace(emailHostAddressError)
+            || isNullOrWhiteSpace(emailPassword) || isNullOrWhiteSpace(emailHostAddress)
             || isNullOrWhiteSpace(emailPort) || !isNumber(emailPort))
         {
             if(isNullOrWhiteSpace(displayName)) {
