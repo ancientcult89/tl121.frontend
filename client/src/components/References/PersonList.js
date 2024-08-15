@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
-import {Alert, Button, Popconfirm, Space, Spin, Table} from "antd";
+import {Alert, Button, Input, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import Column from "antd/es/table/Column";
 import {archivePerson, deletePerson, getPersonList, sendGreetingMessage} from "../../http/personApi";
@@ -8,6 +8,7 @@ import PersonModal from "../modals/PersonModal";
 import {observer} from "mobx-react-lite";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import LocaleSelector from "../LocaleSelector";
 
 const PersonList = observer(() => {
     const {person, locale} = useContext(Context);
@@ -18,6 +19,7 @@ const PersonList = observer(() => {
     const [isLoading, setIsLoading] = useState(true);
     const [items, setItems] = useState([]);
     const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
+    const [filterText, setFilterText] = useState('');
 
     useEffect(() => {
         getPersons()
@@ -34,6 +36,12 @@ const PersonList = observer(() => {
                 unauthRedirect(e);
             });
     }
+
+    function handleFilterChange(e) {
+        setFilterText(e.target.value);
+    }
+
+    const filteredItems = items.filter(item => item.lastName.toLowerCase().includes(filterText.toLowerCase()));
 
     function deletePersonHandler(personId) {
         setIsLoading(true);
@@ -69,17 +77,28 @@ const PersonList = observer(() => {
 
     return (
         <div>
-            <Button
-                type={"primary"}
-                onClick={() => {
-                    setModalType(ADD_MODAL);
-                    setModalVisible(true);
-                    setSelectedPerson(null);
-                    setIsLoading(true);
-                }}
-            >
-                {locale.locale.Person.Add}
-            </Button>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                {/*данный блок дикий костыль, переделать на серверную фильтрацию*/}
+                <Button
+                    type={"primary"}
+                    onClick={() => {
+                        setModalType(ADD_MODAL);
+                        setModalVisible(true);
+                        setSelectedPerson(null);
+                        setIsLoading(true);
+                    }}
+                >
+                    {locale.locale.Person.Add}
+                </Button>
+                <div style={{marginLeft: 10}}>Фильтр по фамилии:</div>
+                <Input
+                    type="text"
+                    placeholder="Filter by Last Name"
+                    value={filterText}
+                    style={{width: 300, marginLeft: 10}}
+                    onChange={handleFilterChange}
+                />
+            </div>
             {httpNotFoundRequestResponseError &&
                 <div style={{marginTop:5}}>
                     <Alert
@@ -93,7 +112,7 @@ const PersonList = observer(() => {
                 </div>
             }
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
-                <Table dataSource={items} rowKey={(record) => record.personId } style={{marginTop: 20}}>
+                <Table dataSource={filteredItems} rowKey={(record) => record.personId } style={{marginTop: 20}}>
                     <Column title={locale.locale.Person.LastName} dataIndex="lastName" key="lastName"/>
                     <Column title={locale.locale.Person.FirstName} dataIndex="firstName" key="firstName"/>
                     <Column title={locale.locale.Person.SurName} dataIndex="surName" key="surName"/>
