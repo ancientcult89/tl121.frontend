@@ -1,20 +1,30 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {Alert, Checkbox, DatePicker, Form, Modal} from "antd";
+import {Checkbox, DatePicker, Form, Modal} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createMeeting, getMeeting, updateMeeting} from "../../http/meetingApi";
 import dateTimeConverter from "../../utils/dateTimeConverter";
 import {getPersonList} from "../../http/personApi";
 import dayjs from "dayjs";
-import {unauthRedirect} from "../../utils/unauthRedirect";
 import PersonSelector from "../ReferenceSelectors/PersonSelector";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
+import ErrorBox from "../Form/ErrorBox/ErrorBox";
+import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
 
 
-const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
+const MeetingModal = (props) => {
+    const {
+        modalType,
+        open,
+        onCancel,
+        meetingId,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+        clearBackendErrors,
+    } = props;
+
     const {meeting, locale, person} = useContext(Context);
     const [plannedDate, setPlannedDate] = useState(null);
     const [actualDate, setActualDate] = useState(null);
@@ -25,8 +35,6 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
     const [personError, setPersonError] = useState(null);
     const [planedDateError, setPlanedDateError] = useState(null);
     const formatDate = 'YYYY-MM-DD';
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
         setConfirmLoading(true);
@@ -43,7 +51,7 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                         key: person.personId,
                     })
                 )})
-            .catch(e => unauthRedirect(e));
+            .catch(e => executeErrorHandlers(e));
         if(meetingId != null)
         {
             getMeeting(meetingId)
@@ -71,18 +79,13 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
         setSelectedPersonFullName(null);
         setPlannedDate(null);
         setActualDate(null);
+        clearBackendErrors();
         onCancel();
     }
     const clearErrors = () => {
         setPlanedDateError(null);
         setPersonError(null);
-        setHttpBadRequestResponseError(null);
-    }
-
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+        clearBackendErrors();
     }
 
     const selectedPersonHandler = (personId) => {
@@ -157,16 +160,7 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                     httpBadRequestResponseError={httpBadRequestResponseError}
                     httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
                 />
-                {planedDateError &&
-                    <div>
-                        <Alert
-                            message={planedDateError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
+                <ErrorBox error={planedDateError}/>
                 <Form.Item label={locale.locale.Meeting.PlannedDate}>
                     <DatePicker
                         onChange={(e) => {
@@ -187,23 +181,14 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
                         />
                     </Form.Item>
                 }
-                {personError &&
-                    <div>
-                        <Alert
-                            message={personError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
+                <ErrorBox error={personError}/>
                 <Form.Item label={locale.locale.Meeting.Person}>
                     <PersonSelector
                         onSelect={selectedPersonHandler}
                         selectedPersonName={selectedPersonFullName}
                     />
                 </Form.Item>
-                <Form.Item label={locale.locale.Meeting.FollowUpWasSended}>
+                <Form.Item label={locale.locale.Meeting.FollowUpWasSent}>
                     <Checkbox
                         onChange={(e) => setFollowUpIsSended(e.target.checked)}
                         checked={followUpIsSended}
@@ -214,4 +199,4 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
     );
 };
 
-export default observer(MeetingModal);
+export default observer(withHttpErrorHandling(MeetingModal));

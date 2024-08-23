@@ -5,7 +5,6 @@ import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createProject, getProject, updateProject} from "../../http/projectApi";
 import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
-
 import ErrorBox from "../Form/ErrorBox/ErrorBox";
 import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
 
@@ -92,7 +91,7 @@ const ProjectModal = observer((props) => {
             />
             <ErrorBox error={projectNameError}/>
             <Form
-                labelCol={{ span: 5 }}
+                labelCol={{ span: 7 }}
             >
                 <Form.Item label={locale.locale.Project.ProjectName}>
                     <Input

@@ -1,16 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {observer} from "mobx-react-lite";
-import {Context} from "../../index";
-import {Button, Dropdown, Form, Space, Spin} from "antd";
-import {getGradeList} from "../../http/gradeApi";
-import {unauthRedirect} from "../../utils/unauthRedirect";
+import React, {useContext, useState} from "react";
+import {Context} from "../../../index";
+import {getGradeList} from "../../../http/gradeApi";
+import {unauthRedirect} from "../../../utils/unauthRedirect";
 
-const GradeSelector = ({onSelect, selectedGradeName}) => {
+const useGradeSelector = (onSelect) => {
     const {grade, locale} = useContext(Context);
     const [gradeLoaded, setGradeLoaded] = useState(false);
     const [gradeDropdownItems,setGradeDropdownItems] = useState([]);
 
-    useEffect(() => {
+    function getData() {
         getGradeList()
             .then(data => {
                 grade.setGrades(data);
@@ -33,21 +31,14 @@ const GradeSelector = ({onSelect, selectedGradeName}) => {
                 setGradeDropdownItems(items);
                 setGradeLoaded(true);
             });
-    }, []);
+    }
 
-    return (
-        <Spin tip={locale.locale.Loading} spinning={!gradeLoaded}>
-            <Dropdown menu={{
-                items: gradeDropdownItems
-            }}>
-                <Button>
-                    <Space>
-                        {selectedGradeName || locale.locale.GradeSelector.SelectGradeQuery}
-                    </Space>
-                </Button>
-            </Dropdown>
-        </Spin>
-    );
+    return {
+        locale,
+        gradeLoaded,
+        gradeDropdownItems,
+        getData,
+    };
 };
 
-export default observer(GradeSelector);
+export default useGradeSelector;

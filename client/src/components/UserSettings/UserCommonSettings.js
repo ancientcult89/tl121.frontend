@@ -1,7 +1,6 @@
 import {observer} from "mobx-react-lite";
 import {emailValidator} from "../../utils/emailValidator";
 import {getUser, updateUser} from "../../http/userApi";
-import {unauthRedirect} from "../../utils/unauthRedirect";
 import {Form, Input} from "antd";
 import RoleSelector from "../ReferenceSelectors/RoleSelector";
 import React, {useContext, useEffect, useState} from "react";
@@ -9,11 +8,18 @@ import {Context} from "../../index";
 import ErrorBox from "../Form/ErrorBox/ErrorBox";
 import SaveButton from "../Form/Button/SaveButton";
 import AlertSaved from "../Form/Alerts/AlertSaved";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
+import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
 
-const UserCommonSettings = ({userId}) => {
+const UserCommonSettings = (props) => {
+    const {
+        userId,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+        clearBackendErrors,
+    } = props;
+
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [selectedRoleId, setSelectedRoleId] = useState(null);
@@ -21,8 +27,6 @@ const UserCommonSettings = ({userId}) => {
     const [userNameError, setUserNameError] = useState(null);
     const [userEmailError, setEmailNameError] = useState(null);
     const [isSaved, setIsSaved] = useState(false);
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
     const {locale, role} = useContext(Context);
 
     useEffect(() => {
@@ -81,12 +85,6 @@ const UserCommonSettings = ({userId}) => {
         })
     }
 
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
-    }
-
     return (
         <Form
             labelCol={{ span: 8 }}
@@ -126,4 +124,4 @@ const UserCommonSettings = ({userId}) => {
     );
 };
 
-export default observer(UserCommonSettings);
+export default observer(withHttpErrorHandling(UserCommonSettings));

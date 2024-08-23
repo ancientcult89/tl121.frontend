@@ -5,20 +5,26 @@ import {Context} from "../../index";
 import Column from "antd/es/table/Column";
 import ProjectSelector from "../ReferenceSelectors/ProjectSelector";
 import {addProjectToPerson, deleteProjectToPerson} from "../../http/projectApi";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
+import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
+import ErrorBox from "../Form/ErrorBox/ErrorBox";
 
-const PersonProjectsModal = ({open, onCancel, person}) => {
+const PersonProjectsModal = (props) => {
+    const {
+        open,
+        onCancel,
+        person,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+    } = props;
+
     const {project, locale} = useContext(Context);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [selectedProjectName, setSelectedProjectName] = useState('');
     const [personNameError, setPersonNameError] = useState(null);
     const [errorType, setErrorType] = useState(null);
     const [projects, setProjects] = useState(person.projects);
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     const selectProjectTypeHandler = (projectId) => {
         project.projects.map(item => {
@@ -28,12 +34,6 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                 setSelectedProjectId(item.projectTeamId)
             }
         })
-    }
-
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
     }
 
     function delPersonProject(personId, projectTeamId) {
@@ -121,16 +121,7 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
                     />
                 </Row>
             </Form>
-            {personNameError &&
-                <div>
-                    <Alert
-                        message={personNameError}
-                        type={errorType}
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <ErrorBox error={personNameError} errorType={errorType} closable/>
             <Table dataSource={projects} rowKey={(record) => record.projectTeamId }>
                 <Column title={locale.locale.Project.ProjectName} dataIndex="projectTeamName" key="1" />
                 <Column
@@ -159,4 +150,4 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
     );
 };
 
-export default observer(PersonProjectsModal);
+export default observer(withHttpErrorHandling(PersonProjectsModal));

@@ -7,7 +7,9 @@ const withHttpErrorHandling = (WrappedComponent) => {
             httpBadRequestResponseError,
             httpNotFoundRequestResponseError,
             clearBackendErrors,
-            executeErrorHandlers
+            executeErrorHandlers,
+            setHttpBadRequestResponseError,
+            setHttpNotFoundRequestResponseError,
         } = useHttpErrorHandling();
 
         return (
@@ -17,6 +19,8 @@ const withHttpErrorHandling = (WrappedComponent) => {
                 httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
                 clearBackendErrors={clearBackendErrors}
                 executeErrorHandlers={executeErrorHandlers}
+                setHttpBadRequestResponseError={setHttpBadRequestResponseError}
+                setHttpNotFoundRequestResponseError={setHttpNotFoundRequestResponseError}
             />
         );
     };

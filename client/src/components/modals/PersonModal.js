@@ -5,14 +5,24 @@ import {Context} from "../../index";
 import {createPerson, getPerson, updatePerson} from "../../http/personApi";
 import {getGradeList} from "../../http/gradeApi";
 import {observer} from "mobx-react-lite";
-import GradeSelector from "../ReferenceSelectors/GradeSelector";
+import GradeSelector from "../ReferenceSelectors/GradeSelector/GradeSelector";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {emailValidator} from "../../utils/emailValidator";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
+import ErrorBox from "../Form/ErrorBox/ErrorBox";
 
-const PersonModal = observer(({modalType, open, onCancel, personId}) => {
+const PersonModal = observer((props) => {
+    const {
+        modalType,
+        open,
+        onCancel,
+        personId,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+        clearBackendErrors,
+    } = props;
+
     const {grade, person, locale} = useContext(Context)
     const [personDataLoaded, setPersonDataLoaded] = useState(false);
     const [firstName, setFirstName] = useState('');
@@ -25,8 +35,6 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
     const [emailError, setEmailError] = useState(null);
     const [gradeError, setGradeError] = useState(null);
     const [nameError, setNameError] = useState(null);
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     const selectGradeTypeHandler = (gradeId) => {
         grade.grades.map(item => {
@@ -89,19 +97,18 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
         setPersonEmail('');
         setFirstName(null);
         setShortName(null);
-        setLastName(null)
-        setSurName(null)
+        setLastName(null);
+        setSurName(null);
+        setGradeError(null);
+        setEmailError(null);
+        setNameError(null);
         onCancel();
     }
     const clearErrors = () => {
-
-        setHttpBadRequestResponseError(null);
-    }
-
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+        clearBackendErrors();
+        setGradeError(null);
+        setEmailError(null);
+        setNameError(null);
     }
 
     const handleOk = () => {
@@ -148,7 +155,6 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                     successfullyRequestHandler();
                 })
                 .catch(e => {
-                    unauthRedirect(e);
                     executeErrorHandlers(e);
                 });
         }
@@ -181,16 +187,7 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                         httpBadRequestResponseError={httpBadRequestResponseError}
                         httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
                     />
-                    {nameError &&
-                        <div>
-                            <Alert
-                                message={nameError}
-                                type="error"
-                                showIcon
-                            />
-                            <p></p>
-                        </div>
-                    }
+                    <ErrorBox error={nameError}/>
                     <Form.Item label={locale.locale.Person.FirstName}>
                         <Input value={firstName} onChange={e => {setFirstName(e.target.value)
 
@@ -211,16 +208,7 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
 
                         }}></Input>
                     </Form.Item>
-                    {emailError &&
-                        <div>
-                            <Alert
-                                message={emailError}
-                                type="error"
-                                showIcon
-                            />
-                            <p></p>
-                        </div>
-                    }
+                    <ErrorBox error={emailError}/>
                     <Form.Item
                         label={locale.locale.Person.Email}
                         rules={[
@@ -232,16 +220,7 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                         <Input value={personEmail} onChange={e => setPersonEmail(e.target.value)}/>
                     </Form.Item>
                 </Spin>
-                {gradeError &&
-                    <div>
-                        <Alert
-                            message={gradeError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
+                <ErrorBox error={gradeError}/>
                 <Form.Item label={locale.locale.GradeSelector.Grade}>
                     <GradeSelector
                         onSelect={selectGradeTypeHandler}

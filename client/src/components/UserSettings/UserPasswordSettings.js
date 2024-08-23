@@ -1,16 +1,23 @@
 import {observer} from "mobx-react-lite";
-import {Alert, Button, Form, Input} from "antd";
+import {Form, Input} from "antd";
 import React, {useContext, useState} from "react";
 import {changePassword} from "../../http/userApi";
-import {unauthRedirect} from "../../utils/unauthRedirect";
 import {Context} from "../../index";
 import SaveButton from "../Form/Button/SaveButton";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 import AlertSaved from "../Form/Alerts/AlertSaved";
+import ErrorBox from "../Form/ErrorBox/ErrorBox";
+import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
 
-const UserPasswordSettings = ({userId, onCancel}) => {
+const UserPasswordSettings = (props) => {
+    const {
+        userId,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+        clearBackendErrors,
+    } = props;
+
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,8 +26,6 @@ const UserPasswordSettings = ({userId, onCancel}) => {
     const [confirmPasswordError, setConfirmPasswordError] = useState(null);
     const [confirmationError, setConfirmationError] = useState(null);
     const [isSaved, setIsSaved] = useState(false);
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
     const {locale} = useContext(Context);
 
     const handleOk = () => {
@@ -54,18 +59,10 @@ const UserPasswordSettings = ({userId, onCancel}) => {
         changePassword(formData)
             .then(() => {
                 setIsSaved(true);
-                setHttpBadRequestResponseError(null);
-                setHttpNotFoundRequestResponseError(null);
+                clearBackendErrors();
             })
             .catch(e => executeErrorHandlers(e));
     };
-
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
-    }
-
 
     return (
         <Form
@@ -76,58 +73,22 @@ const UserPasswordSettings = ({userId, onCancel}) => {
                 httpBadRequestResponseError={httpBadRequestResponseError}
                 httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
             />
-            {confirmationError &&
-                <div>
-                    <Alert
-                        message={confirmationError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
-            {currentPasswordError &&
-                <div>
-                    <Alert
-                        message={currentPasswordError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <ErrorBox error={confirmationError}/>
+            <ErrorBox error={currentPasswordError}/>
             <Form.Item label={locale.locale.User.CurrentPassword}>
                 <Input.Password
                     value={currentPassword}
                     onChange={e => {setCurrentPassword(e.target.value)}}
                 />
             </Form.Item>
-            {newPasswordError &&
-                <div>
-                    <Alert
-                        message={newPasswordError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <ErrorBox error={newPasswordError}/>
             <Form.Item label={locale.locale.User.NewPassword}>
                 <Input.Password
                     value={newPassword}
                     onChange={e => {setNewPassword(e.target.value)}}
                 />
             </Form.Item>
-            {confirmPasswordError &&
-                <div>
-                    <Alert
-                        message={confirmPasswordError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <ErrorBox error={confirmPasswordError}/>
             <Form.Item label={locale.locale.User.ConfirmPassword}>
                 <Input.Password
                     value={confirmPassword}
@@ -141,4 +102,4 @@ const UserPasswordSettings = ({userId, onCancel}) => {
     );
 }
 
-export default observer(UserPasswordSettings);
+export default observer(withHttpErrorHandling(UserPasswordSettings));

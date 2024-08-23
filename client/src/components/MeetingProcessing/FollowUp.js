@@ -5,24 +5,25 @@ import {Button} from "antd";
 import {MEETING_ROUTE} from "../../utils/consts";
 import {Context} from "../../index";
 import {getFollowUp, sendFollowUp} from "../../http/meetingApi";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 
-const FollowUp = () => {
+const FollowUp = (props) => {
+    const {
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+    } = props;
+
     const navigate = useNavigate();
     const {locale} = useContext(Context);
     const [followUp, setFollowUp] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
         getFollowUp(searchParams.get('meetingId'), searchParams.get('personId')).then(data => setFollowUp(data));
     }, []);
 
-    const senFolloUpHandler = () => {
+    const sendingFollowUpHandler = () => {
         let formData = {
             "meetingId": searchParams.get('meetingId'),
             "personId": searchParams.get('personId'),
@@ -32,12 +33,6 @@ const FollowUp = () => {
             .catch(e => {
                 executeErrorHandlers(e);
             });
-    }
-
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
     }
 
     return (
@@ -50,7 +45,7 @@ const FollowUp = () => {
             <Button
                 type={"primary"}
                 style={{backgroundColor: "green"}}
-                onClick={senFolloUpHandler}
+                onClick={sendingFollowUpHandler}
             >
                 {locale.locale.Meeting.ProcessingContent.SendFollowUp}
             </Button>

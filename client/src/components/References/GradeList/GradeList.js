@@ -1,49 +1,44 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, Space, Table, Popconfirm, Spin, Alert} from 'antd';
-import {Context} from "../../index";
-import {deleteGrade, getGradeList} from "../../http/gradeApi";
-import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
-import GradeModal from "../modals/GradeModal";
+import React, { useEffect } from 'react';
+import {Button, Space, Table, Popconfirm, Spin} from 'antd';
+import {ADD_MODAL, EDIT_MODAL} from "../../../utils/consts";
+import GradeModal from "../../modals/GradeModal/GradeModal";
 import {observer} from "mobx-react-lite";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import withHttpErrorHandling from "../../../utils/withHttpErrorHandling";
+import BackEndErrorBox from "../../Form/ErrorBox/BackEndErrorBox";
+import useGradeList from "./useGradeList";
 
 const { Column } = Table;
 
-const GradeList = observer(() => {
-    const {grade, locale} = useContext(Context);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalType, setModalType] = useState(null);
-    const [selectedGradeId, setSelectedGradeId] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
-    const [needUpdate, setNeedUpdate] = useState(true);
+const GradeList = observer((props) => {
+    const {
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+        clearBackendErrors,
+    } = props;
+
+    const {
+        locale,
+        getGrades,
+        delGrade,
+        needUpdate,
+        setIsLoading,
+        setModalType,
+        setModalVisible,
+        setSelectedGradeId,
+        modalType,
+        modalVisible,
+        selectedGradeId,
+        isLoading,
+        grade,
+        setNeedUpdate,
+    } = useGradeList(executeErrorHandlers, clearBackendErrors);
 
     useEffect(() => {        
         getGrades();
         setIsLoading(false);
     }, [needUpdate])
 
-    function getGrades() {
-        getGradeList()
-            .then(data => grade.setGrades(data))
-            .catch(e => {
-                unauthRedirect(e);
-            });
-    }
-
-    function delGrade(gradeId) {
-        setIsLoading(true);
-        deleteGrade(gradeId)
-            .then(() => getGrades())
-            .catch(e => {
-                unauthRedirect(e);
-                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
-            })
-            .finally(() => {
-                setIsLoading(false);
-            })
-    }
 
     return (
         <div>
@@ -58,18 +53,10 @@ const GradeList = observer(() => {
             >
                 {locale.locale.Grade.Add}
             </Button>
-            {httpNotFoundRequestResponseError &&
-                <div style={{marginTop:5}}>
-                    <Alert
-                        message={httpNotFoundRequestResponseError}
-                        type="error"
-                        closable={true}
-                        onClick={() => setHttpNotFoundRequestResponseError(null)}
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <BackEndErrorBox
+                httpBadRequestResponseError={httpBadRequestResponseError}
+                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+            />
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={grade.grades} rowKey={(record) => record.gradeId } style={{marginTop:20}}>
                     <Column title={locale.locale.Grade.GradeName} dataIndex="gradeName" key="1" />
@@ -118,4 +105,4 @@ const GradeList = observer(() => {
     );
 });
 
-export default GradeList;
+export default withHttpErrorHandling(GradeList);

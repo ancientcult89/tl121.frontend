@@ -22,7 +22,9 @@ const useHttpErrorHandling = () => {
         httpBadRequestResponseError,
         httpNotFoundRequestResponseError,
         clearBackendErrors,
-        executeErrorHandlers
+        executeErrorHandlers,
+        setHttpBadRequestResponseError,
+        setHttpNotFoundRequestResponseError,
     };
 };
 

@@ -7,7 +7,7 @@ import {
     PROJECT_ROUTE,
     REGISTRATION_ROUTE, ROLE_ROUTE, TASK_ROUTE, USER_PROFILE_ROUTE, USER_PROJECTS_ROUTE, USER_ROUTE
 } from "../utils/consts";
-import GradeList from "./References/GradeList";
+import GradeList from "./References/GradeList/GradeList";
 import Auth from "../pages/Auth";
 import {Route, Routes} from "react-router-dom";
 import {Context} from "../index";

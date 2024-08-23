@@ -10,8 +10,18 @@ import {isNumber} from "../../utils/isNumber";
 import InputPassword from "../Form/Input/InputPassword";
 import SaveButton from "../Form/Button/SaveButton";
 import AlertSaved from "../Form/Alerts/AlertSaved";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
+import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
 
-const UserMailSettings = ({userId}) => {
+const UserMailSettings = (props) => {
+    const {
+        userId,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+        clearBackendErrors,
+    } = props;
+
     const [displayName, setDisplayName] = useState('');
     const [emailPassword, setEmailPassword] = useState('');
     const [emailHostAddress, setEmailHostAddress] = useState(null);
@@ -27,13 +37,15 @@ const UserMailSettings = ({userId}) => {
     useEffect(() => {
         if(userId != null)
         {
-            getUserMailSettings(userId).then(userMailSettings => {
-                setDisplayName(userMailSettings.displayName);
-                setEmailPassword(userMailSettings.emailPassword);
-                setEmailHostAddress(userMailSettings.emailHostAddress);
-                setEmailPort(userMailSettings.emailPort);
-                setUserMailSettingId(userMailSettings.userMailSettingId);
-            });
+            getUserMailSettings(userId)
+                .then(userMailSettings => {
+                    setDisplayName(userMailSettings.displayName);
+                    setEmailPassword(userMailSettings.emailPassword);
+                    setEmailHostAddress(userMailSettings.emailHostAddress);
+                    setEmailPort(userMailSettings.emailPort);
+                    setUserMailSettingId(userMailSettings.userMailSettingId);
+                })
+                .catch(e => executeErrorHandlers(e));
         }
     }, [userId]);
     const handleOk = () => {
@@ -80,7 +92,7 @@ const UserMailSettings = ({userId}) => {
             .then(() => {
                 setIsSaved(true);
             })
-            .catch(e => unauthRedirect(e));
+            .catch(e => executeErrorHandlers(e));
     };
 
     return (
@@ -88,6 +100,10 @@ const UserMailSettings = ({userId}) => {
             labelCol={{ span: 8 }}
         >
             <AlertSaved isSaved={isSaved} onClose={() => {setIsSaved(false)}}/>
+            <BackEndErrorBox
+                httpBadRequestResponseError={httpBadRequestResponseError}
+                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+            />
             <InputText
                 localisation={locale.locale.UserMailSettings.DisplayName}
                 value={displayName}
@@ -120,4 +136,4 @@ const UserMailSettings = ({userId}) => {
     );
 };
 
-export default observer(UserMailSettings);
+export default observer(withHttpErrorHandling(UserMailSettings));

@@ -3,19 +3,27 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import {createRole, getRole, updateRole} from "../../http/roleApi";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
-import {Alert, Form, Input, Modal} from "antd";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import {Form, Input, Modal} from "antd";
 import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
+import ErrorBox from "../Form/ErrorBox/ErrorBox";
+import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
 
-const RoleModal = ({modalType, open, onCancel, roleId}) => {
+const RoleModal = (props) => {
+    const {
+        modalType,
+        open,
+        onCancel,
+        roleId,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+        clearBackendErrors,
+    } = props;
+
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [roleName, setRoleName] = useState('');
     const [selectedRole, setSelectedRole] = useState(null);
     const [roleNameError, setRoleNameError] = useState(null);
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
     const {locale, role} = useContext(Context);
 
     useEffect(() => {
@@ -37,17 +45,12 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
     const successfullyRequestHandler = () => {
         setSelectedRole(null);
         setRoleNameError('');
+        clearBackendErrors();
         onCancel();
     }
     const clearErrors = () => {
         setRoleNameError(null);
-        setHttpBadRequestResponseError(null);
-    }
-
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+        clearBackendErrors();
     }
 
     const handleOk = () => {
@@ -94,16 +97,7 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
                 httpBadRequestResponseError={httpBadRequestResponseError}
                 httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
             />
-            {roleNameError &&
-                <div>
-                    <Alert
-                        message={roleNameError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <ErrorBox error={roleNameError}/>
             <Form
                 labelCol={{ span: 8 }}
             >
@@ -118,4 +112,4 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
     );
 };
 
-export default observer(RoleModal);
+export default observer(withHttpErrorHandling(RoleModal));
