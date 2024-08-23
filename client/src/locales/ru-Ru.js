@@ -16,6 +16,8 @@ export const ruLocale  = {
     NotSet: "Не задано",
     OK: "Ok",
     NO: "Нет",
+    Save: "Сохранить",
+    Saved: "Сохранено",
     Edit: "Редактировать",
     Delete: "Удалить",
     Archive: "Архивировать",
@@ -39,7 +41,12 @@ export const ruLocale  = {
     AccessDeniedTitle: "Доступ запрещён",
     AccessDeniedMessage: "Пожалуйста авторизуйтесь или убедитесь что у вас есть права к данному разделу",
     Or: "Или",
-    Profile: "Профиль",
+    Profile: {
+        Profile: "Профиль",
+        CommonSettings: "Основные данные",
+        MailSettings: "Настройки исходящей почты",
+        Password: "Пароль",
+    },
 
     Person: {
         Add: "Добавить сотрудника",
@@ -88,7 +95,7 @@ export const ruLocale  = {
         Person: "Сотрудник",
         PlannedDate: "Плановая дата",
         ActualDate: "Дата проведения",
-        FollowUpWasSended: "Отправка Аollow-up",
+        FollowUpWasSent: "Отправка Follow-up",
         Goals: {
             Goals: "Цели",
             Goal: "Цель",

@@ -2,18 +2,27 @@ import {observer} from "mobx-react-lite";
 import {emailValidator} from "../../utils/emailValidator";
 import {getUser, updateUser} from "../../http/userApi";
 import {unauthRedirect} from "../../utils/unauthRedirect";
-import {Alert, Button, Form, Input} from "antd";
+import {Form, Input} from "antd";
 import RoleSelector from "../ReferenceSelectors/RoleSelector";
 import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../index";
+import ErrorBox from "../Form/ErrorBox/ErrorBox";
+import SaveButton from "../Form/Button/SaveButton";
+import AlertSaved from "../Form/Alerts/AlertSaved";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 
-const UserCommonSettings = ({userId, onCancel}) => {
+const UserCommonSettings = ({userId}) => {
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [selectedRoleId, setSelectedRoleId] = useState(null);
     const [selectedRoleName, setSelectedRoleName] = useState('');
     const [userNameError, setUserNameError] = useState(null);
     const [userEmailError, setEmailNameError] = useState(null);
+    const [isSaved, setIsSaved] = useState(false);
+    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
     const {locale, role} = useContext(Context);
 
     useEffect(() => {
@@ -54,14 +63,12 @@ const UserCommonSettings = ({userId, onCancel}) => {
         }
 
         updateUser(formData)
-            .then((updatedUser) =>{
-                setUserName(null);
-                setUserEmail(null);
-                setSelectedRoleId(null);
-                setSelectedRoleName(null)
-                onCancel();
+            .then(() => {
+                setIsSaved(true);
             })
-            .catch(e => unauthRedirect(e));
+            .catch(e => {
+                executeErrorHandlers(e)
+            });
     };
 
     const selectRoleTypeHandler = (roleId) => {
@@ -74,52 +81,46 @@ const UserCommonSettings = ({userId, onCancel}) => {
         })
     }
 
+    const executeErrorHandlers = (e) => {
+        unauthRedirect(e);
+        setHttpBadRequestResponseError(badHttpRequestHandler(e));
+        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+    }
+
     return (
         <Form
             labelCol={{ span: 8 }}
         >
-            {userNameError &&
-                <div>
-                    <Alert
-                        message={userNameError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <AlertSaved isSaved={isSaved} onClose={() => {setIsSaved(false)}}/>
+            <BackEndErrorBox
+                httpBadRequestResponseError={httpBadRequestResponseError}
+                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+            />
+            <ErrorBox error={userNameError}/>
             <Form.Item label={locale.locale.User.UserName}>
                 <Input
                     value={userName}
                     onChange={e => {setUserName(e.target.value)}}
                 />
             </Form.Item>
-            {userEmailError &&
-                <div>
-                    <Alert
-                        message={userEmailError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+
+            <ErrorBox error={userEmailError}/>
             <Form.Item label={locale.locale.User.Email}>
                 <Input
                     value={userEmail}
                     onChange={e => {setUserEmail(e.target.value)}}
                 ></Input>
             </Form.Item>
+
             <Form.Item label={locale.locale.User.Role}>
                 <RoleSelector
                     onSelect={selectRoleTypeHandler}
                     selectedRoleName={selectedRoleName}
                 />
             </Form.Item>
+
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button onClick={handleOk} type={"primary"}>
-                    Save
-                </Button>
+                <SaveButton onClick={handleOk}/>
             </Form.Item>
         </Form>
     );

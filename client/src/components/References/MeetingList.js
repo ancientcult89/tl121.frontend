@@ -177,7 +177,7 @@ const MeetingList = observer(() => {
                         )}
                     />
                     <Column
-                        title={locale.locale.Meeting.FollowUpWasSended}
+                        title={locale.locale.Meeting.FollowUpWasSent}
                         key="4"
                         render={(record) => (
                             <Checkbox checked={record.followUpIsSended}/>

@@ -37,7 +37,7 @@ const TopBar = observer(() => {
                 <LocaleSelector />
                 {user.isAuth && (
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Button style={{ marginLeft: 5 }} onClick={goProfile}>{locale.locale.Profile}</Button>
+                        <Button style={{ marginLeft: 5 }} onClick={goProfile}>{locale.locale.Profile.Profile}</Button>
                         <Button style={{ marginLeft: 5 }} type={"primary"} onClick={logOut}>{locale.locale.LogOut}</Button>
                     </div>
                 )}

@@ -11,6 +11,7 @@ import {unauthRedirect} from "../../utils/unauthRedirect";
 import PersonSelector from "../ReferenceSelectors/PersonSelector";
 import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 
 
 const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
@@ -152,26 +153,10 @@ const MeetingModal = ({modalType, open, onCancel, meetingId}) => {
             <Form
                 labelCol={{ span: 8 }}
             >
-                {httpNotFoundRequestResponseError &&
-                    <div>
-                        <Alert
-                            message={httpNotFoundRequestResponseError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
-                {httpBadRequestResponseError &&
-                    <div>
-                        <Alert
-                            message={httpBadRequestResponseError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
+                <BackEndErrorBox
+                    httpBadRequestResponseError={httpBadRequestResponseError}
+                    httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+                />
                 {planedDateError &&
                     <div>
                         <Alert

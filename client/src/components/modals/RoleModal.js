@@ -7,6 +7,7 @@ import {Alert, Form, Input, Modal} from "antd";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 
 const RoleModal = ({modalType, open, onCancel, roleId}) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -89,26 +90,10 @@ const RoleModal = ({modalType, open, onCancel, roleId}) => {
             confirmLoading={confirmLoading}
             onCancel={onCancel}
         >
-            {httpNotFoundRequestResponseError &&
-                <div>
-                    <Alert
-                        message={httpNotFoundRequestResponseError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
-            {httpBadRequestResponseError &&
-                <div>
-                    <Alert
-                        message={httpBadRequestResponseError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <BackEndErrorBox
+                httpBadRequestResponseError={httpBadRequestResponseError}
+                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+            />
             {roleNameError &&
                 <div>
                     <Alert

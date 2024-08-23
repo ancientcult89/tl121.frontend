@@ -10,6 +10,7 @@ import {MEETING_PROCESSING_ROUTE} from "../utils/consts";
 import {notFoundHttpRequestHandler} from "../utils/notFoundHttpRequestHandler";
 import {useNavigate} from "react-router-dom";
 import {badHttpRequestHandler} from "../utils/badHttpRequestHandler";
+import BackEndErrorBox from "./Form/ErrorBox/BackEndErrorBox";
 
 const OneToOneDeadLineList = observer(() => {
     const [isLoading, setIsLoading] = useState(true);
@@ -86,26 +87,10 @@ const OneToOneDeadLineList = observer(() => {
     return (
         <div>
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
-                {httpNotFoundRequestResponseError &&
-                    <div>
-                        <Alert
-                            message={httpNotFoundRequestResponseError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
-                {httpBadRequestResponseError &&
-                    <div>
-                        <Alert
-                            message={httpBadRequestResponseError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
+                <BackEndErrorBox
+                    httpBadRequestResponseError={httpBadRequestResponseError}
+                    httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+                />
                 <Table
                     dataSource={tableData}
                     rowKey={(record) => record.personId }

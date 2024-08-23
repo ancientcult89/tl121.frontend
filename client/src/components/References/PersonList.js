@@ -9,6 +9,8 @@ import {observer} from "mobx-react-lite";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 import LocaleSelector from "../LocaleSelector";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 
 const PersonList = observer(() => {
     const {person, locale} = useContext(Context);
@@ -18,6 +20,7 @@ const PersonList = observer(() => {
     const [needUpdate, setNeedUpdate] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [items, setItems] = useState([]);
+    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
     const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
     const [filterText, setFilterText] = useState('');
 
@@ -33,12 +36,18 @@ const PersonList = observer(() => {
                 setItems(person.persons)
             })
             .catch(e => {
-                unauthRedirect(e);
+                executeErrorHandlers(e);
             });
     }
 
     function handleFilterChange(e) {
         setFilterText(e.target.value);
+    }
+
+    const executeErrorHandlers = (e) => {
+        unauthRedirect(e);
+        setHttpBadRequestResponseError(badHttpRequestHandler(e));
+        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
     }
 
     const filteredItems = items.filter(item => item.lastName.toLowerCase().includes(filterText.toLowerCase()));
@@ -48,8 +57,7 @@ const PersonList = observer(() => {
         deletePerson(personId)
             .then(() => getPersons())
             .catch(e => {
-                unauthRedirect(e);
-                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+                executeErrorHandlers(e);
             })
             .finally(() => setIsLoading(false))
     }
@@ -59,8 +67,7 @@ const PersonList = observer(() => {
         archivePerson(personId)
             .then(() => getPersons())
             .catch(e => {
-                unauthRedirect(e);
-                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+                executeErrorHandlers(e);
             })
             .finally(() => setIsLoading(false));
     }
@@ -69,15 +76,14 @@ const PersonList = observer(() => {
         setIsLoading(true);
         sendGreetingMessage(personId)
             .catch(e => {
-                unauthRedirect(e);
-                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+                executeErrorHandlers(e);
             })
             .finally(() => setIsLoading(false));
     }
 
     return (
         <div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 15 }}>
                 {/*данный блок дикий костыль, переделать на серверную фильтрацию*/}
                 <Button
                     type={"primary"}
@@ -99,18 +105,10 @@ const PersonList = observer(() => {
                     onChange={handleFilterChange}
                 />
             </div>
-            {httpNotFoundRequestResponseError &&
-                <div style={{marginTop:5}}>
-                    <Alert
-                        message={httpNotFoundRequestResponseError}
-                        type="error"
-                        closable={true}
-                        onClick={() => setHttpNotFoundRequestResponseError(null)}
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <BackEndErrorBox
+                httpBadRequestResponseError={httpBadRequestResponseError}
+                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+            />
             <Spin tip={locale.locale.Loading} spinning={isLoading}>
                 <Table dataSource={filteredItems} rowKey={(record) => record.personId } style={{marginTop: 20}}>
                     <Column title={locale.locale.Person.LastName} dataIndex="lastName" key="lastName"/>

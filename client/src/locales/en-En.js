@@ -14,6 +14,8 @@ export const enLocale  = {
     NotSet: "Not Set",
     OK: "Ok",
     NO: "No",
+    Save: "Save",
+    Saved: "Saved",
     Edit: "Edit",
     Delete: "Delete",
     Archive: "Archive",
@@ -37,7 +39,12 @@ export const enLocale  = {
     AccessDeniedTitle: "Access Denied",
     AccessDeniedMessage: "Please log in or make sure you have rights to this section",
     Or: "Or",
-    Profile: "Profile",
+    Profile: {
+        Profile: "Profile",
+        CommonSettings: "Common Settings",
+        MailSettings: "Mail Settings",
+        Password: "Password",
+    },
 
     Person: {
         Add: "Add Person",
@@ -86,7 +93,7 @@ export const enLocale  = {
         Person: "Person",
         PlannedDate: "Planned Date",
         ActualDate: "Actual Date",
-        FollowUpWasSended: "Follow-up was sended",
+        FollowUpWasSent: "Follow-up was sent",
         Goals: {
             Goals: "Goals",
             Goal: "Goal",

@@ -1,13 +1,15 @@
 import {observer} from "mobx-react-lite";
 import {getUserMailSettings, setUserMailSettings} from "../../http/userApi";
 import {unauthRedirect} from "../../utils/unauthRedirect";
-import {Button, Form} from "antd";
+import {Form} from "antd";
 import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../index";
 import InputText from "../Form/Input/InputText";
 import {isNullOrWhiteSpace} from "../../utils/isNullOrWhiteSpace";
 import {isNumber} from "../../utils/isNumber";
 import InputPassword from "../Form/Input/InputPassword";
+import SaveButton from "../Form/Button/SaveButton";
+import AlertSaved from "../Form/Alerts/AlertSaved";
 
 const UserMailSettings = ({userId}) => {
     const [displayName, setDisplayName] = useState('');
@@ -19,6 +21,7 @@ const UserMailSettings = ({userId}) => {
     const [emailPasswordError, setEmailPasswordError] = useState(null);
     const [emailHostAddressError, setEmailHostAddressError] = useState(null);
     const [emailPortError, setEmailPortError] = useState(null);
+    const [isSaved, setIsSaved] = useState(false);
     const {locale} = useContext(Context);
 
     useEffect(() => {
@@ -74,6 +77,9 @@ const UserMailSettings = ({userId}) => {
             "userMailSettingId": userMailSettingId,
         }
         setUserMailSettings(formData)
+            .then(() => {
+                setIsSaved(true);
+            })
             .catch(e => unauthRedirect(e));
     };
 
@@ -81,6 +87,7 @@ const UserMailSettings = ({userId}) => {
         <Form
             labelCol={{ span: 8 }}
         >
+            <AlertSaved isSaved={isSaved} onClose={() => {setIsSaved(false)}}/>
             <InputText
                 localisation={locale.locale.UserMailSettings.DisplayName}
                 value={displayName}
@@ -107,9 +114,7 @@ const UserMailSettings = ({userId}) => {
             />
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button onClick={handleOk} type={"primary"}>
-                    Save
-                </Button>
+                <SaveButton onClick={handleOk}/>
             </Form.Item>
         </Form>
     );

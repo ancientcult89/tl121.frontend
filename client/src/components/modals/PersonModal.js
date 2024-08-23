@@ -10,6 +10,7 @@ import {unauthRedirect} from "../../utils/unauthRedirect";
 import {emailValidator} from "../../utils/emailValidator";
 import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 
 const PersonModal = observer(({modalType, open, onCancel, personId}) => {
     const {grade, person, locale} = useContext(Context)
@@ -176,26 +177,10 @@ const PersonModal = observer(({modalType, open, onCancel, personId}) => {
                 labelCol={{ span: 5 }}
             >
                 <Spin tip={locale.locale.Loading} spinning={!personDataLoaded}>
-                    {httpNotFoundRequestResponseError &&
-                        <div>
-                            <Alert
-                                message={httpNotFoundRequestResponseError}
-                                type="error"
-                                showIcon
-                            />
-                            <p></p>
-                        </div>
-                    }
-                    {httpBadRequestResponseError &&
-                        <div>
-                            <Alert
-                                message={httpBadRequestResponseError}
-                                type="error"
-                                showIcon
-                            />
-                            <p></p>
-                        </div>
-                    }
+                    <BackEndErrorBox
+                        httpBadRequestResponseError={httpBadRequestResponseError}
+                        httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+                    />
                     {nameError &&
                         <div>
                             <Alert

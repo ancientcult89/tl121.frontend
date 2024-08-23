@@ -1,21 +1,30 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {Alert, Form, Input, Modal} from "antd";
+import {Form, Input, Modal} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {createProject, getProject, updateProject} from "../../http/projectApi";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 
-const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
+import ErrorBox from "../Form/ErrorBox/ErrorBox";
+import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
+
+const ProjectModal = observer((props) => {
+    const {
+        modalType,
+        open,
+        onCancel,
+        projectId,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+        clearBackendErrors,
+    } = props;
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [projectName, setProjectName] = useState('');
     const [selectedProject, setSelectedProject] = useState(null);
     const [projectNameError, setProjectNameError] = useState(null)
     const {project, locale} = useContext(Context);
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
 
     useEffect(() => {
         setConfirmLoading(true);
@@ -26,7 +35,7 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
                     setProjectName(project.projectTeamName);
                     setSelectedProject(project)
                 })
-                .catch(e => unauthRedirect(e));
+                .catch(e => executeErrorHandlers(e));
         }
         setConfirmLoading(false);
     }, [projectId]);
@@ -34,17 +43,8 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
     const successfullyRequestHandler = () => {
         setSelectedProject(null);
         setProjectName('');
+        clearBackendErrors();
         onCancel();
-    }
-    const clearErrors = () => {
-
-        setHttpBadRequestResponseError(null);
-    }
-
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
     }
 
     const handleOk = () => {
@@ -86,36 +86,11 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
             confirmLoading={confirmLoading}
             onCancel={onCancel}
         >
-            {httpNotFoundRequestResponseError &&
-                <div>
-                    <Alert
-                        message={httpNotFoundRequestResponseError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
-            {httpBadRequestResponseError &&
-                <div>
-                    <Alert
-                        message={httpBadRequestResponseError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
-            {projectNameError &&
-                <div>
-                    <Alert
-                        message={projectNameError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <BackEndErrorBox
+                httpBadRequestResponseError={httpBadRequestResponseError}
+                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+            />
+            <ErrorBox error={projectNameError}/>
             <Form
                 labelCol={{ span: 5 }}
             >
@@ -130,4 +105,4 @@ const ProjectModal = observer(({modalType, open, onCancel, projectId}) => {
     );
 });
 
-export default ProjectModal;
+export default withHttpErrorHandling(ProjectModal);

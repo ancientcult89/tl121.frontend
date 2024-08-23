@@ -8,6 +8,7 @@ import {addProjectToPerson, deleteProjectToPerson} from "../../http/projectApi";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 
 const PersonProjectsModal = ({open, onCancel, person}) => {
     const {project, locale} = useContext(Context);
@@ -99,26 +100,10 @@ const PersonProjectsModal = ({open, onCancel, person}) => {
             onOk={onCancel}
             onCancel={onCancel}
         >
-            {httpNotFoundRequestResponseError &&
-                <div>
-                    <Alert
-                        message={httpNotFoundRequestResponseError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
-            {httpBadRequestResponseError &&
-                <div>
-                    <Alert
-                        message={httpBadRequestResponseError}
-                        type="error"
-                        showIcon
-                    />
-                    <p></p>
-                </div>
-            }
+            <BackEndErrorBox
+                httpBadRequestResponseError={httpBadRequestResponseError}
+                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+            />
             <Form
                 labelCol={{ span: 8 }}
             >

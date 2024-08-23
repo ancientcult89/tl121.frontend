@@ -1,6 +1,6 @@
 import {observer} from "mobx-react-lite";
 import React, {useContext, useEffect, useState} from "react";
-import {Spin} from "antd";
+import {Card, Space, Spin} from "antd";
 import {Context} from "../index";
 import {getCurrentUser} from "../http/userApi";
 import {unauthRedirect} from "../utils/unauthRedirect";
@@ -29,17 +29,27 @@ const UserSettings = () => {
 
     return (
         <Spin tip={locale.locale.Loading} spinning={isLoading}>
-            <div>
-                <UserCommonSettings
-                    userId={userId}
-                />
-                <UserMailSettings
-                    userId={userId}
-                />
-                <UserPasswordSettings
-                    userId={userId}
-                />
-            </div>
+            <Space direction="vertical" size={16} style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center' // Выровнять элементы по центру
+            }}>
+                <Card title={locale.locale.Profile.CommonSettings} type="inner" style={{ width: 500 }}>
+                    <UserCommonSettings
+                        userId={userId}
+                    />
+                </Card>
+                <Card title={locale.locale.Profile.MailSettings} type="inner" style={{ width: 500 }}>
+                    <UserMailSettings
+                        userId={userId}
+                    />
+                </Card>
+                <Card title={locale.locale.Profile.Password} type="inner" style={{ width: 500 }}>
+                    <UserPasswordSettings
+                        userId={userId}
+                    />
+                </Card>
+            </Space>
         </Spin>
     )
 }

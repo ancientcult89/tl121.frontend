@@ -10,7 +10,6 @@ import {
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import {
-    DENIED_ROUTE,
     GRADE_ROUTE,
     MEETING_ROUTE,
     ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_PROJECTS_ROUTE,

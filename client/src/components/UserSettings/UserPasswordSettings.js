@@ -4,6 +4,11 @@ import React, {useContext, useState} from "react";
 import {changePassword} from "../../http/userApi";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {Context} from "../../index";
+import SaveButton from "../Form/Button/SaveButton";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
+import AlertSaved from "../Form/Alerts/AlertSaved";
 
 const UserPasswordSettings = ({userId, onCancel}) => {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -13,6 +18,9 @@ const UserPasswordSettings = ({userId, onCancel}) => {
     const [newPasswordError, setNewPasswordError] = useState(null);
     const [confirmPasswordError, setConfirmPasswordError] = useState(null);
     const [confirmationError, setConfirmationError] = useState(null);
+    const [isSaved, setIsSaved] = useState(false);
+    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
+    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
     const {locale} = useContext(Context);
 
     const handleOk = () => {
@@ -44,16 +52,30 @@ const UserPasswordSettings = ({userId, onCancel}) => {
             "confirmPassword": confirmPassword,
         }
         changePassword(formData)
-            .then(data =>{
+            .then(() => {
+                setIsSaved(true);
+                setHttpBadRequestResponseError(null);
+                setHttpNotFoundRequestResponseError(null);
             })
-            .catch(e => unauthRedirect(e));
+            .catch(e => executeErrorHandlers(e));
     };
+
+    const executeErrorHandlers = (e) => {
+        unauthRedirect(e);
+        setHttpBadRequestResponseError(badHttpRequestHandler(e));
+        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+    }
 
 
     return (
         <Form
             labelCol={{ span: 8 }}
         >
+            <AlertSaved isSaved={isSaved} onClose={() => {setIsSaved(false)}}/>
+            <BackEndErrorBox
+                httpBadRequestResponseError={httpBadRequestResponseError}
+                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+            />
             {confirmationError &&
                 <div>
                     <Alert
@@ -113,9 +135,7 @@ const UserPasswordSettings = ({userId, onCancel}) => {
                 />
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button onClick={handleOk} type={"primary"}>
-                    Save
-                </Button>
+                <SaveButton onClick={handleOk}/>
             </Form.Item>
         </Form>
     );

@@ -1,22 +1,31 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, Form, Input, Modal} from 'antd';
+import { Form, Input, Modal} from 'antd';
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {createGrade, getGrade, updateGrade} from "../../http/gradeApi";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
+import ErrorBox from "../Form/ErrorBox/ErrorBox";
+import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
 
 
 
-const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
+const GradeModal = observer((props) => {
+    const {
+        modalType,
+        open,
+        onCancel,
+        gradeId,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        executeErrorHandlers,
+        clearBackendErrors,
+    } = props;
+
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [gradeName, setGradeName] = useState('');
     const [selectedGrade, setSelectedGrade] = useState(null);
     const [gradeNameError, setGradeNameError] = useState(null);
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
     const {grade, locale} = useContext(Context);
 
     useEffect(() => {
@@ -39,18 +48,12 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
         setSelectedGrade(null);
         setGradeName('');
         setGradeNameError(null);
-        setHttpBadRequestResponseError(null);
+        clearBackendErrors();
         onCancel();
     }
     const clearErrors = () => {
         setGradeNameError(null);
-        setHttpBadRequestResponseError(null);
-    }
-
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
+        clearBackendErrors();
     }
 
     const handleOk = () => {
@@ -105,36 +108,11 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
             <Form
                 labelCol={{ span: 5 }}
             >
-                {httpNotFoundRequestResponseError &&
-                    <div>
-                        <Alert
-                            message={httpNotFoundRequestResponseError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
-                {httpBadRequestResponseError &&
-                    <div>
-                        <Alert
-                            message={httpBadRequestResponseError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
-                {gradeNameError &&
-                    <div>
-                        <Alert
-                            message={gradeNameError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
+                <BackEndErrorBox
+                    httpBadRequestResponseError={httpBadRequestResponseError}
+                    httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+                />
+                <ErrorBox error={gradeNameError}/>
                 <Form.Item
                     label={locale.locale.Grade.GradeName}
                 >
@@ -148,4 +126,4 @@ const GradeModal = observer(({modalType, open, onCancel, gradeId}) => {
     );
 });
 
-export default GradeModal;
+export default withHttpErrorHandling(GradeModal);
