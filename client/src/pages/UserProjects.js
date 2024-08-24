@@ -4,7 +4,7 @@ import {Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import {Context} from "../index";
 import {getUserProjects} from "../http/projectApi";
-import UserProjectsModal from "../components/modals/UserProjectsModal";
+import UserProjectsModal from "../components/modals/UserProjectsModal/UserProjectsModal";
 import {getUserList} from "../http/userApi";
 import {unauthRedirect} from "../utils/unauthRedirect";
 

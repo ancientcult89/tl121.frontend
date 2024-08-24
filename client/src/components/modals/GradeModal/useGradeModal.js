@@ -1,16 +1,13 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../../index";
 import {createGrade, getGrade, updateGrade} from "../../../http/gradeApi";
 import {ADD_MODAL, EDIT_MODAL} from "../../../utils/consts";
-
+import useHttpErrorHandling from "../../../hooks/useHttpErrorHandling";
 
 const useGradeModal = (props) => {
     const {
-        executeErrorHandlers,
-        clearBackendErrors,
         onCancel,
         modalType,
-        httpNotFoundRequestResponseError,
         gradeId,
     } = props;
 
@@ -19,6 +16,20 @@ const useGradeModal = (props) => {
     const [selectedGrade, setSelectedGrade] = useState(null);
     const [gradeNameError, setGradeNameError] = useState(null);
     const {grade, locale} = useContext(Context);
+
+    const {
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        clearBackendErrors,
+        executeErrorHandlers,
+        setHttpBadRequestResponseError,
+        setHttpNotFoundRequestResponseError,
+    } = useHttpErrorHandling();
+
+    useEffect(() => {
+        getGradeData();
+    }, [gradeId]);
+
     const successfullyRequestHandler = () => {
         setSelectedGrade(null);
         setGradeName('');
@@ -92,11 +103,12 @@ const useGradeModal = (props) => {
         setConfirmLoading,
         setGradeName,
         setSelectedGrade,
-        getGradeData,
         handleOk,
         confirmLoading,
         gradeNameError,
         gradeName,
+        httpNotFoundRequestResponseError,
+        httpBadRequestResponseError,
     };
 };
 

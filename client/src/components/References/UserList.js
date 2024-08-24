@@ -6,7 +6,7 @@ import {deleteUser, getUserList} from "../../http/userApi";
 import {Popconfirm, Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import {EDIT_MODAL} from "../../utils/consts";
-import UserModal from "../modals/UserModal";
+import UserModal from "../modals/UserModal/UserModal";
 
 const UserList = () => {
     const {locale} = useContext(Context);

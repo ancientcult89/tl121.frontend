@@ -5,8 +5,8 @@ import {getPerson} from "../http/personApi";
 import {getPrevNotesAndFoals} from "../http/meetingApi";
 import {Button, Divider} from "antd";
 import {Context} from "../index";
-import MeetingNotes from "../components/MeetingProcessing/MeetingNotes";
-import MeetingGoals from "../components/MeetingProcessing/MeetingGoals";
+import MeetingNotes from "../components/MeetingProcessing/MeetingNotes/MeetingNotes";
+import MeetingGoals from "../components/MeetingProcessing/MeetingGoals/MeetingGoals";
 import {MEETING_FOLLOWUP_ROUTE} from "../utils/consts";
 import {unauthRedirect} from "../utils/unauthRedirect";
 import TaskList from "../components/References/TaskList";
@@ -16,7 +16,7 @@ const MeetingProcessing = () => {
     const [personFullName, setPersonFullName] = useState('');
     const [previousNotesAndGoals, setPreviousNotesAndGoals] = useState('');
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     useEffect(() => {
         getPerson(searchParams.get('personId'))

@@ -1,12 +1,8 @@
-import React, {useContext, useEffect, useState} from 'react';
 import { Form, Input, Modal} from 'antd';
-import {ADD_MODAL, EDIT_MODAL} from "../../../utils/consts";
-import {createGrade, getGrade, updateGrade} from "../../../http/gradeApi";
-import {Context} from "../../../index";
+import {ADD_MODAL} from "../../../utils/consts";
 import {observer} from "mobx-react-lite";
 import BackEndErrorBox from "../../Form/ErrorBox/BackEndErrorBox";
 import ErrorBox from "../../Form/ErrorBox/ErrorBox";
-import withHttpErrorHandling from "../../../utils/withHttpErrorHandling";
 import useGradeModal from "./useGradeModal";
 
 const GradeModal = observer((props) => {
@@ -15,23 +11,18 @@ const GradeModal = observer((props) => {
         open,
         onCancel,
         gradeId,
-        httpBadRequestResponseError,
-        httpNotFoundRequestResponseError,
     } = props;
 
     const {
         locale,
         setGradeName,
-        getGradeData,
         handleOk,
         gradeName,
         gradeNameError,
         confirmLoading,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
     } = useGradeModal(props);
-
-    useEffect(() => {
-        getGradeData();
-    }, [gradeId]);
 
     return (
         <Modal
@@ -63,4 +54,4 @@ const GradeModal = observer((props) => {
     );
 });
 
-export default withHttpErrorHandling(GradeModal);
+export default GradeModal;

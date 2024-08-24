@@ -8,12 +8,7 @@ const GradeSelector = ({onSelect, selectedGradeName}) => {
         gradeDropdownItems,
         gradeLoaded,
         locale,
-        getData
     } = useGradeSelector(onSelect);
-
-    useEffect(() => {
-        getData()
-    }, []);
 
     return (
         <Spin tip={locale.locale.Loading} spinning={!gradeLoaded}>

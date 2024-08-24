@@ -4,7 +4,7 @@ import {Alert, Button, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import {Context} from "../../index";
 import {deleteProject, getProjectList} from "../../http/projectApi";
-import ProjectModal from "../modals/ProjectModal";
+import ProjectModal from "../modals/ProjectModal/ProjectModal";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 

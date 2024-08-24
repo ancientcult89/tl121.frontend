@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../../index";
 import {getGradeList} from "../../../http/gradeApi";
 import {unauthRedirect} from "../../../utils/unauthRedirect";
@@ -8,6 +8,9 @@ const useGradeSelector = (onSelect) => {
     const [gradeLoaded, setGradeLoaded] = useState(false);
     const [gradeDropdownItems,setGradeDropdownItems] = useState([]);
 
+    useEffect(() => {
+        getData()
+    }, []);
     function getData() {
         getGradeList()
             .then(data => {
@@ -37,7 +40,6 @@ const useGradeSelector = (onSelect) => {
         locale,
         gradeLoaded,
         gradeDropdownItems,
-        getData,
     };
 };
 

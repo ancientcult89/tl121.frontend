@@ -5,7 +5,7 @@ import {getPersonList} from "../http/personApi";
 import { Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
 import {getPersonProjects} from "../http/projectApi";
-import PersonProjectsModal from "../components/modals/PersonProjectsModal";
+import PersonProjectsModal from "../components/modals/PersonProjectsModal/PersonProjectsModal";
 import {unauthRedirect} from "../utils/unauthRedirect";
 
 const PersonProjects = () => {

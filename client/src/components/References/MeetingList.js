@@ -5,7 +5,7 @@ import {deleteMeeting, getMeeting, getPagedMeetingList} from "../../http/meeting
 import {Alert, Button, Checkbox, Popconfirm, Row, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL, MEETING_PROCESSING_ROUTE} from "../../utils/consts";
 import Column from "antd/es/table/Column";
-import MeetingModal from "../modals/MeetingModal";
+import MeetingModal from "../modals/MeetingModal/MeetingModal";
 import {useNavigate} from "react-router-dom";
 import PersonSelector from "../ReferenceSelectors/PersonSelector";
 import {unauthRedirect} from "../../utils/unauthRedirect";

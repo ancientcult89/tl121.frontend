@@ -4,7 +4,7 @@ import {Alert, Button, Input, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
 import Column from "antd/es/table/Column";
 import {archivePerson, deletePerson, getPersonList, sendGreetingMessage} from "../../http/personApi";
-import PersonModal from "../modals/PersonModal";
+import PersonModal from "../modals/PersonModal/PersonModal";
 import {observer} from "mobx-react-lite";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";

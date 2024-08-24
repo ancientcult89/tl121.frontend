@@ -4,7 +4,7 @@ import {Context} from "../../index";
 import {deleteRole, getRoleList} from "../../http/roleApi";
 import {Alert, Button, Popconfirm, Space, Spin, Table} from "antd";
 import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
-import RoleModal from "../modals/RoleModal";
+import RoleModal from "../modals/RoleModal/RoleModal";
 import Column from "antd/es/table/Column";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";

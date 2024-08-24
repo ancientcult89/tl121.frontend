@@ -1,15 +1,30 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../../index";
 import {deleteGrade, getGradeList} from "../../../http/gradeApi";
+import useHttpErrorHandling from "../../../hooks/useHttpErrorHandling";
 
 
-const useGradeSelector = (executeErrorHandlers, clearBackendErrors) => {
+const useGradeSelector = () => {
     const {grade, locale} = useContext(Context);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalType, setModalType] = useState(null);
     const [selectedGradeId, setSelectedGradeId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [needUpdate, setNeedUpdate] = useState(true);
+
+    const {
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        clearBackendErrors,
+        executeErrorHandlers,
+        setHttpBadRequestResponseError,
+        setHttpNotFoundRequestResponseError,
+    } = useHttpErrorHandling();
+
+    useEffect(() => {
+        getGrades();
+        setIsLoading(false);
+    }, [needUpdate])
 
     function getGrades() {
         getGradeList()
@@ -34,7 +49,6 @@ const useGradeSelector = (executeErrorHandlers, clearBackendErrors) => {
 
     return {
         locale,
-        getGrades,
         delGrade,
         needUpdate,
         setIsLoading,
@@ -47,6 +61,8 @@ const useGradeSelector = (executeErrorHandlers, clearBackendErrors) => {
         isLoading,
         setNeedUpdate,
         grade,
+        httpNotFoundRequestResponseError,
+        httpBadRequestResponseError,
     };
 };
 

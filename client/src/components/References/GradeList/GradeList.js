@@ -9,17 +9,9 @@ import useGradeList from "./useGradeList";
 
 const { Column } = Table;
 
-const GradeList = observer((props) => {
-    const {
-        httpBadRequestResponseError,
-        httpNotFoundRequestResponseError,
-        executeErrorHandlers,
-        clearBackendErrors,
-    } = props;
-
+const GradeList = observer(() => {
     const {
         locale,
-        getGrades,
         delGrade,
         needUpdate,
         setIsLoading,
@@ -32,13 +24,9 @@ const GradeList = observer((props) => {
         isLoading,
         grade,
         setNeedUpdate,
-    } = useGradeList(executeErrorHandlers, clearBackendErrors);
-
-    useEffect(() => {        
-        getGrades();
-        setIsLoading(false);
-    }, [needUpdate])
-
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError
+    } = useGradeList();
 
     return (
         <div>
@@ -105,4 +93,4 @@ const GradeList = observer((props) => {
     );
 });
 
-export default withHttpErrorHandling(GradeList);
+export default GradeList;

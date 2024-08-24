@@ -16,7 +16,7 @@ import OneToOneDeadLineList from "./OneToOneDeadLineList";
 import ProjectList from "./References/ProjectList";
 import MeetingList from "./References/MeetingList";
 import MeetingProcessing from "../pages/MeetingProcessing";
-import FollowUp from "./MeetingProcessing/FollowUp";
+import FollowUp from "./MeetingProcessing/FollowUp/FollowUp";
 import RoleList from "./References/RoleList";
 import PersonProjects from "../pages/PersonProjects";
 import UserProjects from "../pages/UserProjects";
