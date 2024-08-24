@@ -1,7 +1,7 @@
 import {observer} from "mobx-react-lite";
 import { Button, Form, Modal, Popconfirm, Row, Space, Table} from "antd";
 import Column from "antd/es/table/Column";
-import ProjectSelector from "../../ReferenceSelectors/ProjectSelector";
+import ProjectSelector from "../../ReferenceSelectors/ProjectSelector/ProjectSelector";
 import BackEndErrorBox from "../../Form/ErrorBox/BackEndErrorBox";
 import ErrorBox from "../../Form/ErrorBox/ErrorBox";
 import usePersonProjectsModal from "./usePersonProjectsModal";

@@ -7,7 +7,7 @@ import {createMeeting, getMeeting, updateMeeting} from "../../../http/meetingApi
 import dateTimeConverter from "../../../utils/dateTimeConverter";
 import {getPersonList} from "../../../http/personApi";
 import dayjs from "dayjs";
-import PersonSelector from "../../ReferenceSelectors/PersonSelector";
+import PersonSelector from "../../ReferenceSelectors/PersonSelector/PersonSelector";
 import BackEndErrorBox from "../../Form/ErrorBox/BackEndErrorBox";
 import ErrorBox from "../../Form/ErrorBox/ErrorBox";
 import withHttpErrorHandling from "../../../utils/withHttpErrorHandling";

@@ -7,7 +7,7 @@ import {ADD_MODAL, EDIT_MODAL, MEETING_PROCESSING_ROUTE} from "../../utils/const
 import Column from "antd/es/table/Column";
 import MeetingModal from "../modals/MeetingModal/MeetingModal";
 import {useNavigate} from "react-router-dom";
-import PersonSelector from "../ReferenceSelectors/PersonSelector";
+import PersonSelector from "../ReferenceSelectors/PersonSelector/PersonSelector";
 import {unauthRedirect} from "../../utils/unauthRedirect";
 import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 

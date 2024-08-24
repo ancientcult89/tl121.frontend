@@ -1,11 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {observer} from "mobx-react-lite";
-import {Context} from "../../index";
-import {Button, Dropdown, Form, Space, Spin} from "antd";
-import {getProjectList} from "../../http/projectApi";
-import {unauthRedirect} from "../../utils/unauthRedirect";
+import React, {useContext, useEffect, useState} from "react";
+import {Context} from "../../../index";
+import {unauthRedirect} from "../../../utils/unauthRedirect";
+import {getProjectList} from "../../../http/projectApi";
 
-const ProjectSelector = ({onSelect, selectedProjectName}) => {
+const useProjectSelector = (onSelect) => {
     const {project, locale} = useContext(Context);
     const [projectLoaded, setProjectLoaded] = useState(false);
     const [projectDropdownItems,setProjectDropdownItems] = useState([]);
@@ -35,21 +33,11 @@ const ProjectSelector = ({onSelect, selectedProjectName}) => {
             });
     }, []);
 
-    return (
-        <div>
-            <Spin tip={locale.locale.Loading} spinning={!projectLoaded}>
-                <Dropdown menu={{
-                    items: projectDropdownItems
-                }}>
-                    <Button>
-                        <Space>
-                            {selectedProjectName || locale.locale.ProjectSelector.SelectProjectQuery}
-                        </Space>
-                    </Button>
-                </Dropdown>
-            </Spin>
-        </div>
-    );
+    return {
+        locale,
+        projectLoaded,
+        projectDropdownItems,
+    };
 };
 
-export default observer(ProjectSelector);
+export default useProjectSelector;

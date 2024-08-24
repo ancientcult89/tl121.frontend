@@ -2,7 +2,7 @@ import {observer} from "mobx-react-lite";
 import {emailValidator} from "../../utils/emailValidator";
 import {getUser, updateUser} from "../../http/userApi";
 import {Form, Input} from "antd";
-import RoleSelector from "../ReferenceSelectors/RoleSelector";
+import RoleSelector from "../ReferenceSelectors/RoleSelector/RoleSelector";
 import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../index";
 import ErrorBox from "../Form/ErrorBox/ErrorBox";

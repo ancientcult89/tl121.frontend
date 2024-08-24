@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Row} from "antd";
 import {Context} from "../index";
-import PersonSelector from "../components/ReferenceSelectors/PersonSelector";
+import PersonSelector from "../components/ReferenceSelectors/PersonSelector/PersonSelector";
 import TaskList from "../components/References/TaskList";
 
 const Tasks = () => {
