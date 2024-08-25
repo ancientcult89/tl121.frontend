@@ -1,46 +1,19 @@
-import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {Context} from "../../index";
-import {completeTask, getTaskList} from "../../http/meetingApi";
 import {Alert, Popconfirm, Space, Spin, Table} from "antd";
 import Column from "antd/es/table/Column";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import useTaskList from "./useTaskList";
 
-const TaskList = ({personId, showPersonField = true, currentMeetingId = null}) => {
-    const {locale} = useContext(Context);
-    const [isLoading, setIsLoading] = useState(true);
-    const [tasks, setTasks] = useState([]);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
+const TaskList = (props) => {
+    const {personId, showPersonField = true, currentMeetingId = null} = props;
 
-    useEffect(() => {
-        getTasks(personId, currentMeetingId);
-        setIsLoading(false);
-    }, [personId]);
-
-    const getTasks = (personId, currentMeetingId) => {
-        getTaskList(personId, currentMeetingId)
-            .then(data => {
-                setTasks(data);
-            })
-            .catch(e => unauthRedirect(e))
-    }
-
-    function completeTaskHandler(meetingGoalId) {
-        setIsLoading(true);
-        let formData = {
-            "goalId": meetingGoalId,
-        }
-        completeTask(formData)
-            .then(() => {
-                getTasks(personId, currentMeetingId);
-            })
-            .catch(e => {
-                unauthRedirect(e);
-                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
-            })
-            .finally(() => setIsLoading(false))
-    }
+    const {
+        locale,
+        httpNotFoundRequestResponseError,
+        setHttpNotFoundRequestResponseError,
+        isLoading,
+        tasks,
+        completeTaskHandler,
+    } = useTaskList(props);
 
     return (
         <div>

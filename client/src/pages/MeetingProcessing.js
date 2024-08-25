@@ -9,7 +9,7 @@ import MeetingNotes from "../components/MeetingProcessing/MeetingNotes/MeetingNo
 import MeetingGoals from "../components/MeetingProcessing/MeetingGoals/MeetingGoals";
 import {MEETING_FOLLOWUP_ROUTE} from "../utils/consts";
 import {unauthRedirect} from "../utils/unauthRedirect";
-import TaskList from "../components/References/TaskList";
+import TaskList from "../components/References/TaskList/TaskList";
 
 const MeetingProcessing = () => {
     const {locale} = useContext(Context);

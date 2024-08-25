@@ -2,9 +2,9 @@ import React, {useContext, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../../index";
 import { Form, Modal, Row, Switch} from "antd";
-import UserPasswordSettings from "../../UserSettings/UserPasswordSettings";
-import UserCommonSettings from "../../UserSettings/UserCommonSettings";
-import UserMailSettings from "../../UserSettings/UserMailSettings";
+import UserPasswordSettings from "../../UserSettings/UserPasswordSettings/UserPasswordSettings";
+import UserCommonSettings from "../../UserSettings/UserCommonSettings/UserCommonSettings";
+import UserMailSettings from "../../UserSettings/UserMailSettings/UserMailSettings";
 import useUserModal from "./useUserModal";
 
 const UserModal = ({modalType, open, onCancel, userId}) => {

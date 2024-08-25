@@ -4,7 +4,7 @@ import {deleteGrade, getGradeList} from "../../../http/gradeApi";
 import useHttpErrorHandling from "../../../hooks/useHttpErrorHandling";
 
 
-const useGradeSelector = () => {
+const useGradeList = () => {
     const {grade, locale} = useContext(Context);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalType, setModalType] = useState(null);
@@ -66,4 +66,4 @@ const useGradeSelector = () => {
     };
 };
 
-export default useGradeSelector;
+export default useGradeList;

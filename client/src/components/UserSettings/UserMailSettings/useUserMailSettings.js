@@ -1,26 +1,18 @@
-import {observer} from "mobx-react-lite";
-import {getUserMailSettings, setUserMailSettings} from "../../http/userApi";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {Form} from "antd";
 import React, {useContext, useEffect, useState} from "react";
-import {Context} from "../../index";
-import InputText from "../Form/Input/InputText";
-import {isNullOrWhiteSpace} from "../../utils/isNullOrWhiteSpace";
-import {isNumber} from "../../utils/isNumber";
-import InputPassword from "../Form/Input/InputPassword";
-import SaveButton from "../Form/Button/SaveButton";
-import AlertSaved from "../Form/Alerts/AlertSaved";
-import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
-import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
+import {Context} from "../../../index";
+import { getUserMailSettings, setUserMailSettings } from "../../../http/userApi";
+import useHttpErrorHandling from "../../../hooks/useHttpErrorHandling";
+import {isNullOrWhiteSpace} from "../../../utils/isNullOrWhiteSpace";
+import {isNumber} from "../../../utils/isNumber";
 
-const UserMailSettings = (props) => {
+
+const useUserMailSettings = (userId) => {
     const {
-        userId,
         httpBadRequestResponseError,
         httpNotFoundRequestResponseError,
         executeErrorHandlers,
         clearBackendErrors,
-    } = props;
+    } = useHttpErrorHandling();
 
     const [displayName, setDisplayName] = useState('');
     const [emailPassword, setEmailPassword] = useState('');
@@ -80,6 +72,14 @@ const UserMailSettings = (props) => {
             return;
         }
 
+        function clearErrors (){
+            setDisplayNameError(null);
+            setEmailPasswordError(null);
+            setEmailHostAddressError(null);
+            setEmailPortError(null);
+            clearBackendErrors();
+        }
+
         let formData = {
             "userId": userId,
             "displayName": displayName,
@@ -90,50 +90,35 @@ const UserMailSettings = (props) => {
         }
         setUserMailSettings(formData)
             .then(() => {
+                clearErrors();
                 setIsSaved(true);
             })
             .catch(e => executeErrorHandlers(e));
     };
 
-    return (
-        <Form
-            labelCol={{ span: 8 }}
-        >
-            <AlertSaved isSaved={isSaved} onClose={() => {setIsSaved(false)}}/>
-            <BackEndErrorBox
-                httpBadRequestResponseError={httpBadRequestResponseError}
-                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
-            />
-            <InputText
-                localisation={locale.locale.UserMailSettings.DisplayName}
-                value={displayName}
-                onChange={setDisplayName}
-                error={displayNameError}
-            />
-            <InputPassword
-                localisation={locale.locale.UserMailSettings.EmailPassword}
-                value={emailPassword}
-                onChange={setEmailPassword}
-                error={emailPasswordError}
-            />
-            <InputText
-                localisation={locale.locale.UserMailSettings.EmailHostAddress}
-                value={emailHostAddress}
-                onChange={setEmailHostAddress}
-                error={emailHostAddressError}
-            />
-            <InputText
-                localisation={locale.locale.UserMailSettings.EmailPort}
-                value={emailPort}
-                onChange={setEmailPort}
-                error={emailPortError}
-            />
 
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <SaveButton onClick={handleOk}/>
-            </Form.Item>
-        </Form>
-    );
+    return {
+        locale,
+        isSaved,
+        setIsSaved,
+        httpNotFoundRequestResponseError,
+        httpBadRequestResponseError,
+        displayName,
+        setDisplayName,
+        displayNameError,
+        setDisplayNameError,
+        emailPassword,
+        setEmailPassword,
+        emailPasswordError,
+        setEmailPasswordError,
+        emailHostAddress,
+        setEmailHostAddress,
+        emailPort,
+        setEmailPort,
+        emailHostAddressError,
+        emailPortError,
+        handleOk,
+    };
 };
 
-export default observer(withHttpErrorHandling(UserMailSettings));
+export default useUserMailSettings;

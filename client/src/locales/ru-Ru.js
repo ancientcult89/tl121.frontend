@@ -25,6 +25,7 @@ export const ruLocale  = {
     SignIn: "Войти",
     Back: "Назад",
     Register: "Зарегистрироваться",
+    Registered: "Регистрация прошла успешно!",
     LogOut: "Выйти",
     References: "Справочники",
     AdminPanel: "Панель администратора",

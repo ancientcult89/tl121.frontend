@@ -4,9 +4,9 @@ import {Card, Space, Spin} from "antd";
 import {Context} from "../index";
 import {getCurrentUser} from "../http/userApi";
 import {unauthRedirect} from "../utils/unauthRedirect";
-import UserCommonSettings from "../components/UserSettings/UserCommonSettings";
-import UserMailSettings from "../components/UserSettings/UserMailSettings";
-import UserPasswordSettings from "../components/UserSettings/UserPasswordSettings";
+import UserCommonSettings from "../components/UserSettings/UserCommonSettings/UserCommonSettings";
+import UserMailSettings from "../components/UserSettings/UserMailSettings/UserMailSettings";
+import UserPasswordSettings from "../components/UserSettings/UserPasswordSettings/UserPasswordSettings";
 
 const UserSettings = () => {
     const [userId, setUserId] = useState(null);

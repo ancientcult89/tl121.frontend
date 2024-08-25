@@ -1,37 +1,39 @@
 import {observer} from "mobx-react-lite";
-import React, {useContext, useEffect, useState} from "react";
 import {Alert, Button, Form, Input, Popconfirm, Space} from 'antd';
-import {useNavigate} from "react-router-dom";
-import {ONE_TWO_ONE_DEADLINES_ROUTE} from "../utils/consts";
-import {Context} from "../index";
-import {login, recoveryPassword, registration} from "../http/userApi";
-import {emailValidator} from "../utils/emailValidator";
-import {localeConverter} from "../utils/localeConverter";
+import {ONE_TWO_ONE_DEADLINES_ROUTE} from "../../utils/consts";
+import {login, recoveryPassword, registration} from "../../http/userApi";
+import {emailValidator} from "../../utils/emailValidator";
+import {localeConverter} from "../../utils/localeConverter";
+import BackEndErrorBox from "../../components/Form/ErrorBox/BackEndErrorBox";
+import AlertSuccess from "../../components/Form/Alerts/AlertSuccess";
+import useAuth from "./useAuth";
+import ErrorBox from "../../components/Form/ErrorBox/ErrorBox";
 
 
 const Auth = observer(({isLogin}) => {
-    const {user, locale} = useContext(Context);
-    const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [userName, setUserName] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [isLoginState, setIsLoginState] = useState(isLogin);
-    const [loginError, setLoginError] = useState(null);
-    const [recoveryError, setRecoveryError] = useState(null);
-
-    useEffect(() => {
-        user.setIsAuth(false);
-    }, [])
-
-    function completeTaskHandler(email) {
-        recoveryPassword(email)
-            .then(() => { setLoginError(null)})
-            .catch(e => {
-                setRecoveryError(e.response.data);
-                setLoginError(null);
-            });
-    }
+    const {
+        locale,
+        loginError,
+        completeTaskHandler,
+        email,
+        password,
+        user,
+        navigate,
+        executeErrorHandlers,
+        confirmPassword,
+        setIsLoginState,
+        isLoginState,
+        httpNotFoundRequestResponseError,
+        httpBadRequestResponseError,
+        isSuccessRegistration,
+        userName,
+        recoveryError,
+        setConfirmPassword,
+        setUserName,
+        setEmail,
+        setPassword,
+        click,
+    } = useAuth(isLogin);
 
     const loginErrorBar = (
         <div>
@@ -52,51 +54,6 @@ const Auth = observer(({isLogin}) => {
         </div>
     );
 
-    const click = async () => {
-        try {
-            let emailIsValid = emailValidator(email);
-            if(password === '' || !emailIsValid)
-            {
-                return;
-            }
-            if(isLoginState) {
-                const loginResponse = await login(email, password);
-                user.setUser(loginResponse.user);
-                let usersLocale = localeConverter.idToString(loginResponse.user.locale);
-                locale.setLocale(usersLocale);
-                user.setRole(loginResponse.role?.roleName);
-                localStorage.setItem('role', loginResponse.role?.roleName);
-                user.setIsAuth(true);
-                navigate(ONE_TWO_ONE_DEADLINES_ROUTE);
-            }
-            else {
-                let emailIsValid = emailValidator(email);
-                if(userName === '' || !emailIsValid || password === '' || confirmPassword === '' || password !== confirmPassword)
-                {
-                    return;
-                }
-
-                const formData = {
-                    email: email,
-                    userName: userName,
-                    password: password,
-                    confirmPassword: confirmPassword,
-                }
-                await registration(formData);
-                setPassword('');
-                setConfirmPassword('');
-                setIsLoginState(!isLoginState);
-            }
-        }
-        catch (e)
-        {
-            if(e.code !== 'ERR_NETWORK' && Number(e.response.status) === 400)
-            {
-                setLoginError(locale.locale.LoginError)
-            }
-        }
-    }
-
     return (
             <Form
                 name="basic"
@@ -106,6 +63,11 @@ const Auth = observer(({isLogin}) => {
                 initialValues={{ remember: true }}
                 autoComplete="off"
             >
+                <BackEndErrorBox
+                    httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
+                    httpBadRequestResponseError={httpBadRequestResponseError}
+                />
+                <AlertSuccess message={locale.locale.Registered} isSuccess={isSuccessRegistration}/>
                 {!isLoginState &&
                     <Form.Item
                         label={locale.locale.UserName}
@@ -125,16 +87,7 @@ const Auth = observer(({isLogin}) => {
                         <p></p>
                     </div>
                 }
-                {recoveryError &&
-                    <div>
-                        <Alert
-                            message={recoveryError}
-                            type="error"
-                            showIcon
-                        />
-                        <p></p>
-                    </div>
-                }
+                <ErrorBox error={recoveryError}/>
                 <Form.Item
                     label={locale.locale.Email}
                     name="email"

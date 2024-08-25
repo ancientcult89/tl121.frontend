@@ -1,16 +1,16 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {getOneTwoOne} from "../http/oneToOneDeadLineApi";
-import {Alert, Space, Spin, Table, Tag} from "antd";
+import {getOneTwoOne} from "../../http/oneToOneDeadLineApi";
+import { Space, Spin, Table, Tag} from "antd";
 import Column from "antd/es/table/Column";
-import {Context} from "../index";
-import {unauthRedirect} from "../utils/unauthRedirect";
-import {createMeetingForProcessing, getMeeting} from "../http/meetingApi";
-import {MEETING_PROCESSING_ROUTE} from "../utils/consts";
-import {notFoundHttpRequestHandler} from "../utils/notFoundHttpRequestHandler";
+import {Context} from "../../index";
+import {unauthRedirect} from "../../utils/unauthRedirect";
+import {createMeetingForProcessing, getMeeting} from "../../http/meetingApi";
+import {MEETING_PROCESSING_ROUTE} from "../../utils/consts";
+import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
 import {useNavigate} from "react-router-dom";
-import {badHttpRequestHandler} from "../utils/badHttpRequestHandler";
-import BackEndErrorBox from "./Form/ErrorBox/BackEndErrorBox";
+import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
+import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
 
 const OneToOneDeadLineList = observer(() => {
     const [isLoading, setIsLoading] = useState(true);

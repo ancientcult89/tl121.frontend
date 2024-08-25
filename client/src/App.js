@@ -3,8 +3,8 @@ import { BrowserRouter } from "react-router-dom";
 import { Spin } from 'antd';
 import {observer} from "mobx-react-lite";
 import {Context} from "./index";
-import LayoutBar from "./components/LayoutBar";
-import TopBar from "./components/TopBar";
+import LayoutBar from "./components/widgets/LayoutBar";
+import TopBar from "./components/widgets/TopBar";
 import './global.css';
 import {localeList} from "./locales/localeList";
 

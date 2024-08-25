@@ -17,12 +17,14 @@ const useFollowUp = () => {
     const {locale} = useContext(Context);
     const [followUp, setFollowUp] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         getFollowUp(searchParams.get('meetingId'), searchParams.get('personId')).then(data => setFollowUp(data));
     }, []);
 
     const sendingFollowUpHandler = () => {
+        setIsLoading(true);
         let formData = {
             "meetingId": searchParams.get('meetingId'),
             "personId": searchParams.get('personId'),
@@ -31,7 +33,8 @@ const useFollowUp = () => {
             .then(r => navigate(MEETING_ROUTE))
             .catch(e => {
                 executeErrorHandlers(e);
-            });
+            })
+            .finally(() => setIsLoading(false));
     }
 
     return {
@@ -40,6 +43,7 @@ const useFollowUp = () => {
         sendingFollowUpHandler,
         httpNotFoundRequestResponseError,
         httpBadRequestResponseError,
+        isLoading,
     };
 };
 

@@ -8,19 +8,19 @@ import {
     REGISTRATION_ROUTE, ROLE_ROUTE, TASK_ROUTE, USER_PROFILE_ROUTE, USER_PROJECTS_ROUTE, USER_ROUTE
 } from "../utils/consts";
 import GradeList from "./References/GradeList/GradeList";
-import Auth from "../pages/Auth";
+import Auth from "../pages/Auth/Auth";
 import {Route, Routes} from "react-router-dom";
 import {Context} from "../index";
-import PersonList from "./References/PersonList";
-import OneToOneDeadLineList from "./OneToOneDeadLineList";
-import ProjectList from "./References/ProjectList";
-import MeetingList from "./References/MeetingList";
+import PersonList from "./References/PersonList/PersonList";
+import OneToOneDeadLineList from "./widgets/OneToOneDeadLineList";
+import ProjectList from "./References/ProjectList/ProjectList";
+import MeetingList from "./References/MeetingList/MeetingList";
 import MeetingProcessing from "../pages/MeetingProcessing";
 import FollowUp from "./MeetingProcessing/FollowUp/FollowUp";
-import RoleList from "./References/RoleList";
+import RoleList from "./References/RoleList/RoleList";
 import PersonProjects from "../pages/PersonProjects";
 import UserProjects from "../pages/UserProjects";
-import UserList from "./References/UserList";
+import UserList from "./References/UserList/UserList";
 import AccessDenied from "./AccessDenied";
 import Tasks from "../pages/Tasks";
 import UserSettings from "../pages/UserSettings";

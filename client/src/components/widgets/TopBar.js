@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Button, Col, Row } from "antd";
-import { Context } from "../index";
+import { Context } from "../../index";
 import { useNavigate } from "react-router-dom";
-import { LOGIN_ROUTE, USER_PROFILE_ROUTE, VERSION } from "../utils/consts";
+import { LOGIN_ROUTE, USER_PROFILE_ROUTE, VERSION } from "../../utils/consts";
 import { observer } from "mobx-react-lite";
-import LocaleSelector from "./LocaleSelector";
+import LocaleSelector from "../LocaleSelector";
 
 const TopBar = observer(() => {
     const { locale, user } = useContext(Context);

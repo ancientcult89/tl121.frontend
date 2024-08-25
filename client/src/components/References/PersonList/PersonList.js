@@ -1,85 +1,33 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Context} from "../../index";
-import {Alert, Button, Input, Popconfirm, Space, Spin, Table} from "antd";
-import {ADD_MODAL, EDIT_MODAL} from "../../utils/consts";
+import { Button, Input, Popconfirm, Space, Spin, Table} from "antd";
+import {ADD_MODAL, EDIT_MODAL} from "../../../utils/consts";
 import Column from "antd/es/table/Column";
-import {archivePerson, deletePerson, getPersonList, sendGreetingMessage} from "../../http/personApi";
-import PersonModal from "../modals/PersonModal/PersonModal";
+import PersonModal from "../../modals/PersonModal/PersonModal";
 import {observer} from "mobx-react-lite";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
-import LocaleSelector from "../LocaleSelector";
-import {badHttpRequestHandler} from "../../utils/badHttpRequestHandler";
-import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
+import BackEndErrorBox from "../../Form/ErrorBox/BackEndErrorBox";
+import usePersonList from "./usePersonList";
 
 const PersonList = observer(() => {
-    const {person, locale} = useContext(Context);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalType, setModalType] = useState(null);
-    const [selectedPerson, setSelectedPerson] = useState(null);
-    const [needUpdate, setNeedUpdate] = useState(true);
-    const [isLoading, setIsLoading] = useState(true);
-    const [items, setItems] = useState([]);
-    const [httpBadRequestResponseError, setHttpBadRequestResponseError] = useState(null);
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
-    const [filterText, setFilterText] = useState('');
-
-    useEffect(() => {
-        getPersons()
-        setIsLoading(false)
-    }, [needUpdate])
-
-    function getPersons() {
-        getPersonList()
-            .then(data => {
-                person.setPersons(data)
-                setItems(person.persons)
-            })
-            .catch(e => {
-                executeErrorHandlers(e);
-            });
-    }
-
-    function handleFilterChange(e) {
-        setFilterText(e.target.value);
-    }
-
-    const executeErrorHandlers = (e) => {
-        unauthRedirect(e);
-        setHttpBadRequestResponseError(badHttpRequestHandler(e));
-        setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
-    }
-
-    const filteredItems = items.filter(item => item.lastName.toLowerCase().includes(filterText.toLowerCase()));
-
-    function deletePersonHandler(personId) {
-        setIsLoading(true);
-        deletePerson(personId)
-            .then(() => getPersons())
-            .catch(e => {
-                executeErrorHandlers(e);
-            })
-            .finally(() => setIsLoading(false))
-    }
-
-    function archivePersonHandler(personId) {
-        setIsLoading(true);
-        archivePerson(personId)
-            .then(() => getPersons())
-            .catch(e => {
-                executeErrorHandlers(e);
-            })
-            .finally(() => setIsLoading(false));
-    }
-
-    function sendingGreetingMessageHandler(personId) {
-        setIsLoading(true);
-        sendGreetingMessage(personId)
-            .catch(e => {
-                executeErrorHandlers(e);
-            })
-            .finally(() => setIsLoading(false));
-    }
+    const {
+        locale,
+        setModalType,
+        modalType,
+        setSelectedPerson,
+        selectedPerson,
+        setIsLoading,
+        isLoading,
+        filterText,
+        handleFilterChange,
+        httpNotFoundRequestResponseError,
+        httpBadRequestResponseError,
+        filteredItems,
+        setModalVisible,
+        modalVisible,
+        archivePersonHandler,
+        deletePersonHandler,
+        needUpdate,
+        setNeedUpdate,
+        sendingGreetingMessageHandler,
+    } = usePersonList();
 
     return (
         <div>

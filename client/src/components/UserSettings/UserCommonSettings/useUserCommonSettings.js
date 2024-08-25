@@ -1,24 +1,17 @@
-import {observer} from "mobx-react-lite";
-import {emailValidator} from "../../utils/emailValidator";
-import {getUser, updateUser} from "../../http/userApi";
-import {Form, Input} from "antd";
-import RoleSelector from "../ReferenceSelectors/RoleSelector/RoleSelector";
 import React, {useContext, useEffect, useState} from "react";
-import {Context} from "../../index";
-import ErrorBox from "../Form/ErrorBox/ErrorBox";
-import SaveButton from "../Form/Button/SaveButton";
-import AlertSaved from "../Form/Alerts/AlertSaved";
-import BackEndErrorBox from "../Form/ErrorBox/BackEndErrorBox";
-import withHttpErrorHandling from "../../utils/withHttpErrorHandling";
+import {Context} from "../../../index";
+import { getUser, updateUser} from "../../../http/userApi";
+import {emailValidator} from "../../../utils/emailValidator";
+import useHttpErrorHandling from "../../../hooks/useHttpErrorHandling";
 
-const UserCommonSettings = (props) => {
+
+const useUserCommonSettings = (userId) => {
     const {
-        userId,
         httpBadRequestResponseError,
         httpNotFoundRequestResponseError,
         executeErrorHandlers,
-        clearBackendErrors,
-    } = props;
+    } = useHttpErrorHandling();
+
 
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -85,43 +78,23 @@ const UserCommonSettings = (props) => {
         })
     }
 
-    return (
-        <Form
-            labelCol={{ span: 8 }}
-        >
-            <AlertSaved isSaved={isSaved} onClose={() => {setIsSaved(false)}}/>
-            <BackEndErrorBox
-                httpBadRequestResponseError={httpBadRequestResponseError}
-                httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
-            />
-            <ErrorBox error={userNameError}/>
-            <Form.Item label={locale.locale.User.UserName}>
-                <Input
-                    value={userName}
-                    onChange={e => {setUserName(e.target.value)}}
-                />
-            </Form.Item>
-
-            <ErrorBox error={userEmailError}/>
-            <Form.Item label={locale.locale.User.Email}>
-                <Input
-                    value={userEmail}
-                    onChange={e => {setUserEmail(e.target.value)}}
-                ></Input>
-            </Form.Item>
-
-            <Form.Item label={locale.locale.User.Role}>
-                <RoleSelector
-                    onSelect={selectRoleTypeHandler}
-                    selectedRoleName={selectedRoleName}
-                />
-            </Form.Item>
-
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <SaveButton onClick={handleOk}/>
-            </Form.Item>
-        </Form>
-    );
+    return {
+        locale,
+        isSaved,
+        setIsSaved,
+        httpBadRequestResponseError,
+        httpNotFoundRequestResponseError,
+        userNameError,
+        setUserName,
+        setUserNameError,
+        userEmail,
+        setUserEmail,
+        selectRoleTypeHandler,
+        selectedRoleName,
+        handleOk,
+        userName,
+        userEmailError,
+    };
 };
 
-export default observer(withHttpErrorHandling(UserCommonSettings));
+export default useUserCommonSettings;

@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import {Context} from "../index";
+import {Context} from "../../index";
 import {
     TeamOutlined,
     BookOutlined,
@@ -15,8 +15,8 @@ import {
     ONE_TWO_ONE_DEADLINES_ROUTE, PERSON_PROJECTS_ROUTE,
     PERSON_ROUTE,
     PROJECT_ROUTE, ROLE_ROUTE, TASK_ROUTE, USER_PROJECTS_ROUTE, USER_ROUTE
-} from "../utils/consts";
-import AppRouter from "./AppRouter";
+} from "../../utils/consts";
+import AppRouter from "../AppRouter";
 import {observer} from "mobx-react-lite";
 
 const { Content, Sider } = Layout;

@@ -2,14 +2,14 @@ import React, {useContext} from 'react';
 import {Alert} from "antd";
 import {Context} from "../../../index";
 
-const AlertSaved = ({isSaved, onClose}) => {
+const AlertSuccess = ({isSuccess, onClose, message}) => {
     const {locale} = useContext(Context);
 
     return (
         <div>
-            {isSaved &&
+            {isSuccess &&
                 <div>
-                    <Alert message={locale.locale.Saved} type="success" showIcon closable onClose={onClose}/>
+                    <Alert message={message ?? locale.locale.Saved} type="success" showIcon closable onClose={onClose}/>
                     <p/>
                 </div>
             }
@@ -18,4 +18,4 @@ const AlertSaved = ({isSaved, onClose}) => {
     );
 };
 
-export default AlertSaved;
+export default AlertSuccess;

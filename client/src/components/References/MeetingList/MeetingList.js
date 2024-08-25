@@ -1,104 +1,39 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {Context} from "../../index";
-import {deleteMeeting, getMeeting, getPagedMeetingList} from "../../http/meetingApi";
+import {Context} from "../../../index";
+import {deleteMeeting, getMeeting, getPagedMeetingList} from "../../../http/meetingApi";
 import {Alert, Button, Checkbox, Popconfirm, Row, Space, Spin, Table} from "antd";
-import {ADD_MODAL, EDIT_MODAL, MEETING_PROCESSING_ROUTE} from "../../utils/consts";
+import {ADD_MODAL, EDIT_MODAL, MEETING_PROCESSING_ROUTE} from "../../../utils/consts";
 import Column from "antd/es/table/Column";
-import MeetingModal from "../modals/MeetingModal/MeetingModal";
-import {useNavigate} from "react-router-dom";
-import PersonSelector from "../ReferenceSelectors/PersonSelector/PersonSelector";
-import {unauthRedirect} from "../../utils/unauthRedirect";
-import {notFoundHttpRequestHandler} from "../../utils/notFoundHttpRequestHandler";
+import MeetingModal from "../../modals/MeetingModal/MeetingModal";
+import PersonSelector from "../../ReferenceSelectors/PersonSelector/PersonSelector";
+import useMeetingList from "./useMeetingList";
 
 const MeetingList = observer(() => {
-    const {meeting, locale, person} = useContext(Context);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalType, setModalType] = useState(null);
-    const [selectedMeetingId, setSelectedMeetingId] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [meetings, setMeetings] = useState([]);
-    const [needUpdate, setNeedUpdate] = useState(true);
-    const navigate = useNavigate();
-    const [httpNotFoundRequestResponseError, setHttpNotFoundRequestResponseError] = useState(null);
-    const [pageInfo, setPageInfo] = useState({
-        totalRecords: 1,
-        currentPage: 1
-    })
-
-    useEffect(() => {
-        getMeetings(person.selectedPerson.personId);
-        setIsLoading(false)
-    }, [needUpdate, person.selectedPerson.personId])
-
-    const clearFilteringMeetingList = () => {
-        person.setSelectedPerson({
-            personId: null,
-            personName: '',
-        });
-    }
-
-    function processMeeting(meetingId, personId) {
-        getMeeting(meetingId)
-            .then(() => {
-                navigate(
-                    MEETING_PROCESSING_ROUTE + '/?meetingId=' + meetingId + '&personId=' + personId
-                )
-            })
-            .catch((e) => {
-                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
-            })
-    }
-
-    const onPageChange = (pageNumber) => {
-        getMeetings(person.selectedPerson.personId, pageNumber, 10);
-    };
-    const onShowSizeChange = (currentPage, pageSize) => {
-        getMeetings(person.selectedPerson.personId, currentPage, pageSize);
-    };
-    function getMeetings(personId, currentPage = 1, pageSize = 10) {
-        const meetingPagedRequest = {
-            personId: personId,
-            currentPage: currentPage,
-            pageSize: pageSize
-        };
-
-        getPagedMeetingList(meetingPagedRequest)
-            .then(data => {
-                meeting.setMeetings(data.meetings);
-                setMeetings(data.meetings);
-                setPageInfo({
-                    totalRecords: data.pageInfo.totalItems,
-                    currentPage: data.pageInfo.currentPage
-                });
-            })
-            .catch(e => {
-                unauthRedirect(e);
-            });
-    }
-
-    function delMeeting(meetingId) {
-        setIsLoading(true);
-        deleteMeeting(meetingId)
-            .then(() => getMeetings(person.selectedPerson.personId))
-            .catch(e => {
-                unauthRedirect(e);
-                setHttpNotFoundRequestResponseError(notFoundHttpRequestHandler(e));
-            })
-            .finally(() => setIsLoading(false));
-    }
-
-    const selectedPersonHandler = (personId) => {
-        person.persons.map(item => {
-            if(item.personId === personId)
-            {
-                person.setSelectedPerson({
-                    personId: item.personId,
-                    personName: item.lastName + ' ' + item.firstName + ' ' + item.surName
-                });
-            }
-        })
-    }
+    const {
+        locale,
+        setModalType,
+        setModalVisible,
+        setIsLoading,
+        selectedPersonHandler,
+        person,
+        clearFilteringMeetingList,
+        isLoading,
+        httpNotFoundRequestResponseError,
+        setHttpNotFoundRequestResponseError,
+        meetings,
+        onPageChange,
+        onShowSizeChange,
+        pageInfo,
+        setSelectedMeetingId,
+        delMeeting,
+        modalVisible,
+        setNeedUpdate,
+        needUpdate,
+        modalType,
+        processMeeting,
+        selectedMeetingId,
+    } = useMeetingList();
 
     return (
         <div>

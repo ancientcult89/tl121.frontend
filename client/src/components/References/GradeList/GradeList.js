@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react';
 import {Button, Space, Table, Popconfirm, Spin} from 'antd';
 import {ADD_MODAL, EDIT_MODAL} from "../../../utils/consts";
 import GradeModal from "../../modals/GradeModal/GradeModal";
 import {observer} from "mobx-react-lite";
-import withHttpErrorHandling from "../../../utils/withHttpErrorHandling";
 import BackEndErrorBox from "../../Form/ErrorBox/BackEndErrorBox";
 import useGradeList from "./useGradeList";
 

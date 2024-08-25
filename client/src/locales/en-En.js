@@ -23,6 +23,7 @@ export const enLocale  = {
     SignIn: "Sign In",
     Back: "Back",
     Register: "Register",
+    Registered: "Registered",
     LogOut: "LogOut",
     References: "References",
     AdminPanel: "Admin Panel",

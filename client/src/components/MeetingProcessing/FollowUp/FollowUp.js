@@ -1,5 +1,5 @@
 import {observer} from "mobx-react-lite";
-import {Button} from "antd";
+import {Button, Spin} from "antd";
 import BackEndErrorBox from "../../Form/ErrorBox/BackEndErrorBox";
 import useFollowUp from "./useFollowUp";
 
@@ -10,10 +10,11 @@ const FollowUp = () => {
         sendingFollowUpHandler,
         httpBadRequestResponseError,
         httpNotFoundRequestResponseError,
+        isLoading,
     } = useFollowUp();
 
     return (
-        <div>
+        <Spin tip={locale.locale.Loading} spinning={isLoading}>
             <BackEndErrorBox
                 httpBadRequestResponseError={httpBadRequestResponseError}
                 httpNotFoundRequestResponseError={httpNotFoundRequestResponseError}
@@ -26,7 +27,7 @@ const FollowUp = () => {
             >
                 {locale.locale.Meeting.ProcessingContent.SendFollowUp}
             </Button>
-        </div>
+        </Spin>
     );
 };
 
